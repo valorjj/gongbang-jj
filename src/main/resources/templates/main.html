@@ -1286,9 +1286,8 @@
                                 </p>
                                 <p th:text="${'공방컨텐츠: ' + room.roomContent}">
                                 </p>
+                                <p th:text="${'리뷰평균:' + room.roomAvg}"></p>
                             </div>
-
-                            </p>
                             <div th:text="${'공방가격: ' + room.roomPrice}" id="room-price" class="room-price"></div>
                             <hr>
                         </div>
@@ -1313,23 +1312,33 @@
                     </div>
                 </div>
             </div>
-            <!-- 카드줄력부분 종료 -->
+            <!-- 개설된 강의 출력 종료 -->
 
             <!-- 리뷰 후기 카드 출력 02-04 조지훈 작성중 -->
             <div class="row  p-2">
                 <h3>공방리뷰</h3>
                 <div class="card review" th:each="reply : ${replylist}">
                     <div class="reviewimgbox">
-                        <a href="" th:data-bs-target="${ '#modal' + reply.replyNo }" data-bs-toggle="modal"><img
-                                th:src="@{'/replyimg/' + ${reply.replyImgEntities                                          .get(0).replyImg}}"
-                                class="card-img-top"/></a>
-
+                        <a href="" th:data-bs-target="${ '#modal' + reply.replyNo }" data-bs-toggle="modal">
+                            <img th:src="@{'/replyimg/' + ${reply.replyImgEntities.get(0).replyImg}}" class="card-img-top"/>
+                        </a>
                     </div>
 
                     <div class="card-body">
                         <div class="card-title" th:text="${'개설공방 :' + reply.roomEntity.roomTitle}">
                         </div>
                         <p class="card-text" th:text="${'리뷰내용 :' +reply.replyContent}">
+                        </p>
+                        <!-- 별점 출력-->
+                        <p th:if="${reply.replyStar == 1}"> &starf;
+                        </p>
+                        <p th:if="${reply.replyStar == 2}"> &starf;&starf;
+                        </p>
+                        <p th:if="${reply.replyStar == 3}"> &starf;&starf;&starf;
+                        </p>
+                        <p th:if="${reply.replyStar == 4}"> &starf;&starf;&starf;&starf;
+                        </p>
+                        <p th:if="${reply.replyStar == 5}"> &starf;&starf;&starf;&starf;&starf;
                         </p>
                     </div>
 
