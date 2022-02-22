@@ -1,0 +1,99 @@
+@charset "UTF-8";
+.wrap {
+    font-family: CookieRun-Regular;
+}
+
+.title {
+    margin: 2rem !important;
+    border-bottom: 5px solid #374b73;
+    width: 14rem;
+}
+
+.successbtn button {
+    background-color: #ff9a9a;
+    color: rgb(0, 0, 0);
+    border-radius: 1rem;
+    padding: 0 0.5rem;
+}
+
+.successbtn button:hover {
+    transform: scale(1.05);
+    transition: 1s;
+    transition-timing-function: ease-in-out;
+}
+
+
+/* 테이블 */
+
+.tablecontents {
+    border-radius: 1rem;
+}
+
+.tablecontents tr:first-child {
+    background: #374b73;
+}
+
+.firsttr th {
+    border: solid 2px #fff;
+    font-size: 1.2rem;
+}
+
+.secondtr {
+
+}
+
+.secondtr td {
+    border: solid 2px #fff;
+    font-size: 1.2rem;
+    height: 5rem;
+    line-height: 5rem;
+}
+
+.tablecontents tr {
+    background: #ffdbdb;
+}
+
+.tablecontents span,
+.tablecontents a {
+    color: #374b73;
+}
+
+.tableroomname a {
+    text-decoration: none;
+}
+
+/* 모달클래스 */
+.classmodal .modal-content{
+font-family: CookieRun-Regular;
+}
+
+.modalbtn {
+    width: 100%;
+}
+
+.modalbtn button{
+    width: 25%;
+    border-radius: 1rem !important;
+    margin: 0 2rem;
+}
+
+
+.modalbtn button:nth-child(1){
+    background: #67d5bf;
+    color: #374b73;
+}
+
+.modalbtn button:nth-child(2){
+    background: #ffdbdb;
+    color: #ff9a9a;
+}
+
+.modalbtn button:hover {
+
+    color: #000;
+    transform: scale(1.05);
+    transition: 0.3s all ease-in-out;
+}
+
+
+    

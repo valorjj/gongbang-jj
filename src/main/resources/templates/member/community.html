@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>커뮤니티</title>
+    <link rel="stylesheet" th:href="@{/css/community/community.css}">
+    <link rel="stylesheet" th:href="@{/css/community/community_main.css}">
+</head>
+
+<body>
+
+    <div th:replace="common.html::common"></div>
+    <div th:replace="header.html::header"></div>
+
+    <script th:src="@{/js/community/community.js}"></script>
+
+    <div class="wrap">
+        <div class="container">
+            <div class="row">
+                <!--
+        [사이드 바 영역]
+        -->
+                <div class="col-3 sidebar-wrapper">
+                    <div class="title h3">커뮤니티</div>
+                    <!--카테고리 생성, 게시판 생성 버튼은 각각 Modal 창과 연결되어있다. -->
+                    <div class="row" sec:authorize="hasRole('ADMIN')">
+                        <div>
+                            <button type="button" id="newCategoryBtn" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                <i class="bi bi-plus-square mx-3"></i>카테고리
+                            </button>
+                        </div>
+                        <div>
+                            <button type="button" id="newBoardBtn" data-bs-toggle="modal" data-bs-target="#newBoardModal">
+                                <i class="bi bi-plus-square mx-3" id="createNewBoard"></i>게시판
+                            </button>
+                        </div>
+                    </div>
+                    <!--
+                1. 카테고리를 출력하고
+                2. 해당하는 게시판을 출력한다. : for 문 안에 for 문
+            -->
+                    <div th:each="category : ${categories}" class="sidebar-container" th:id="category + ${category.categoryNo}">
+                        <div th:text="${category.categoryName}" class="sidebar-category"></div>
+                        <div th:each="board : ${boards}" class="sidebar-board" th:id="board + ${board.boardNo}" th:if="${board.categoryEntity.categoryNo == category.categoryNo}">
+                            <div class="sidebar-tabs">
+                                <!-- 각 게시판에 id 값과 클릭 이벤트를 부여한다. -->
+                                <!-- 전달되는 인수는 id 값에 해당하는 boardNo -->
+                                <div th:text="${board.boardName}" th:id="${board.boardNo}" th:onclick="showBoardContent( [[${board.boardNo}]] );"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--  -->
+
+                    <!--  -->
+
+                </div>
+                <!-- 사이드바에서 게시글 클릭 시 해당하는 게시물을 출력한다. -->
+                <!-- tab 전환 이벤트로 걸어둔다. -->
+                <!-- 각각의 페이지를 모두 로드한 뒤, current 혹은 active 등의 클래스를 부여해서 해당하는 것만 화면에 출력한다. -->
+                <!-- 처음에 소개하는 메인 페이지를 default 로 둘 계획이다. -->
+                <div class="col-9 content-wrapper ">
+
+                    <div class="content-area-text h3 text-right">
+                        <h4> <span style="background-color: #ffdbdb; "> 커뮤니티 게시판</span> 에 참여하여</h4>
+                        <p>회원들과 자유롭게 <span style="font-weight: bold; color: #77c2ff;">의견</span> 을 나누세요 !</p>
+                    </div>
+
+                    <div class="content-container">
+                        <!-- 각각의 게시판 내용은 content-area 에 담긴다. -->
+                        <div class="content-area ">
+                            <!-- 맨 처음 진입 시 나타날 화면 -->
+
+
+                        </div>
+
+
+
+                    </div>
+
+                    <!-- 백그라운드 -->
+                    <div class="maincanvas">
+                        <canvas id="scene"></canvas>
+                        <input class="d-none" id="copy" type="text" value="Gong Bang ♥" />
+                    </div>
+                    <div class="canvasimg">
+                        <img src="https://cdn.pixabay.com/photo/2021/11/14/18/36/telework-6795505_960_720.jpg" alt="">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--새로운 카테고리를 생성하는 모달 시작-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">새로운 카테고리</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <!--새로운 카테고리 이름-->
+                        <input type="text" class="form-control" placeholder="생성할 카테고리 명칭" id="newCategory" name="newCategory">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button id="createNewCategoryBtn" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <span>생성</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--새로운 카테고리 생성하는 모달 종료-->
+
+    <!--새로운 게시판 생성하는 모달 시작-->
+    <div class="modal fade" id="newBoardModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newBoardModalLabel">새로운 게시판</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <!--새로운 게시판 이름-->
+                        <input type="text" class="form-control" placeholder="생성할 게시판 명칭" id="newBoard" name="newBoard">
+                        <select name="" id="category-select" class="form-select">
+                            <option value="">카테고리를 선태해주세요</option>
+                            <div th:each="category : ${categories}">
+                                <option th:value="${category.categoryName}" th:text="${category.categoryName}"></option>
+                            </div>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소
+                    </button>
+                    <!-- roomNo 를 인수로 전달한다. -->
+                    <!-- 게시판을 생성하는 버튼은, 각 카테고리 별로 하나씩 존재해야한다. -->
+                    <!-- 버튼에 roomNo 인수를 더해서 각각 id 값을 매긴다. -->
+                    <button id="createNewBoardBtn" type="button" class="buttons btn btn-secondary" data-bs-dismiss="modal">
+                        <span>생성</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--새로운 게시판 생성하는 모달 종료-->
+
+    <!-- 캔버스 -->
+    <script>
+        var canvas = document.querySelector("#scene"),
+            ctx = canvas.getContext("2d"),
+            particles = [],
+            amount = 0,
+            mouse = {
+                x: 0,
+                y: 0
+            },
+            radius = 1;
+
+        var colors = ["#468966", "#FFF0A5", "#FFB03B", "#B64926", "#8E2800"];
+
+        var copy = document.querySelector("#copy");
+
+        var ww = canvas.width = window.innerWidth;
+        var wh = canvas.height = window.innerHeight;
+
+        function Particle(x, y) {
+            this.x = Math.random() * ww;
+            this.y = Math.random() * wh;
+            this.dest = {
+                x: x,
+                y: y
+            };
+            this.r = Math.random() * 5 + 2;
+            this.vx = (Math.random() - 0.5) * 20;
+            this.vy = (Math.random() - 0.5) * 20;
+            this.accX = 0;
+            this.accY = 0;
+            this.friction = Math.random() * 0.05 + 0.94;
+
+            this.color = colors[Math.floor(Math.random() * 6)];
+        }
+
+        Particle.prototype.render = function() {
+
+
+            this.accX = (this.dest.x - this.x) / 1000;
+            this.accY = (this.dest.y - this.y) / 1000;
+            this.vx += this.accX;
+            this.vy += this.accY;
+            this.vx *= this.friction;
+            this.vy *= this.friction;
+
+            this.x += this.vx;
+            this.y += this.vy;
+
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.r, Math.PI * 2, false);
+            ctx.fill();
+
+            var a = this.x - mouse.x;
+            var b = this.y - mouse.y;
+
+            var distance = Math.sqrt(a * a + b * b);
+            if (distance < (radius * 70)) {
+                this.accX = (this.x - mouse.x) / 100;
+                this.accY = (this.y - mouse.y) / 100;
+                this.vx += this.accX;
+                this.vy += this.accY;
+            }
+
+        }
+
+        function onMouseMove(e) {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        }
+
+        function onTouchMove(e) {
+            if (e.touches.length > 0) {
+                mouse.x = e.touches[0].clientX;
+                mouse.y = e.touches[0].clientY;
+            }
+        }
+
+        function onTouchEnd(e) {
+            mouse.x = -9999;
+            mouse.y = -9999;
+        }
+
+        function initScene() {
+            ww = canvas.width = window.innerWidth;
+            wh = canvas.height = window.innerHeight;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.font = "bold " + (ww / 10) + "px sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillText(copy.value, ww / 2, wh / 2);
+
+            var data = ctx.getImageData(0, 0, ww, wh).data;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.globalCompositeOperation = "screen";
+
+            particles = [];
+            for (var i = 0; i < ww; i += Math.round(ww / 150)) {
+                for (var j = 0; j < wh; j += Math.round(ww / 150)) {
+                    if (data[((i + j * ww) * 4) + 3] > 150) {
+                        particles.push(new Particle(i, j));
+                    }
+                }
+            }
+            amount = particles.length;
+
+        }
+
+        function onMouseClick() {
+            radius++;
+            if (radius === 5) {
+                radius = 0;
+            }
+        }
+
+        function render(a) {
+            requestAnimationFrame(render);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (var i = 0; i < amount; i++) {
+                particles[i].render();
+            }
+        };
+
+        copy.addEventListener("keyup", initScene);
+        window.addEventListener("resize", initScene);
+        window.addEventListener("mousemove", onMouseMove);
+        window.addEventListener("touchmove", onTouchMove);
+        window.addEventListener("click", onMouseClick);
+        window.addEventListener("touchend", onTouchEnd);
+        initScene();
+        requestAnimationFrame(render);
+    </script>
+
+</body>
+
+</html>
+
+</html>
+
+</html>

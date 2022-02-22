@@ -1,0 +1,79 @@
+    @charset "UTF-8";
+    .wrap {
+        font-family: CookieRun-Regular;
+    }
+    
+    .title {
+        margin: 1rem;
+        border-bottom: 5px solid #374b73;
+        display: inline-block;
+    }
+    
+    .contentsbox {
+        display: flex;
+        justify-content: center;
+        align-items: start;
+    }
+    
+    .leftcontents {
+        padding: 1rem;
+        border: 1px solid #374b73;
+        margin: 1rem;
+    }
+    
+    .leftcontentsinner {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .leftcontentsinner span {
+        border-bottom: 1px solid #374b73;
+        display: inline-block;
+        margin: 1rem 0;
+        width: auto;
+    }
+    
+    .leftcontentsinner span {
+        font-size: 1.2rem;
+        width: 6rem;
+    }
+    
+    .leftcontentsinner span:nth-child(3) {
+        width: 8rem;
+    }
+    
+    .leftcontents button {
+        background-color: #ff9a9a;
+        float: right;
+        border-radius: 1rem 1rem;
+    }
+    
+    .leftcontents button:hover {
+        transform: scale(1.1);
+        transition: all ease-in-out 0.5s;
+    }
+    
+    .noticetitle h4 {
+        color: #ffffff;
+        display: inline-block;
+        width: 10rem;
+        background-color: #263238;
+        text-align: center;
+    }
+    
+    .rightcontentscontents h5 {
+        margin: 1rem;
+    }
+    
+    .rightcontentscontents table tr,
+    .rightcontentscontents table td {
+        border-radius: 1rem;
+    }
+    
+    .rightcontentscontents table tr th {
+        background-color: #ffdbdb;
+        color: #374b73 !important;
+        border-radius: 1rem;
+    }
+    
+    .rightcontentscontents table tr th {}

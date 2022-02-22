@@ -1,0 +1,137 @@
+<div id="table-section">
+    <table class="table table-striped admintable text-center" id="admin-table">
+        <tr class="admintabletr">
+            <td>등록번호</td>
+            <td>클래스명</td>
+            <td>카테고리</td>
+            <td>정원</td>
+            <td>공방주소</td>
+            <td>승인상태</td>
+            <td>등록일자</td>
+            <td colspan="2">비고</td>
+        </tr>
+
+        <tr th:each="room : ${roomEntities}">
+            <td th:text="${room.roomNo}"></td>
+            <td>
+                <a th:href="@{'/room/view/' + ${room.roomNo} }"
+                   class="logo d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
+                    <span th:text="${room.roomTitle}"></span>
+                </a>
+            </td>
+            <td th:text="${room.roomCategory}"></td>
+            <td th:text="${room.roomMax}+'명'"></td>
+            <td th:text="${#strings.listSplit(room.roomAddress,',')[0]}"></td>
+            <td>
+                                        <span th:if="${room.roomStatus.equals('검토중')}" th:text="${room.roomStatus}"
+                                              style="color:red"></span>
+                <span th:if="${room.roomStatus.equals('승인완료')}" th:text="${room.roomStatus}"
+                      style="color:green"></span>
+            </td>
+            <td th:text="${#temporals.format (room.createdDate,'MM-dd hh:mm')}"></td>
+            <td class="submitbtn_a">
+                <button class=" border w-100 px-1 my-2 slide addaccess"
+                        th:data-bs-target="${'#active' + room.roomNo}" data-bs-toggle="modal">
+                    <span class="nav-link link-dark text-dark">상태변경</span></button>
+            </td>
+            <td class="submitbtn_b">
+                <button class=" border w-100 px-1 my-2 slide addaccess"
+                        th:data-bs-target="${'#delete' + room.roomNo}"
+                        data-bs-toggle="modal"><span
+                        class="nav-link link-dark  text-dark">삭제</span>
+                </button>
+            </td>
+            <!-- 상태변경모달  -->
+            <div class="modal" th:id="${'active'+room.roomNo}" data-keyboard="false"
+                 data-backdrop="static" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content rounded-4 shadow">
+                        <div class="modal-body p-4 text-center">
+                            <h5 class="my-2"> 등록물 상태변경 </h5>
+                            <p class="my-2" id="activemsg">등록물 상태를 변경합니다. 변경하시겠습니까? </p>
+                        </div>
+                        <div class="modal-footer p-0 modaltxt">
+                            <button type="button" class="btn-link text-decoration-none "
+                                    th:onclick="activeupdate([[${room.roomNo}]],'검토중')">
+                                검토중
+                            </button>
+                            <button type="button" class="btn-link text-decoration-none "
+                                    th:onclick="activeupdate([[${room.roomNo}]],'승인중')">
+                                승인중
+                            </button>
+                            <button type="button" class="btn-link text-decoration-none "
+                                    th:onclick="activeupdate([[${room.roomNo}]],'승인완료')">
+                                승인완료
+                            </button>
+                            <button type="button" class="btn-link text-decoration-none "
+                                    th:onclick="activeupdate([[${room.roomNo}]],'승인거부')">
+                                승인거부
+                            </button>
+                            <button type="button" class="btn-link text-decoration-none  "
+                                    data-bs-dismiss="modal">취소
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 삭제모달  -->
+            <div class="modal" tabindex="-1" th:id="${'delete'+room.roomNo}"
+                 data-bs-keyword="false" data-bs-backdrop="static">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content rounded-4 shadow">
+                        <div class="modal-body p-4 text-center">
+                            <h5 class="mb-0"> 등록물 삭제 </h5>
+                            <p class="mb-3" id="deletemsg">등록물 삭제시 복구가 불가능합니다. 삭제하시겠습니까?
+                            </p>
+                        </div>
+                        <div class="modal-footer flex-nowrap p-0">
+                            <button th:onclick="rdelete([[${room.roomNo}]]);" type="button"
+                                    class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0 border-right">
+                                <strong>삭제합니다.</strong></button>
+                            <button type="button"
+                                    class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0"
+                                    data-bs-dismiss="modal">아닙니다.
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </tr>
+    </table>
+</div>
+
+<div class="pagingbox">
+    <ul id="pagination-section" class="pagination justify-content-center" th:with="start = ${ T(Math).floor( roomEntities.number / 10 ) * 10 + 1 } ,
+                                                     last = ( ${ start + 9 < roomEntities.totalPages ?  start + 9 : roomEntities.totalPages } )">
+
+        <li class="page-item">
+            <a class="page-link" th:href="@{/admin/adminlist( page = 1 ) }"> 처음 </a>
+        </li>
+
+        <li class="page-item" th:class="${roomEntities.first} ? 'disabled' ">
+
+            <a class="page-link"
+               th:href="${roomEntities.first} ? '#' : @{/admin/adminlist( page = ${ roomEntities.number } ) }">
+                이전 </a>
+        </li>
+
+        <li class="page-item" th:each="page : ${#numbers.sequence( start , last ) }">
+            <a class="page-link" th:href="@{/admin/adminlist( page = ${page} ) }"
+               th:text="${page}"></a>
+        </li>
+
+        <li class="page-item" th:class="${roomEntities.last} ? 'disabled' ">
+            <a class="page-link"
+               th:href="${roomEntities.last} ? '#' : @{/admin/adminlist( page = ${roomEntities.number+2} ) }">
+                다음
+            </a>
+        </li>
+
+        <li class="page-item">
+            <a class="page-link"
+               th:href="@{/admin/adminlist( page=${roomEntities.totalPages} ) }">
+                마지막 </a>
+        </li>
+    </ul>
+</div>

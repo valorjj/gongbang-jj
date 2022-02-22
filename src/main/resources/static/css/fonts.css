@@ -1,0 +1,26 @@
+@charset "UTF-8";
+
+/* 폰트텍스트1 */
+
+
+/* 폰트명 : 쿠키런 Regular */
+
+
+/* 폰트주소 : https://noonnu.cc/font_page/364 */
+
+@font-face {
+    font-family: 'CookieRun-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/CookieRun-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+*,
+body {
+    font-family: CookieRun-Regular;
+    /* font-family: 'Noto Sans KR', sans-serif; */
+}
+
+
+/* 나눔 바른 스퀘어 폰트 */

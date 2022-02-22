@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>공방 수정 페이지</title>
+    <link rel="stylesheet" th:href="@{/css/room/register.css}">
+    <link rel="stylesheet" th:href="@{/css/summernote/summernote-lite.css}">
+
+</head>
+
+<body>
+<div th:replace="common.html::common"></div>
+<div th:replace="header.html::header"></div>
+
+<script th:src="@{/js/summernote/summernote-lite.js}"></script>
+<script th:src="@{/js/summernote/lang/summernote-ko-KR.js}"></script>
+
+<!-- 다음우편api js -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+<div class="container register-detail-wrapper">
+    <div class="row col-12 tab-wrapper">
+        <div id="stickynav" class="tab-wrapperinner">
+            <ul class="tabs nav tab-wrappernav">
+                <li class="nav-item tab-link current" data-tab="tab-1">Step-1 : 공방정보</li>
+
+                <li class="nav-item tab-link" data-tab="tab-2">Step-2 : 공방소개</li>
+
+                <li class="nav-item tab-link" data-tab="tab-3">Step-3 : 공방위치</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row register-detail-inner register-detail-inner-a">
+        <span class="my-1" style="font-weight: bold;">작성 유의 사항</span>
+        <div>
+            <ul>
+                <li>언제든지 수정 페이지로 다시 돌아오실 수 있으니 부담없이 작성해주세요.</li>
+                <li><span class="required-content text-danger mx-1">(*)</span>필수 작성 사항을 기입하지 않으면 등록할 수 없습니다.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row register-detail-inner">
+        <!--
+        1. @Author : 김정진
+        2. @Date : 2022-01-27
+        3. @Note :
+            1. form 태그 이용한 클래스 정보 등록
+            2. tab-1, tab-2, tab-3 에 각각 탭 이동 이벤트가 걸려있다.
+            3. room 엔티티는 member, roomimg 와 1:N 맵핑 되어있다.
+            4. 현재 드래그 앤 드롭이 합치는 과정에서 망가져서 드래그 앤 드롭이 적용되지 않는다.
+        -->
+        <form th:action="@{/room/updateController}" id="form" method="post" enctype="multipart/form-data"
+              onsubmit="return registerCheck();">
+            <input type="hidden" th:value="${roomEntity.roomNo}" name="roomNo">
+            <input type="hidden" th:value="${roomEntity.roomStatus}" name="roomStatus">
+            <input type="hidden" th:value="${roomEntity.createdDate}" name="createdDate">
+            <!--첫번째 탭-->
+            <div id="tab-1" class="tab-content current">
+                <div class="tab-1-title"> 공방 정보입력</div>
+                <div class="register-content-wrapper">
+                    <div class="d-flex justify-content-start align-items-center registerbox">
+                        <div class=""> 강사님 기본 정보 :</div>
+                        <div class="my-2">
+                            <div th:text="${memberEntity.memberName}"></div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-start align-items-center registerbox">
+                        <div> 강사님 연락처 :</div>
+                        <div class="my-2">
+                            <div th:text="${memberEntity.memberPhone}"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="register-content-wrapper">
+                    <label for="roomTitle" class="form-label">공방 이름<span>[필수]</span>
+                        <span>글자수(<span id="title-key-count"></span>/50)</span>
+                    </label>
+                    <input onchange="registerCheck();" type="text" class="form-control" id="roomTitle"
+                           name="roomTitle" th:value="${roomEntity.roomTitle}">
+                    <div id="title-result"></div>
+                    <div class="register-tip">
+                        <small>작성 TIP</small>
+                        <ul>
+                            <li>
+                                어떤 수업인지 한 눈에 알 수 있는 공방 이름을 등록해주세요
+                            </li>
+                            <li>
+                                스튜디오 또는 공방 및 강습소의 이름이 포함 되어도 좋습니다
+                            </li>
+                            <li>
+                                지역 또는 공방 성격 (원데이 공방클래스 / 정규 공방클래스) 등을 뒤에 적어 주셔도 좋습니다
+                            </li>
+                            <li>
+                                등록 이후 언제나 자유롭게 수정이 가능하므로 부담없이 작성해 주세요
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="register-content-wrapper register-content-wrappertextarea">
+                    <!--
+                1. 클래스에 대한 간략한 소개를 작성한다.
+                2. 글자수는 150자 내외로 입력하도록 유효성 검사를 걸어야한다.
+                    1. change 를 사용해서 input 태그에 입력된 문자열의 길이를 받아서 150자가 넘으면 에러 메시지를 출력한다.
+                -->
+                    <label for="addClassInfo" class="form-label">공방 간단소개 <span>[필수]</span>
+                        <span>글자수(<span id="content-key-count"></span>/150)</span></label><br>
+                    <div class="text-center">
+                            <textarea onchange="registerCheck();" name="roomContent" id="addClassInfo"
+                                      cols="30" rows="5" th:text="${roomEntity.roomContent}"></textarea>
+                    </div>
+
+                    <div id="content-result"></div>
+                    <div class="register-tip">
+                        <small>작성 TIP</small>
+                        <ul>
+                            <li>
+                                공방 요약 설명 작성란입니다
+                            </li>
+                            <li>
+                                제목을 보완해 줄 수 있는 설명을 적어주세요
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="register-content-wrapper">
+                    <!--
+                    1. 클래스 카테고리는 미리 정해져있고, 관리자만이 추가 및 삭제, 수정이 가능하다.
+                    -->
+                    <label for="classCategory" class="form-label">공방 카테고리<span>[필수]</span></label>
+                    <div id="classCategory" class="register-category">
+                        <input type="radio" name="roomCategory" class="form-check-input" value="핸드메이드" checked>핸드메이드
+                        <input type="radio" name="roomCategory" class="form-check-input" value="쿠킹">쿠킹
+                        <input type="radio" name="roomCategory" class="form-check-input" value="플라워">플라워
+                        <input type="radio" name="roomCategory" class="form-check-input" value="드로잉">드로잉
+                        <input type="radio" name="roomCategory" class="form-check-input" value="음악">음악
+                        <input type="radio" name="roomCategory" class="form-check-input" value="요가/필라테스">필라테스
+                        <input type="radio" name="roomCategory" class="form-check-input" value="스포츠">스포츠
+                        <input type="radio" name="roomCategory" class="form-check-input" value="뷰티">뷰티
+                        <input type="radio" name="roomCategory" class="form-check-input" value="애완동물">애완동물
+                        <input type="radio" name="roomCategory" class="form-check-input" value="체험">체험
+                        <input type="radio" name="roomCategory" class="form-check-input" value="자기계발">자기계발
+                    </div>
+                </div>
+
+                <!--
+
+                1. 이미지를 여러 장 드래그 앤 드롭, 혹은 클릭해서 업로드하는 부분이다.
+                2. 현재 누가 뭘 만졌는지 고장나서 클릭 후 업로드밖에 먹히지 않는다.
+
+                -->
+                <div class="image-drag-wrapper">
+                    <label class="image-label" id="image-label" for="image-input">
+                        <div class="inner" id="inner">기존 이미지는 사라집니다.</div>
+                    </label>
+                    <input onchange="registerCheck();" id="image-input" class="image-input" accept="image/*"
+                           type="file" required="true" multiple="true" hidden="true" name="roomImageInput">
+                    <p class="preview-title">이미지 미리보기</p>
+                    <div class="preview" id="preview"></div>
+                </div>
+
+            </div>
+
+            <!--두번 째 탭-->
+            <div id="tab-2" class="tab-content">
+                <div class="tab-2-title"> 공방 상세내용 <span>(필수)</span></div>
+                <div class="register-content-wrapper">
+                    <label for="summernote"> 공방 소개</label>
+                    <!-- SummerNote 첨부하기 -->
+                    <div>
+                        <textarea id="summernote" name="roomDetail" th:utext="${roomEntity.roomDetail}">
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!--세번 째 탭-->
+            <div id="tab-3" class="tab-content">
+
+                <div class="tab-3-title"> 공방 위치입력</div>
+                <div class="register-content-wrapper">
+                    <div>지역 선택</div>
+                    <div id="classLocalCategory" class="register-local-category">
+                        <input type="radio" name="roomLocal" class="form-check-input" value="서울" checked>서울
+                        <input type="radio" name="roomLocal" class="form-check-input" value="경기">경기
+                        <input type="radio" name="roomLocal" class="form-check-input" value="인천">인천
+                        <input type="radio" name="roomLocal" class="form-check-input" value="대구">대구
+                        <input type="radio" name="roomLocal" class="form-check-input" value="부산">부산
+                    </div>
+                </div>
+
+                <div class="register-content-wrapper">
+                    <div>공방 주소 입력</div>
+                    <div class="row">
+                        <div class="col-4">
+                            <input onchange="registerCheck();" type="text" name="roomAddress" id="sample5_address"
+                                   class="form-control" placeholder="주소">
+                        </div>
+                        <div class="col-3">
+                            <button type="button" onclick="sample5_execDaumPostcode()">
+                                주소검색
+                            </button>
+                        </div>
+                    </div>
+                    <!-- 선택한 주소의 위치를 지도에 표시합니다. -->
+                    <div>
+                        <div id="map" style="width : 450px; height : 450px; margin-top : 15px; display : none">
+                        </div>
+                    </div>
+                    <!-- 입력한 좌표의 위도, 경도를 input-hidden 으로 넘겨줍니다. -->
+                    <input type="hidden" name="addressX" id="addressX">
+                    <input type="hidden" name="addressY" id="addressY">
+                </div>
+
+                <div class="register-content-wrapper">
+                    <div class="col-4">
+                        <label for="register-capacity"> 최대 수용 인원 선택 </label>
+                    </div>
+                    <div class="col-4">
+                        <select class="form-control" name="roomMax" id="register-capacity">
+                            <option value="1" selected>1명</option>
+                            <option value="2">2명</option>
+                            <option value="3">3명</option>
+                            <option value="4">4명</option>
+                            <option value="5">5명</option>
+                            <option value="6">6명</option>
+                            <option value="7">7명</option>
+                            <option value="8">8명</option>
+                            <option value="9">9명</option>
+                            <option value="10">10명</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="register-content-wrapper">
+                    <div>편의사항 및 제공사항</div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" name="infoCheck" id="formCheck1">
+                        <label class="form-check-label" for="formCheck1">
+                            반려동물과 동반 입장 가능합니다
+                        </label>
+                        <input type="hidden" value="" id="checkBox1" name="checkBox1">
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" name="infoCheck" id="formCheck2">
+                        <label class="form-check-label" for="formCheck2">
+                            와이파이를 제공합니다
+                        </label>
+                        <input type="hidden" value="" id="checkBox2" name="checkBox2">
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" name="infoCheck" id="formCheck3">
+                        <label class="form-check-label" for="formCheck3">
+                            주차공간을 제공합니다
+                        </label>
+                        <input type="hidden" value="" id="checkBox3" name="checkBox3">
+                    </div>
+                </div>
+                <div class="register-content-wrapper">
+                    <div> 강의 가격 설정 (슬라이더를 움직여주세요)</div>
+                    <div class="col-6">
+                        <input type="range" class="slider" id="room-price-slider" value="0" min="0" max="100000"
+                               step="5000" onchange="setValue(this);">
+                    </div>
+                    <div class="col-4">
+                        <input type="text" name="roomPrice" id="roomPrice" value="0">
+                    </div>
+                </div>
+                <div class="register-content-wrapper">
+                    <input type="submit" value="공방 정보 수정">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=84d555c388d3da38338a57c648112954&libraries=services"></script>
+<script th:src="@{/js/registerclass.js}"></script>
+
+<script>
+
+        function setValue(e) {
+            $("#roomPrice").val(e.value);
+        }
+
+        $(document).ready(function () {
+            //여기 아래 부분
+            $('#summernote').summernote({
+                height: 300,                 // 에디터 높이
+                minHeight: null,             // 최소 높이
+                maxHeight: null,             // 최대 높이
+                focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+                lang: "ko-KR",					// 한글 설정
+                placeholder: '최대 2048자까지 쓸 수 있습니다'	//placeholder 설정
+            });
+        });
+</script>
+
+<script>
+    window.onscroll = function () { myFunction() };
+
+    var header = document.getElementById("stickynav");
+    var sticky = header.offsetTop;
+
+    function myFunction() {
+        if (window.pageYOffset > sticky) {
+            header.classList.add("sticky");
+        } else {
+            header.classList.remove("sticky");
+        }
+    }
+
+
+</script>
+
+</body>
+</html>

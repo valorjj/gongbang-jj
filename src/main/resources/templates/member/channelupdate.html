@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>나의 채널 정보</title>
+    <link rel="stylesheet" th:href="@{/css/summernote/summernote-lite.css}">
+</head>
+<body>
+<div th:replace="common.html::common"></div>
+<div th:replace="header.html::header"></div>
+<script th:src="@{/js/summernote/summernote-lite.js}"></script>
+<script th:src="@{/js/summernote/lang/summernote-ko-KR.js}"></script>
+
+<div class="container">
+    <div class="row">
+        <form action="/member/channelupdatecontroller" method="post" enctype="multipart/form-data">
+            <input type="hidden" th:value="${memberNo}" name="memberNo">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control rounded-4" name="channelTitle" placeholder="채널명">
+                <label for="floatingInput">채널명</label>
+            </div>
+            <div>
+                <textarea id="summernote" name="channelContent"></textarea>
+            </div>
+            <input type="file" name="memberImg" id="file">
+            <input type="submit" value="등록">
+        </form>
+    </div>
+</div>
+
+<script th:src="@{/js/registerclass.js}"></script>
+<script src="">
+    $(document).ready(function() {
+        //여기 아래 부분
+        $('#summernote').summernote({
+              height: 300,                 // 에디터 높이
+              minHeight: null,             // 최소 높이
+              maxHeight: null,             // 최대 높이
+              focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+              lang: "ko-KR",					// 한글 설정
+              placeholder: '최대 2048자까지 쓸 수 있습니다'	//placeholder 설정
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<div class="reservation-content" th:each=" history : ${histories}">
+    <div class="row my-3 d-flex reservation-content-inner">
+        <div class="row col-md-6 col-6 reservation-content-inner-left text-center ">
+            <img id="historyImg" th:if="${history.RoomEntity.RoomImgEntities != null}"
+                 th:src="@{'/roomimg/' + ${history.RoomEntity.RoomImgEntities.get(0).roomImg} }">
+        </div>
+        <div class="col-md-6 col-6 reservation-content-inner-right">
+            <div>
+                <span>예약자 아이디 :</span> <span th:text="${history.memberEntity.memberId}"></span>
+            </div>
+            <div>
+                <span>클래스명 : </span> <span th:text="${history.roomEntity.roomTitle}"></span>
+            </div>
+            <div>
+                <span>예약날짜 : </span> <span th:text="${history.timeTableEntity.roomDate}"></span>
+            </div>
+            <div>
+                <span>시작/종료 시간 : </span> <span th:text="${history.timeTableEntity.roomTime}"></span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+    @charset "UTF-8";
+    .wrap {
+        font-family: CookieRun-Regular;
+    }
+    
+    .title {
+        margin: 2rem !important;
+        border-bottom: 5px solid #374b73;
+        width: 12rem;
+    }
+    
+    .myinfotxt {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .myinfotxt span {
+        border-bottom: 3px dotted #ff9a9a;
+        width: 15rem;
+    }
+    
+    .pay button {
+        margin: 0.5rem 0;
+        padding: 0 1rem;
+        height: 3rem;
+        border-radius: 0.5rem;
+        border: none;
+        background: #67d5bf;
+        box-shadow: gray 3px 3px 3px;
+        color: white;
+    }
+    
+    .pay button:hover {
+        background: #ff9a9a;
+        transition: ease-in-out 0.5s;
+        transform: scale(1.05);
+        color: black;
+    }
+    
+    .pay svg,
+    .pay span {
+        width: 2.5rem;
+        height: inherit;
+        fill: #374b73;
+    }
+    
+    .paybtn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 1rem 0;
+    }
+    
+    .paybtn input {
+        width: 10rem;
+        margin: 0 2rem;
+        border-radius: 1rem;
+        height: 3rem;
+    }
+    
+    .paybtn input:hover {
+        transform: scale(1.05);
+        transition: ease-in-out 1s;
+    }
+    
+    .paybtn input:first-child {
+        background-color: #374b73;
+        color: white;
+    }
+    
+    .paybtn input:last-child {
+        background-color: #ff9a9a;
+    }
+    
+    .paybtn button:last-child a {
+        color: wheat;
+    }

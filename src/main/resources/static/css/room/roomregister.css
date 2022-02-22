@@ -1,0 +1,202 @@
+@charset "UTF-8";
+
+/* 폰트적용 */
+
+.room_register {
+    font-family: CookieRun-Regular;
+}
+
+
+/* 클래스 등록 소개 */
+
+.content_add {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem 0;
+    /* border: solid 1px #000; */
+}
+
+.content_addinner {
+    padding: 1rem 0;
+}
+
+
+/* 클래스 등록배경레이아웃(가상요소) */
+
+.content_add::before {
+    position: absolute;
+    content: "";
+    background: url(https://cdn.pixabay.com/photo/2017/01/10/01/32/teach-1968076_960_720.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.5;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    z-index: -1;
+}
+
+.contenttext {
+    padding: 1rem;
+}
+
+.contenttexta {
+    font-size: 2.0rem;
+    font-weight: bold;
+}
+
+.contenttextb {
+    font-size: 1.5rem;
+}
+
+.addbtn {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+@keyframes addbtneffect {
+    0% {
+        top: 0px;
+        width: 18rem;
+        height: 5rem
+    }
+    50% {
+        top: 0.5rem;
+        width: 18rem;
+        height: 5rem
+    }
+    to {
+        top: 1rem;
+        width: 18rem;
+        height: 5rem
+    }
+}
+
+.addbtn button {
+    cursor: pointer;
+    position: relative;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.4);
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    transition: all 1s;
+    animation: addbtneffect 1s ease-in Infinite Alternate;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.addbtn button:after,
+.addbtn button:before {
+    content: " ";
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    border: 0px solid #fff;
+    transition: all 1s;
+}
+
+.addbtn button:after {
+    top: -1px;
+    left: -1px;
+    border-top: 5px solid black;
+    border-left: 5px solid black;
+}
+
+.addbtn button:before {
+    bottom: -1px;
+    right: -1px;
+    border-bottom: 5px solid black;
+    border-right: 5px solid black;
+}
+
+.addbtn button:hover {
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    transform: scale(1.2);
+    box-shadow: 5px 5px;
+    color: #ff9a9a;
+}
+
+.addbtn button:hover:before,
+.addbtn button:hover:after {
+    width: 100%;
+    height: 100%;
+}
+
+
+/* 클래스 등록과정 소개 */
+
+.content_addprocess {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.titlebox {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.title {
+    background: #ffdbdb;
+    border-bottom: 3px solid #374b73;
+    padding-bottom: 0.2rem;
+    border-radius: 0.5rem;
+}
+
+.titleborder {
+    height: 5px;
+    width: 100%;
+    display: flex;
+    margin-top: -5px;
+    justify-self: center;
+    background-color: #374b73;
+}
+
+.contextbox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff1ed;
+    padding: 1rem 0;
+}
+
+.context:hover {
+    transform: scale(1.05);
+    transition-timing-function: ease-in-out;
+    transition-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+}
+
+.context {
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #ff9a9a;
+    border-radius: 1rem 1rem 2rem 2rem;
+    box-shadow: 10px 10px 10px 10px rgb(196, 196, 196);
+}
+
+.contextarrow {
+    align-self: center;
+    fill: #374b73;
+}
+
+.context p {
+    background-color: #ffdbdb;
+    padding: 0 1rem;
+    border-radius: 1rem;
+    margin-top: 1rem;
+}
+
+.contextinner {
+    padding: 1rem;
+}

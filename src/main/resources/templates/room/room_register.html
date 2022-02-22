@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>클래스 개설 소개 </title>
+    <link th:href="@{/css/room/roomregister.css}" rel="stylesheet">
+</head>
+
+<body>
+    <div th:replace="common.html::common"></div>
+    <div th:replace="header.html::header"></div>
+    <div class="container room_register">
+        <!-- 클래스 등록 소개 -->
+        <div class="row content_add">
+            <div class="content_addinner">
+                <div class="contenttext">
+                    <p class="contenttexta">누구나 강의를 개설할 수 있습니다</p>
+                    <p class="contenttextb">여러분의 재능을 공유하세요 !</p>
+                </div>
+                <div class="addbtn">
+                    <a th:href="@{/room/registerDetail}">
+                        <button type="button" class="btn">공방클래스 등록하기</button>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+        <!-- 클래스 등록하는 과정 소개-->
+        <div class="row content_addprocess">
+            <div class="titlebox my-3">
+                <div class="title h3"> 공방클래스 등록 과정</div>
+            </div>
+
+            <div class="row contextbox">
+                <div class="col-md-3 context" style="height: auto;">
+                    <p> 공방클래스 등록</p>
+                    <img src="/img/class/class1.png" class="img-fluid" alt="">
+                    <div class="contextinner">
+                        공방클래스 회원 가입 후
+                        자유롭게 클래스 등록 글을
+                        작성해 주세요
+                    </div>
+                </div>
+                <div class="col-md-1 contextarrow" style="height: auto;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+                        <title />
+                        <path
+                            d="M69.8437,43.3876,33.8422,13.3863a6.0035,6.0035,0,0,0-7.6878,9.223l30.47,25.39-30.47,25.39a6.0035,6.0035,0,0,0,7.6878,9.2231L69.8437,52.6106a6.0091,6.0091,0,0,0,0-9.223Z" />
+                    </svg>
+                </div>
+                <div class="col-md-3 context" style="height: auto;">
+                    <p> 검토 후 승인</p>
+                    <img src="/img/class/class2.png" class="img-fluid" alt="">
+                    <div class="contextinner">
+                        작성해주신 공방은
+                        공방클래스 매니저가 간단한 확인 이후
+                        승인 안내 메일을 전달 드려요
+                    </div>
+                </div>
+                <div class="col-md-1 contextarrow" style="height: auto;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+                        <title />
+                        <path
+                            d="M69.8437,43.3876,33.8422,13.3863a6.0035,6.0035,0,0,0-7.6878,9.223l30.47,25.39-30.47,25.39a6.0035,6.0035,0,0,0,7.6878,9.2231L69.8437,52.6106a6.0091,6.0091,0,0,0,0-9.223Z" />
+                    </svg>
+                </div>
+                <div class="col-md-3 context" style="height: auto;">
+                    <p>수강 및 정산</p>
+                    <img src="/img/class/class3.png" class="img-fluid" alt="">
+                    <div class="contextinner">
+                        수강생 결제 완료 후
+                        클래스가 진행 되고 나면
+                        정산 신청을 하실 수 있어요
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 클래스 등록 영상 가이드-->
+        <!-- 나중에 youtube 시연영상을 여기서 보여주면 될 듯-->
+        <!-- 다 완성하고 youtube 영상 링크 걸어주기 -->
+        <div class="row">
+
+        </div>
+
+
+    </div>
+    <div th:replace="footer.html::footer"></div>
+
+</body>
+
+</html>

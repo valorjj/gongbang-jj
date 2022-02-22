@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>메시지</title>
+    <link rel="stylesheet" th:href="@{/css/member/member_msg.css}">
+</head>
+<body>
+
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script> -->
+
+    <div th:replace="common.html::common"></div>
+    <div th:replace="header.html::header"></div>
+
+    <div class="wrap">
+        <div class="container">
+            <div class="title h3">메세지</div>
+            <div class="row">
+                <!-- 좌측 컨텐츠 -->
+                <div class="col-md-4 p-3 my-3 leftcontents">
+                    <div class="row p-2">
+                        <div class="col-md-2 align-items-center">
+                            <img src="/img/default-profile-photo.png" alt="" width="32" height="32" class="rounded-circle img-fluid">
+                        </div>
+                        <div class="col-md-9">
+                            <div>받은 쪽지 내용 몇글자만 미리보기</div>
+                        </div>
+                        <div class="col-md-1 d-flex justify-content-center">
+                            <!-- 읽었으면 완료 표시-->
+                            <div><span style="color:green;"><i class="bi bi-check-lg"></i></span></div>
+                            <!-- 안 읽었으면 미완료표시-->
+                            <div><span style="color:red;"><i class="bi bi-question-lg"></i></span></div>
+                        </div>
+                    </div>
+                    <div class="row p-2">
+                        <div class="col-md-2 align-items-center">
+                            <img src="/img/default-profile-photo.png" alt="" width="32" height="32" class="rounded-circle img-fluid">
+                        </div>
+                        <div class="col-md-9">
+                            <div>받은 쪽지 내용 몇글자만 미리보기</div>
+                        </div>
+                        <div class="col-md-1 d-flex justify-content-center">
+                            <!-- 읽었으면 완료 표시-->
+                            <div><span style="color:green;"><i class="bi bi-check-lg"></i></span></div>
+                            <!-- 안 읽었으면 미완료표시-->
+                            <!--<div><span style="color:red;"><i class="bi bi-question-lg"></i></span></div>-->
+                        </div>
+                    </div>
+                    <div class="row p-2">
+                        <div class="col-md-2 align-items-center">
+                            <img src="/img/default-profile-photo.png" alt="" width="32" height="32" class="rounded-circle img-fluid">
+                        </div>
+                        <div class="col-md-9">
+                            <div>받은 쪽지 내용 몇글자만 미리보기</div>
+                        </div>
+                        <div class="col-md-1 d-flex justify-content-center">
+                            <!-- 읽었으면 완료 표시-->
+                            <!--<div><span style="color:green;"><i class="bi bi-check-lg"></i></span></div>-->
+                            <!-- 안 읽었으면 미완료표시-->
+                            <div><span style="color:red;"><i class="bi bi-question-lg"></i></span></div>
+                        </div>
+                    </div>
+                    <div class="row p-2">
+                        <div class="col-md-2 align-items-center">
+                            <img src="/img/default-profile-photo.png" alt="" width="32" height="32" class="rounded-circle img-fluid">
+                        </div>
+                        <div class="col-md-9">
+                            <div>받은 쪽지 내용 몇글자만 미리보기</div>
+                        </div>
+                        <div class="col-md-1 d-flex justify-content-center">
+                            <!-- 읽었으면 완료 표시-->
+                            <div><span style="color:green;"><i class="bi bi-check-lg"></i></span></div>
+                            <!-- 안 읽었으면 미완료표시-->
+                            <!--<div><span style="color:red;"><i class="bi bi-question-lg"></i></span></div>-->
+                        </div>
+                    </div>
+
+            </div>
+
+                <!-- 우측 컨텐츠 -->
+                <div class="col-md-6 offset-1 p-1 my-3 rightcontents">
+                    <div class="rightcontents-receivemsg">
+                        <h3> 받은 쪽지 </h3>
+                        <table class="table table-striped">
+                            <tr th:each="room : ${rooms}" class="py-3">
+                                <td th:text="${'순번: ' + room.roomNo}"></td>
+                                <td th:text="${'공방제목: '+room.roomTitle}"></td>
+                                <td>
+                                    <div th:each="note:${room.noteEntities}" class="receivemsgcontent">
+                                        <span th:text="${'보낸사람: ' + note.memberEntity.memberName}"></span>
+                                        <span th:text="${'내용: ' + note.noteContents}"></span>
+                                        <span th:text="${'보낸 날짜: ' + #temporals.format (note.createdDate,'MM-dd hh:mm')}"></span>
+                                        <span th:if="${note.noteReply!=null}" style="color:orange; border: solid 3px orange; text-align: center; border-radius:5px; padding:5px;">
+                                            답변완료 </span>
+                                    <span th:if="${session.logindto.memberNo != note.memberEntity.memberNo}">
+                                            <span th:if="${note.noteReply==null}"> <button class="btn btn-warning"
+                                                                                           th:onclick="notereply([[${note.noteNo}]],[[${note.noteContents}]])">
+                                                    답변하기
+                                                </button></span>
+                                        </span>
+                                    <span class="readstate" th:text="${note.noteRead==0} ? 읽지않음 : 읽음"></span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <hr>
+                <div class="rightcontents-sendmsg">
+                    <h3> 보낸 쪽지 </h3>
+                    <table class="table table-striped">
+                        <tr th:each="note : ${notes}">
+                            <td th:text="${note.roomEntity.roomNo}"></td>
+                            <td th:text="${note.roomEntity.roomTitle}"></td>
+                            <td>
+                                <span th:text="${'내용 : ' + note.noteContents}"></span>
+                                <span th:text="${'보낸 날짜 : ' + #temporals.format (note.createdDate,'MM-dd hh:mm')}"></span>
+                                <span th:text="${'읽음 : ' + note.noteRead}"></span>
+                                <span class="noteReply" th:if="${note.noteReply!=null}"
+                                      th:text="${'답변 : ' + note.noteReply}"></span>
+                                <span class="noteReply" th:if="${note.noteReply==null}"> 답변대기중 </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <!-- 우측컨텐츠 종료 -->
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="notereplymodal" data-bs-keyword="false" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-body p-4 text-center">
+                <h5 class="mb-0"> 문의 답변 </h5>
+                <p class="mb-3" id="replymsg"> 문의자에게 답변할 수 있습니다. </p>
+                <div id="noteContents"></div>
+                <textarea class="form-control" row="10" id="noteReply"></textarea>
+                <input type="hidden" id="noteNo" name="noteNo">
+            </div>
+            <div class="modal-footer flex-nowrap p-0">
+                <button onclick="notereplywrite()" type="button"
+                        class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0 border-right"><strong>답변합니다.</strong>
+                </button>
+                <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0"
+                        data-bs-dismiss="modal">답변취소
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div th:replace="footer.html::footer"></div>
+<script th:src="@{/js/roomlist.js}"></script>
+<script th:src="@{/js/nreply.js}"></script>
+</body>
+
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/calendar.css}">
+    <link rel="stylesheet" th:href="@{/css/member/history_list.css}">
+</head>
+
+<body>
+<!--
+@Author : 김정진
+@Date : 2022-02-13
+@Note :
+1. History Entity 에서 회원이 신청한 내역을 달력에 뿌려줍니다.
+2. 처음엔 모든 내역을 출력합니다.
+3.
+-->
+
+<div th:replace="common.html::common"></div>
+<div th:replace="header.html::header"></div>
+
+<div class="wrap">
+    <div class="container">
+        <div class="row rowbox">
+            <!-- 좌측 컨텐츠 -->
+            <div class="col-md-5 col-5 reservation-wrapper">
+                <!-- 처음 화면 진입 시 예약 내역 전체를 출력 -->
+                <div class="reservation-content" th:each=" history : ${histories}">
+                    <div class="row my-3 d-flex reservation-content-inner">
+                        <div class="row col-md-6 col-6 reservation-content-inner-left text-center ">
+                            <img id="historyImg" th:if="${history.RoomEntity.RoomImgEntities != null}"
+                                 th:src="@{'/roomimg/' + ${history.RoomEntity.RoomImgEntities.get(0).roomImg} }">
+                        </div>
+                        <div class="col-md-6 col-6 reservation-content-inner-right">
+                            <div>
+                                <span>예약자 아이디 :</span> <span th:text="${history.memberEntity.memberId}"></span>
+                            </div>
+                            <div>
+                                <span>클래스명 : </span> <span th:text="${history.roomEntity.roomTitle}"></span>
+                            </div>
+                            <div>
+                                <span>예약날짜 : </span> <span th:text="${history.timeTableEntity.roomDate}"></span>
+                            </div>
+                            <div>
+                                <span>시작/종료 시간 : </span> <span th:text="${history.timeTableEntity.roomTime}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 캘린더에서 선택한 날짜에 대한 예약 내역을 출력 -->
+                <div class="reservation-date-select">
+
+                </div>
+                <!-- 예약 내역 반복문으로 출력 종료 -->
+            </div>
+
+            <!-- 우측 캘린더  -->
+            <div class="col-md-5 col-5 right" id="reservation-calendar">
+                <!-- 달력 출력 시작 -->
+                <div class="calendarbox" style="">
+                    <div class="sec_cal">
+                        <div class="cal_nav">
+                            <a href="javascript:;" class="nav-btn go-prev">prev</a>
+                            <div class="year-month"></div>
+                            <a href="javascript:;" class="nav-btn go-next">next</a>
+                        </div>
+                        <div class="cal_wrap">
+                            <div class="days">
+                                <div class="day">MON</div>
+                                <div class="day">TUE</div>
+                                <div class="day">WED</div>
+                                <div class="day">THU</div>
+                                <div class="day">FRI</div>
+                                <div class="day">SAT</div>
+                                <div class="day">SUN</div>
+                            </div>
+                            <div class="dates"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 달력 출력 종료 -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/calendar3.js}"></script>
+
+</body>
+</html>

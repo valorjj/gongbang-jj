@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/admin/adminlist.css}">
+    <style>
+        #chartdiv {
+            width: 100%;
+            height: 45rem; transform(scale : 0.9);
+        }
+
+        .admin-figure-wrapper{
+            color: #374b73;
+            font-size: 1.2rem;
+            margin: 0 auto;
+        }
+
+        .admin-figure .figure-item{
+            display: inline;
+        }
+
+    </style>
+</head>
+
+<body>
+<div th:replace="common.html::common"></div>
+<div th:replace="header.html::header"></div>
+
+<!-- Resources -->
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+
+<script th:src="@{/js/adminChart.js}"></script>
+
+<div class="wrap">
+    <div class="container admin-list-wrapper">
+        <div class="row">
+            <!-- 좌측 이미지 -->
+            <div class="col-2">
+                <div class="tab-wrapper">
+                    <ul class="tabs nav d-flex flex-column text-center">
+                        <li class="nav-item tab-link current" data-tab="tab-1">클래스</li>
+                        <li class="nav-item tab-link" data-tab="tab-2">후기</li>
+                        <li class="nav-item tab-link" data-tab="tab-3">통계</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- 우측 정보 -->
+            <div class="col-9 offset-1">
+                <!-- 검색창 -->
+                <div id="tab-1" class="tab-content current">
+                    <div class="row">
+                        <div class="col-4">
+                            <select onchange="adminSearch();" name="adminLocal" id="adminLocal" class="form-select">
+                                <option value="" selected>지역선택</option>
+                                <option value="서울">서울</option>
+                                <option value="경기">경기</option>
+                                <option value="인천">인천</option>
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <select onchange="adminSearch();" name="adminCategory" id="adminCategory"
+                                    class="form-select">
+                                <option value="" selected>카테고리선택</option>
+                                <option value="핸드메이드">핸드메이드</option>
+                                <option value="쿠킹">쿠킹</option>
+                                <option value="플라워">플라워</option>
+                                <option value="드로잉">드로잉</option>
+                                <option value="음악">음악</option>
+                                <option value="요가/필라테스">필라테스</option>
+                                <option value="스포츠">스포츠</option>
+                                <option value="뷰티">뷰티</option>
+                                <option value="애완동물">애완동물</option>
+                                <option value="체험">체험</option>
+                                <option value="자기계발">자기계발</option>
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <div class="row">
+                                <div class="col-6">
+                                    <input onchange="adminSearch();" name="adminSearch" id="adminSearch" type="search"
+                                           placeholder="검색" class="form-control" aria-label="Search">
+                                </div>
+                                <div class="col-6 adminsearch">
+                                    <button id="search" type="button">검색</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <div id="table-section">
+                            <table class="table table-striped admintable text-center" id="admin-table">
+                                <tr class="admintabletr">
+                                    <td>등록번호</td>
+                                    <td>클래스명</td>
+                                    <td>카테고리</td>
+                                    <td>정원</td>
+                                    <td>공방주소</td>
+                                    <td>승인상태</td>
+                                    <td>등록일자</td>
+                                    <td colspan="2">비고</td>
+                                </tr>
+
+                                <tr th:each="room : ${roomEntities}">
+                                    <td th:text="${room.roomNo}"></td>
+                                    <td>
+                                        <a th:href="@{'/room/view/' + ${room.roomNo} }"
+                                           class="logo d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
+                                            <span th:text="${room.roomTitle}"></span>
+                                        </a>
+                                    </td>
+                                    <td th:text="${room.roomCategory}"></td>
+                                    <td th:text="${room.roomMax}+'명'"></td>
+                                    <td th:text="${#strings.listSplit(room.roomAddress,',')[0]}"></td>
+                                    <td>
+                                        <span th:if="${room.roomStatus.equals('검토중')}" th:text="${room.roomStatus}"
+                                              style="color:orange"></span>
+                                        <span th:if="${room.roomStatus.equals('승인중')}" th:text="${room.roomStatus}"
+                                              style="color:navy"></span>
+                                        <span th:if="${room.roomStatus.equals('승인완료')}" th:text="${room.roomStatus}"
+                                              style="color:green"></span>
+                                        <span th:if="${room.roomStatus.equals('승인거부')}" th:text="${room.roomStatus}"
+                                              style="color:red"></span>
+
+                                    </td>
+                                    <td th:text="${#temporals.format (room.createdDate,'MM-dd hh:mm')}"></td>
+                                    <td class="submitbtn_a">
+                                        <button class=" border w-100 px-1 my-2 slide addaccess"
+                                                th:data-bs-target="${'#active' + room.roomNo}" data-bs-toggle="modal">
+                                            <span class="nav-link link-dark text-dark">상태변경</span></button>
+                                    </td>
+                                    <td class="submitbtn_b">
+                                        <button class=" border w-100 px-1 my-2 slide addaccess"
+                                                th:data-bs-target="${'#delete' + room.roomNo}"
+                                                data-bs-toggle="modal"><span
+                                                class="nav-link link-dark  text-dark">삭제</span>
+                                        </button>
+                                    </td>
+                                    <!-- 상태변경모달  -->
+                                    <div class="modal" th:id="${'active'+room.roomNo}" data-keyboard="false"
+                                         data-backdrop="static" tabindex="-1" role="dialog">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content rounded-4 shadow">
+                                                <div class="modal-body p-4 text-center">
+                                                    <h5 class="my-2"> 등록물 상태변경 </h5>
+                                                    <p class="my-2" id="activemsg">등록물 상태를 변경합니다. 변경하시겠습니까? </p>
+                                                </div>
+                                                <div class="modal-footer p-0 modaltxt">
+                                                    <button type="button" class="btn-link text-decoration-none "
+                                                            th:onclick="activeupdate([[${room.roomNo}]],'검토중')">
+                                                        검토중
+                                                    </button>
+                                                    <button type="button" class="btn-link text-decoration-none "
+                                                            th:onclick="activeupdate([[${room.roomNo}]],'승인중')">
+                                                        승인중
+                                                    </button>
+                                                    <button type="button" class="btn-link text-decoration-none "
+                                                            th:onclick="activeupdate([[${room.roomNo}]],'승인완료')">
+                                                        승인완료
+                                                    </button>
+                                                    <button type="button" class="btn-link text-decoration-none "
+                                                            th:onclick="activeupdate([[${room.roomNo}]],'승인거부')">
+                                                        승인거부
+                                                    </button>
+                                                    <button type="button" class="btn-link text-decoration-none  "
+                                                            data-bs-dismiss="modal">취소
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 삭제모달  -->
+                                    <div class="modal" tabindex="-1" th:id="${'delete'+room.roomNo}"
+                                         data-bs-keyword="false" data-bs-backdrop="static">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content rounded-4 shadow">
+                                                <div class="modal-body p-4 text-center">
+                                                    <h5 class="mb-0"> 등록물 삭제 </h5>
+                                                    <p class="mb-3" id="deletemsg">등록물 삭제시 복구가 불가능합니다. 삭제하시겠습니까?
+                                                    </p>
+                                                </div>
+                                                <div class="modal-footer flex-nowrap p-0">
+                                                    <button th:onclick="rdelete([[${room.roomNo}]]);" type="button"
+                                                            class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0 border-right">
+                                                        <strong>삭제합니다.</strong></button>
+                                                    <button type="button"
+                                                            class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0"
+                                                            data-bs-dismiss="modal">아닙니다.
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="pagingbox">
+                            <ul id="pagination-section" class="pagination justify-content-center" th:with="start = ${ T(Math).floor( roomEntities.number / 10 ) * 10 + 1 } ,
+                                                     last = ( ${ start + 9 < roomEntities.totalPages ?  start + 9 : roomEntities.totalPages } )">
+
+                                <li class="page-item">
+                                    <a class="page-link" th:href="@{/admin/adminlist( page = 1 ) }"> 처음 </a>
+                                </li>
+
+                                <li class="page-item" th:class="${roomEntities.first} ? 'disabled' ">
+
+                                    <a class="page-link"
+                                       th:href="${roomEntities.first} ? '#' : @{/admin/adminlist( page = ${ roomEntities.number } ) }">
+                                        이전 </a>
+                                </li>
+
+                                <li class="page-item" th:each="page : ${#numbers.sequence( start , last ) }">
+                                    <a class="page-link" th:href="@{/admin/adminlist( page = ${page} ) }"
+                                       th:text="${page}"></a>
+                                </li>
+
+                                <li class="page-item" th:class="${roomEntities.last} ? 'disabled' ">
+                                    <a class="page-link"
+                                       th:href="${roomEntities.last} ? '#' : @{/admin/adminlist( page = ${roomEntities.number+2} ) }">
+                                        다음
+                                    </a>
+                                </li>
+
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       th:href="@{/admin/adminlist( page=${roomEntities.totalPages} ) }">
+                                        마지막 </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+                <div id="tab-2" class="tab-content">
+                    후기
+                </div>
+                <div id="tab-3" class="tab-content">
+
+                    <div class="admin-figure-wrapper">
+                        <div class="admin-figure">
+                            <div class="figure-item">총 결제금액</div>
+                            <div class="figure-item figure-item-number" th:text="${totalPrice}"></div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="figure-item bi bi-currency-dollar" viewBox="0 0 16 16">
+                                <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718H4zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73l.348.086z"/>
+                            </svg>
+                        </div>
+                        <div class="admin-figure">
+                            <div class="figure-item">총 참여인원</div>
+                            <div class="figure-item figure-item-number" th:text="${totalNumber}"></div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="figure-item bi bi-people-fill" viewBox="0 0 16 16">
+                                <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                                <path fill-rule="evenodd"
+                                      d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"/>
+                                <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <!--
+                    @Author : 김정진
+                    @Date : 2022-02-17
+                    @Content :
+                        1. 회원 전체의 예약 내역 차트로 보여주는 부분
+                        2. 연도별, 월별, 일별 구분
+                            1. 개설된 강좌
+                            2. 결제된 금액
+                            3. 인원 수
+                        3. 남녀 비율 파이차트
+
+                    @Flow :
+                        1. 처음 접근하면 아무것도 없다
+                        2. select 하면 ajax 로 데이터를 뿌려준다.
+                -->
+                    <div class="d-flex" style="">
+                        <div class="d-flex my-3">
+                            <span> 총 결제금액 :</span>
+                            <div class="mx-3" th:text="${totalPrice}"></div>
+                        </div>
+                        <div class="d-flex my-3 mx-3">
+                            <span> 총 참여인원 :</span>
+                            <div class="mx-3" th:text="${totalNumber}"></div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row admin-select-wrapper">
+                        <div class="col-4 admin-select-content">
+                            <select name="" id="admin-chart-year" class="form-select">
+                                <option value="">연도선택</option>
+                                <option value="2022">2022년</option>
+                                <option value="2023">2023년</option>
+                                <option value="2024">2024년</option>
+                            </select>
+
+                        </div>
+                        <div class="col-4 admin-select-content">
+                            <select name="" id="admin-chart-month" class="form-select">
+                                <option value="">월별선택</option>
+                                <option th:each="num : ${#numbers.sequence(1,12)}" th:value="${num}"
+                                        th:text="${num} + 월"></option>
+                            </select>
+
+                        </div>
+                        <div class="col-4 admin-select-content">
+                            <select name="" id="admin-chart-day" class="form-select">
+                                <option value="">일별선택</option>
+                                <option th:each="num : ${#numbers.sequence(1,31)}" th:value="${num}"
+                                        th:text="${num} + 일"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row admin-select-wrapper">
+                        <div class="col-4 admin-select-content">
+                            <button onclick="adminLocalSelectBtn();" id="admin-chart-local">지역분류</button>
+                        </div>
+                        <div class="col-4 admin-select-content">
+                            <button onclick="adminCategorySelectBtn();" id="admin-chart-category">카테고리분류</button>
+                        </div>
+
+                        <div class="col-4 admin-select-content admin-select-btn" id="admin-chart-btn">
+                            <button onclick="adminSelectBtn();" id="admin-chart-category">차트보기</button>
+
+                        </div>
+                    </div>
+
+                    <!-- 차트 그리기 -->
+                    <div class="admin-chart-wrapper ">
+                        <div class="admin-chart-content ">
+                            <div id="chartdiv "></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/admin/adminList.js} "></script>
+    <script th:src="@{/js/roomlist.js} "></script>
+
+</div>
+</body>
+
+</html>

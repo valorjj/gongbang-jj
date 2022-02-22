@@ -1,0 +1,352 @@
+                    @charset "UTF-8";
+                    /* 헤더폰트적용 */
+                    /* common 안쓰는 페이지 및 헤더쓰는 페이지가 있어서 여기서 한번더 써줘야 적용됀다. */
+                    
+                    #wrap {
+                        /* font-family: 'Noto Sans KR', sans-serif; */
+                        font-family: CookieRun-Regular;
+                        /* display: none; */
+
+                    }
+
+
+
+                    .logo img {
+                        height: 50px;
+                    }
+
+                    .navbtn button {
+                        border: #374b73 1px solid;
+                        font-weight: bold;
+                        color: #374b73;
+                    }
+
+                    .navbtn button:hover {
+                        background: #374b73;
+                        color: white;
+                    }
+
+                    .modal {
+                        display: none;
+                    }
+
+                    .loginmodal {
+                        background-color: #Fff;
+                    }
+
+                    #popup {
+                        position: relative;
+                        width: 100vw;
+                        height: 100vh;
+                        background: rgba(0, 0, 0, 0.8);
+                    }
+
+                    .popupmodal {
+                        border-radius: 5rem;
+                        z-index: 100;
+                        position: absolute;
+                        background: white;
+                        width: 60%;
+                        height: 60%;
+                        top: 20%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                    }
+                    /* 관리자 드롭셀버튼*/
+
+                    .adminavitem {
+                        display: flex;
+                        align-items: center;
+                    }
+                    /* 회원가입 버튼 */
+
+                    #formsubmit:hover {
+                        background-color: #ff9a9a;
+                        color: white;
+                        transform: scale(1.1);
+                    }
+
+                    .googlesignup {
+                        background: rgba(171, 201, 255, 0.6);
+                        color: black;
+                        font-weight: bold;
+                        border: none;
+                        border-radius: 3rem;
+                        box-shadow: 3px 3px 3px black;
+                        text-decoration: none;
+                    }
+
+                    .googlesignup:hover {
+                        background: rgba(171, 201, 255, 1);
+                        transform: scale(1.1);
+                        transition: 1s;
+                    }
+
+                    .kakaosignup {
+                        background: rgba(253, 216, 1, 0.6);
+                        color: rgb(0, 0, 0);
+                        font-weight: bold;
+                        border: none;
+                        border-radius: 3rem;
+                        box-shadow: 3px 3px 3px black;
+                    }
+
+                    .kakaosignup:hover {
+                        background: rgba(253, 216, 1, 1);
+                        transform: scale(1.1);
+                        transition: 1s;
+                    }
+
+                    .naversignup {
+                        background: rgba(45, 190, 83, 0.6);
+                        color: rgb(0, 0, 0);
+                        font-weight: bold;
+                        border: none;
+                        border-radius: 3rem;
+                        box-shadow: 3px 3px 3px black;
+                    }
+
+                    .naversignup:hover {
+                        background: rgba(45, 190, 83, 1);
+                        transform: scale(1.1);
+                        transition: 1s;
+                    }
+
+                    #switchlogin,
+                    #findbtn {
+                        text-align: none;
+                        color: #374b73;
+                        font-weight: bold;
+                        background: #ffdcdc;
+                        font-size: 1rem;
+                        border-radius: 1rem;
+                        margin: 1rem;
+                        cursor: pointer;
+                        padding: 0.2rem 1rem;
+                        height: 5rem;
+                        text-decoration: none;
+                    }
+
+                    #switchlogin:hover,
+                    #findbtn:hover {
+                        text-decoration: underline;
+                        transition: all ease-in-out 0.2s !important;
+                        background: #374b73;
+                        color: white !important;
+                        transform: scale(1.04);
+                    }
+
+                    .openlogin {
+                        background: #ff9a9a;
+                        color: #374b73;
+                        font-weight: bold;
+                    }
+
+                    .openlogin:hover {
+                        transform: scale(0.9);
+                        transition-timing-function: ease-in-out;
+                        transition: 1s;
+                    }
+
+                    .logintext {
+                        cursor: pointer;
+                    }
+
+                    .effect-underline:after {
+                        content: '';
+                        position: absolute;
+                        left: 10px;
+                        display: inline-block;
+                        height: 1em;
+                        width: 90%;
+                        border-bottom: 1px solid;
+                        margin-top: 10px;
+                        opacity: 0;
+                        -webkit-transition: opacity 0.35s, -webkit-transform 0.35s;
+                        transition: opacity 0.35s, transform 0.35s;
+                        -webkit-transform: scale(0, 1);
+                        transform: scale(0, 1);
+                    }
+
+                    .effect-underline:hover:after {
+                        opacity: 1;
+                        -webkit-transform: scale(1);
+                        transform: scale(1);
+                    }
+                    /* 검색칸 */
+
+                    .opensearchbox button {
+                        background: #ffffff;
+                        border: 2px solid #374b73;
+                        width: 100%;
+                        border-radius: 3rem;
+                    }
+
+                    .opensearchbox button:hover {
+                        background: #ff9a9a;
+                        color: white;
+                        transform: scale(0.95);
+                        transition: all 1s;
+                    }
+
+                    .classregistbtn {
+                        border-radius: 2rem;
+                        width: 100%;
+                        border: #ff9a9a 3px solid;
+                        background-color: #374b73;
+                        color: white;
+                        height: 2.5rem;
+                        cursor: pointer;
+                    }
+
+                    .classregistbtn:hover {
+                        background: #ff9a9a;
+                        transition: 1s;
+                        color: rgb(255, 255, 255);
+                        font-weight: bold;
+                        border: #374b73 3px solid;
+                    }
+
+                    .regionbtn,
+                    .categorybtn {
+                        background-color: #ffffff;
+                        border: 3px solid #616161;
+                        border-radius: 1rem;
+                        color: black;
+                    }
+
+                    .searchtext {
+                        display: flex;
+                    }
+
+                    .searchtext label {
+                        background-color: #ffffff;
+                        border: 3px solid #616161;
+                        border-radius: 1rem;
+                        color: black;
+                        height: 2.5rem;
+                        line-height: 2rem;
+                        text-align: center;
+                        width: 6rem;
+                        cursor: pointer;
+                    }
+
+                    .searchtext input {
+                        border-radius: 1.5rem;
+                        height: 2.5rem;
+                    }
+
+                    #classLocal,
+                    #classCategory {
+                        border-radius: 1rem;
+                        font-size: 1rem;
+                        height: 2.7rem;
+                    }
+
+                    .search .searchbtn {
+                        background-color: #374b73;
+                        border-radius: 5rem;
+                        width: 20rem;
+                        color: white;
+                        font-weight: bold;
+                        border: 3px solid #ff9a9a;
+                    }
+
+                    .search .closesearch {
+                        background-color: #ff9a9a;
+                        border-radius: 3rem;
+                        width: 5rem;
+                        border: 3px solid #374b73;
+                    }
+
+                    .search input:hover {
+                        transform: scale(1.1);
+                        transition: 1s;
+                    }
+
+                    /* 드롭다운 */
+                    .dropbtn {
+                    display: flex;
+                    align-items: center;
+                    }
+
+                    .dropbtn img {
+                        display: block;
+                    }
+
+                    .dropdown-menu li  {
+                        display: flex;
+                        align-items: center;
+                        height: 2.4rem;
+
+                    }
+
+
+                    .dropdown-menu li:hover {
+                        background-color: #374b73;
+                        color: white;
+
+                    }
+
+                    .dropdown-menu li a {
+                        text-decoration: none;
+                        color: #374b73;
+                        font-weight: bold;
+                    }
+
+                    .dropdown-menu a:hover {
+                        color: white;
+                    }
+
+
+                    .dropdown-item:hover {
+                        background-color: #374b73;
+                        color: white;
+                        transition: 1s;
+                    }
+
+                    .dropdown-menu svg {
+                        width: 1.5rem;
+                        fill: #ff9a9a;
+                    }
+
+                    .dropdown-menu i {
+                        color: #ff9a9a;
+                        transform: scale(1.1);
+                        margin-left: 1.25rem;
+                    }
+
+
+                    .mych svg {
+                        fill: #ff9a9a;
+                        margin-right: 0.6rem;
+                    }
+                    
+                    .point svg {
+                        margin-right: 0.8rem;
+                        fill: #ff9a9a;
+                    }
+                    
+                    .community svg {
+                        fill: #ff9a9a;
+                        margin-right: 0.8rem;
+                    }
+                    /* 회원찾기모달 */
+                    /* 버튼 */
+                    
+                    .searchinfo {
+                        display: flex;
+                        flex-direction: column;
+                    }
+                    
+                    .searchinfo input {
+                        width: 80%
+                    }
+                    
+                    .searchinfo button {
+                        height: 2rem;
+                        width: 80%;
+                        background: #374b73;
+                        border-radius: 1rem;
+                        color: white;
+                    }

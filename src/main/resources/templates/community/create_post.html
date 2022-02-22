@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="stylesheet" th:href="@{/css/summernote/summernote-lite.css}">
+    <style>
+        .regbtn button {
+            width: 5rem;
+            margin: 0 2rem;
+            background: #374b73;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script th:src="@{/js/summernote/summernote-lite.js}"></script>
+    <script th:src="@{/js/summernote/lang/summernote-ko-KR.js}"></script>
+    <script th:src="@{/js/community/new-post.js}"></script>
+
+    <form id="form">
+        <div class="container" style="background-color: #fff;">
+            <input type="hidden" th:value="${boardNo}" name="boardNo">
+            <div class="row">
+                <!-- 제목 -->
+                <div class="mb-3">
+                    <label for="create-post-title" class="form-label h3 mb-3" style="">제목입력</label>
+                    <input type="text" name="create-post-title" id="create-post-title" class="form-control">
+                </div>
+                <!-- 섬머노트 : 내용 -->
+                <div class="mb-3">
+                    <textarea name="post-content" id="summernote" cols="30" rows="10"></textarea>
+                </div>
+                <!-- 파일 -->
+                <div class="mb-3">
+                    <div class="community-image-drag-wrapper">
+                        <label class="community-image-label" id="community-image-label" for="community-post-img-input">
+                            <div class="community-inner" id="community-inner">이미지 업로드</div>
+                        </label>
+                        <input id="community-post-img-input" class="community-post-img-input" accept="image/*" type="file" required="true" multiple="true" hidden="true" name="community-post-img-input">
+                        <p class="preview-title">이미지 미리보기</p>
+                        <div class="community-preview" id="community-preview"></div>
+                        <div id="community-image-input-result"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row d-flex justify-content-center align-items-center regbtn">
+                <button type="button" onclick="createNewPost();" class="community-create-post-btn">등록</button>
+                <button th:onclick="goToPostList( [[${boardNo}]] );">취소</button>
+            </div>
+
+        </div>
+    </form>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            //여기 아래 부분
+            $('#summernote').summernote({
+                height: 300, // 에디터 높이
+                minHeight: null, // 최소 높이
+                maxHeight: null, // 최대 높이
+                focus: true, // 에디터 로딩후 포커스를 맞출지 여부
+                lang: "ko-KR", // 한글 설정
+                placeholder: '최대 2048자까지 쓸 수 있습니다' //placeholder 설정
+            });
+        });
+    </script>
+
+</body>
+
+</html>

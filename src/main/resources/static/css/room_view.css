@@ -1,0 +1,145 @@
+body{
+    padding: 0px;
+    margin: 0px;
+}
+
+ul li{
+    list-style-type: none;
+    display: inline;
+    margin-left: 20px;
+}
+#qnabox{
+    width: 96%;
+    height: auto;
+    display: flex;
+    padding: 2%;
+    margin-top: 20px;
+    border-color: #e0e0e0;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 7px;
+    flex-direction: column;
+}
+
+.carousel-item img{
+    border-radius: 3rem;
+}
+
+.star_rating {
+    font-size:0; letter-spacing:-4px;
+}
+.star_rating a {
+    font-size: 22px;
+    letter-spacing: 0;
+    display: inline-block;
+    margin-left: 5px;
+    color: #ccc;
+    text-decoration :none;
+}
+
+/* 리뷰 별점 표시 */
+.star_rating a:first-child {
+    margin-left: 0;
+}
+.star_rating a.on {
+    color: #777;
+}
+
+/* 리뷰 평균 */
+#review-avg{
+    font-size: 1.0rem;
+    color: #374b73;
+}
+
+.carousel slide{
+    height: 550px 100%;
+}
+
+.Category {
+    font-weight: bold;
+    font-size: 2rem;
+    color: orange;
+    display: flex;
+    background-color: bisque;
+    width: auto;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.Categorybox {
+    display: flex;
+    position: relative;
+    margin : 10px;
+    flex-direction: row;
+    text-decoration: none;
+}
+
+.title{
+    font-weight: bold;
+    margin : 10px;
+}
+
+.subad{
+    margin: 10px;
+}
+
+.viewnav li {
+    list-style-type: none;
+    display: inline;
+}
+/* 캘린더 CSS 종료 */
+
+
+.classBtn{
+    border: 1px solid #ff9a9a;
+    background-color: #ffffff;
+    color: #ff9a9a;
+    padding: 5px;
+    width: 100%;
+}
+
+.classBtn:hover{
+    cursor: pointer;
+    color: #fff1ed;
+}
+
+<!-- 개설 내역 출력-->
+.classContent{
+    border: 1px solid #ff9a9a;
+    background-color: rgb(0, 0, 0, 0);
+    color: #ff9a9a;
+    padding: 5px;
+    width: 100%;
+}
+
+/* 리뷰출력 */
+#reviewcard{
+    border: solid 1px rgb(161, 154, 154);
+    margin-bottom: 1rem; 
+    border-radius: 1rem; 
+    padding: 1rem;
+}
+
+/* 클래스소개 */
+#classinfo{
+    font-weight: bold;
+}
+
+#classinfobox{
+    height: 15rem;
+}
+
+#ETC{
+    font-weight: bold;
+}
+
+#ETCbox{
+    height: 15rem;
+}
+
+#teacherinfo{
+    font-weight: bold;
+}
+#teacherinfobox{
+    height: 15rem;
+}

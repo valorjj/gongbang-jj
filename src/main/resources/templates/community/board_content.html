@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<!--
+@Author : 김정진
+@Date : 2022-02-18
+@Note :
+    1. board_content.html 은 게시판 선택 후, 해당 게시판에 대한 정보를 출력하는 화면입니다.
+    2. 컨트롤러에서 model 값을 뿌려준 다음 board_list.html 에 있는 div 영역에 뿌려집니다.
+-->
+
+<head>
+    <link rel="stylesheet" th:href="@{/css/community/board_content.css}">
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="boardcontents" th:id=" 'postList' + ${boardNo}">
+                <div class="row no-gutters">
+                    <div class="col-6">
+                        <div class="row no-gutters">
+                            <!--<div class="col-3">전체선택</div>-->
+                            <div class="col-3"></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="row no-gutters">
+                            <div class="col-3">
+                                <!--<button class="list-type-btn">10개씩</button>-->
+                            </div>
+                            <div class="col-3">
+                                <!--<button class="list-type-btn">30개씩</button>-->
+                            </div>
+                            <div class="col-6 d-flex justify-content-end addbtn">
+                                <button class="list-type-btn" type="button" th:onclick="createPost( [[${boardNo}]] );">게시글
+                                    작성
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="table table-striped community-table text-center ">
+                    <thead>
+                        <tr class="community-table-tr">
+                            <th>제목</th>
+                            <th>작성자</th>
+                            <th>작성일</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="post : ${posts}">
+                            <!-- 상세페이지로 이동-->
+                            <td th:text="${post.postTitle}" th:onclick="goToPostView( [[${post.postNo}]], [[${boardNo}]] )">
+                            </td>
+                            <td th:text="${post.memberEntity.memberId}"></td>
+                            <td th:text="${post.createdDate}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <input type="hidden" th:value="${ posts.number + 1 }" id="current-page">
+
+                <!-- 페이징 처리 -->
+                <ul class="pagination justify-content-center" th:with="start = ${ T(Math).floor( posts.number / 10 ) * 10 + 1 } ,
+                                     last = ( ${ start + 9 < posts.totalPages ?  start + 9 : posts.totalPages } )">
+                    <!-- 첫페이지이동 -->
+                    <li class="page-item">
+                        <a class="page-link" th:href="@{ /community/postListController( page = 1 ) }"> 처음 </a>
+                    </li>
+                    <!-- 이전페이지이동 -->
+                    <li class="page-item" th:class="${posts.first} ? 'disabled' ">
+                        <!-- 첫번페이지에서 이전페이지이동 표시 x -->
+                        <a class="page-link" th:href="${posts.first} ? '#' : @{ /community/postListController( page = ${ posts.number } ) }">
+                            이전 </a>
+                    </li>
+                    <!-- 페이지번호 -->
+                    <li class="page-item" th:each="page : ${#numbers.sequence( start , last ) }">
+                        <a class="page-link" th:href="@{ /community/postListController( page = ${page} ) }" th:text="${page}"></a>
+                    </li>
+                    <!-- 다음페이지이동 -->
+                    <li class="page-item" th:class="${posts.last} ? 'disabled' ">
+                        <a class="page-link" th:href="${posts.last} ? '#' : @{ /community/postListController( page = ${posts.number+2} ) }">
+                            다음
+                        </a>
+                    </li>
+                    <!-- 마지막페이지 이동 -->
+                    <li class="page-item">
+                        <a class="page-link" th:href="@{ /community/postListController( page=${posts.totalPages} ) }">
+                            마지막
+                        </a>
+                    </li>
+                </ul>
+
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

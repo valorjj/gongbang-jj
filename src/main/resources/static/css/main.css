@@ -1,0 +1,615 @@
+    @charset "UTF-8";
+    #wrap {
+        /* font-family: 'Noto Sans KR', sans-serif; */
+        /* font-family: CookieRun-Regular !important; */
+    }
+    /* 캐러셀2 */
+    
+    .carouselbtn input {
+        background-image: linear-gradient(to right, #eceff1, #ff9a9a);
+        box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.75);
+        color: white;
+        border: none;
+        border-radius: 2rem;
+        margin-top: -2rem;
+    }
+    
+    .carouselbox section {
+        width: 100%;
+        height: 20em;
+        margin: 0 auto;
+        position: relative;
+        margin-top: 5rem;
+    }
+    
+    .carouselbox section ul {
+        margin-left: -2rem;
+        overflow: hidden;
+    }
+    
+    .carouselbox section ul li,
+    .carouselbox section ul li iframe {
+        height: 20rem;
+    }
+    
+    .carouselbox section ul li img {
+        width: 100%;
+        height: 20rem;
+    }
+    
+    .carouselbox section ul li video {
+        width: 120%;
+        height: 25rem;
+    }
+    
+    .carouselbox section span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        z-index: 10;
+    }
+    
+    .items {
+        width: 500px;
+        height: 281px;
+        display: inline-block;
+        -webkit-transition: all 0.3s ease-in-out;
+        -moz-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+        overflow: hidden;
+    }
+    
+    .items {
+        position: absolute;
+    }
+    
+    .main-pos {
+        z-index: 1;
+        /*background-image: url('https://dl.dropbox.com/u/32649907/imgs/shadow.png');*/
+    }
+    
+    .left-pos {
+        opacity: 1;
+        margin-left: -20vw !important;
+        -webkit-transform: scale(0.75);
+        -moz-transform: scale(0.75);
+        transform: scale(0.75);
+    }
+    
+    .back-pos {
+        margin-left: 2em !important;
+        opacity: 1;
+        -webkit-transform: scale(0.5);
+        -moz-transform: scale(0.5);
+        transform: scale(0.5);
+    }
+    
+    .right-pos {
+        opacity: 1;
+        margin-left: 20vw !important;
+        -webkit-transform: scale(0.75);
+        -moz-transform: scale(0.75);
+        transform: scale(0.75);
+    }
+    
+    span {
+        position: relative;
+        margin: 0 auto;
+        top: 20em;
+    }
+    /* 스틱슬라이드*/
+    /*
+@Author : 태호
+@Content : 간격 수치 등 조정
+@Date : 2022-02-07
+*/
+    
+    .slider-parent {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    /*  */
+    
+    .slider-child {
+        width: 100%;
+        height: 10rem;
+        overflow: hidden;
+        background: rgb(236, 239, 241);
+        display: flex;
+        padding: 0 1rem;
+        border-radius: 3rem;
+    }
+    /*  */
+    
+    .slider-child>div {
+        align-self: center;
+    }
+    
+    .slider-child>div svg {}
+    
+    .slider-child svg path {
+        -webkit-filter: saturate(6);
+        filter: saturate(6);
+    }
+    
+    .slider-child svg:hover {
+        -webkit-filter: invert(0.9);
+        filter: invert(0.9);
+    }
+    /* 버튼 */
+    
+    .tabbutton {
+        margin: 3rem 0;
+    }
+    
+    .tabbutton button {
+        width: 10rem;
+        margin: 0 0.5rem;
+        border-radius: 1rem;
+        background: rgb(236, 239, 241);
+        height: 3rem;
+    }
+    
+    .tabbutton button:focus {
+        background: #374b73;
+        color: white;
+    }
+    
+    #localBtn:hover,
+    #categoryBtn:hover {
+        transform: scale(1.05);
+        transition: 0.8s;
+        background: #757b82;
+        color: white;
+    }
+    
+    #localBtn svg,
+    #categoryBtn svg {
+        height: 1rem;
+    }
+    
+    .slick-slide {
+        margin: 0 5rem;
+        width: 100%;
+    }
+    
+    .slick-arrow {
+        border-radius: 1rem;
+        z-index: 5;
+        margin: 0 2rem;
+        background: #374b73;
+    }
+    
+    .slick-arrow:hover {
+        background: rgb(0, 0, 0);
+    }
+    /*
+@Author : 정진
+@Content : 등록되어 있는 room 리스트를 카드 형식으로 출력
+@Date : 2022-01-27
+*/
+    
+    .card {
+        height: 400px;
+        width: 350px;
+        border-radius: 15px;
+        display: inline-block;
+        margin-bottom: 30px;
+        position: relative;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        /*
+    오버플로우, 마진 빼야 슬릭 잘 적용되서 주석처리해두었습니다. jj
+    */
+        /*overflow: hidden;*/
+        /*margin: 2rem auto;*/
+    }
+    
+    .card-header {
+        -webkit-transition: 0.5s;
+        /*사파리 & 크롬*/
+        -moz-transition: 0.5s;
+        /*파이어폭스*/
+        -ms-transition: 0.5s;
+        /*인터넷 익스플로러*/
+        -o-transition: 0.5s;
+        /*오페라*/
+        transition: 0.5s;
+        width: 100%;
+        height: 270px;
+        border-radius: 15px 15px 0 0;
+        /* background-image: url(/img/coffee.jpg); */
+        background-size: 100% 280px;
+        background-repeat: no-repeat;
+    }
+    
+    .card-img {
+        height: 100%;
+        width: 100%;
+    }
+    
+    .card:hover .card-header {
+        opacity: 0.8;
+        height: 100px;
+    }
+    
+    .card-header-is_closed {
+        background-color: #ff9a9a;
+        color: #fff;
+        font-weight: bold;
+        text-align: center;
+        float: right;
+        margin: 15px 15px 0 0;
+        border-radius: 50%;
+        font-weight: bold;
+        padding: 10px 10px;
+        line-height: 20px;
+    }
+    
+    h1 {
+        font-size: 22px;
+        font-weight: bold;
+    }
+    
+    .card-body {
+        background-color: rgb(255, 255, 255);
+        border: 1;
+    }
+    
+    .card-body-header {
+        line-height: 25px;
+        margin: 10px 20px 0px 20px;
+    }
+    
+    .card-body-description {
+        opacity: 0;
+        color: #757b82;
+        line-height: 25px;
+        -webkit-transition: 0.2s ease-in-out;
+        /*사파리&크롬*/
+        -moz-transition: 0.2s ease-in-out;
+        /*파이어폭스*/
+        -ms-transition: 0.2s ease-in-out;
+        /*익스플로러*/
+        -o-transition: 0.2s ease-in-out;
+        /*오페라*/
+        transition: 0.2s ease-in-out;
+        overflow: hidden;
+        height: 180px;
+        margin: 5px 20px;
+    }
+    
+    .card:hover .card-body-description {
+        opacity: 1;
+        -webkit-transition: 0.5s ease-in-out;
+        -moz-transition: 0.5s ease-in-out;
+        -ms-transition: 0.5s ease-in-out;
+        -o-transition: 0.5s ease-in-out;
+        transition: 0.5s ease-in-out;
+    }
+    
+    .card-body-hashtag {
+        color: #2478ff;
+        font-style: italic;
+    }
+    
+    .card-body-footer {
+        position: absolute;
+        margin-top: 15px;
+        margin-bottom: 6px;
+        bottom: 0;
+        width: 314px;
+        font-size: 14px;
+        color: #000000;
+        background-color: rgb(255, 255, 255);
+        padding: 0 15px;
+        z-index: 1;
+    }
+    
+    .icon {
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 2px;
+    }
+    
+    .icon-view_count {
+        width: 25px;
+        height: 17px;
+        background: url("images/eye.jpg") no-repeat;
+    }
+    
+    .icon-comments_count {
+        margin-left: 5px;
+        width: 25px;
+        height: 17px;
+        background: url("images/comment.jpg") no-repeat;
+    }
+    
+    .reg_date {
+        float: right;
+    }
+    
+    .cardboxinner {}
+    
+    .cardboxtop {
+        background: #2478ff;
+    }
+    
+    .cardboxmid {
+        background: #8db8ff;
+    }
+    
+    .cardboxbot {
+        background: #c7c7c7;
+    }
+    
+    .cardboxbotprice {}
+    
+    .cardboxbotprice div {}
+    
+    .room-price {
+        color: #000000;
+        font-size: 0.8rem;
+        text-align: right;
+    }
+    /* 카드영역 */
+    
+    .product-boxoutline {
+        height: auto;
+    }
+    
+    .product-box {
+        height: auto;
+        margin: 1rem 1rem;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .product-card {
+        width: 30%;
+        position: relative;
+        z-index: 1;
+        background: #ffffff;
+        min-width: 20rem;
+        height: 470px;
+        box-shadow: 12px 15px 20px 0px rgba(46, 61, 73, 0.15);
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        border-radius: 20px 20px 0px 0px;
+        margin: 1rem 1rem;
+    }
+    
+    .card-content a,
+    .card-content a:hover,
+    .card-content a:active {
+        text-decoration: none;
+        color: #525c65;
+        transition: color 0.3s ease;
+    }
+    
+    .product-card:hover {
+        box-shadow: 2px 4px 8px 0px rgba(46, 61, 73, 0.2)
+    }
+    
+    .product-card .card-thumbnail {
+        /* height: 400px; */
+        overflow: hidden;
+        border-radius: 20px 20px 0px 0px;
+        z-index: 5;
+        height: 100%;
+        width: 100%;
+    }
+    
+    .product-card .card-thumbnail img {
+        display: block;
+        width: 100%;
+        -webkit-transition: all .3s cubic-bezier(0, .5, .5, 1);
+        -o-transition: all .3s cubic-bezier(0, .5, .5, 1);
+        transition: all .3s cubic-bezier(0, .5, .5, 1);
+    }
+    
+    .product-card:hover .card-thumbnail img {
+        -webkit-transform: scale(1.1);
+        -moz-transform: scale(1.1);
+        transform: scale(1.1);
+        opacity: .6;
+    }
+    
+    .product-card .card-content {
+        position: absolute;
+        bottom: 0;
+        background: #ffdbdb;
+        width: 100%;
+        padding: 1rem;
+        -webkti-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        -webkit-transition: all 0.3s cubic-bezier(0.37, 0.75, 0.61, 1.05) 0s;
+        -moz-transition: all 0.3s cubic-bezier(0.37, 0.75, 0.61, 1.05) 0s;
+        -ms-transition: all 0.3s cubic-bezier(0.37, 0.75, 0.61, 1.05) 0s;
+        -o-transition: all 0.3s cubic-bezier(0.37, 0.75, 0.61, 1.05) 0s;
+        transition: all 0.3s cubic-bezier(0.37, 0.75, 0.61, 1.05) 0s;
+        border-radius: 0px 0px 20px 20px;
+        z-index: 10;
+    }
+    
+    .product-card .card-content .send {
+        position: absolute;
+        top: -30px;
+        right: 10px;
+        height: 60px;
+        width: 60px;
+        background: #197;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 1s ease;
+        transition-delay: 0.3s;
+        opacity: 0;
+    }
+    
+    .product-card .card-content .card-title {
+        margin: 0;
+        padding: 0 0 10px;
+        color: #333333;
+        font-size: 20px;
+        font-weight: 700;
+        text-transform: capitalize;
+    }
+    
+    .product-card .card-content .card-sub-title {
+        margin: 0;
+        padding: 0 0 20px;
+        color: #197;
+        font-size: 15px;
+        font-weight: 400;
+        text-transform: capitalize;
+    }
+    
+    .product-card .card-content .description {
+        color: #666666;
+        font-size: 12px;
+        line-height: 1.8em;
+        display: none;
+        /* height: 0px; */
+    }
+    
+    .product-card .card-content .post-meta {
+        margin: 30px 0 0;
+        color: #999999;
+    }
+    
+    .product-card .card-content .post-meta .time-stamp {
+        margin: 0 80px 0 0;
+    }
+    
+    .product-card .card-content .post-meta a {
+        color: inherit;
+        text-decoration: none;
+    }
+    
+    .card-bot {
+        height: 3rem;
+        width: 100%;
+        padding: 0.5rem;
+        position: absolute;
+        bottom: 0;
+        background-color: #ffffff;
+        z-index: 20;
+        color: #374b73;
+    }
+    
+    .card-bot ul {
+        display: flex;
+        align-items: center;
+        height: 100%;
+    }
+    
+    .card-bot ul li {
+        margin: 0 1rem;
+    }
+    /* 리뷰카드 */
+    
+    .reviewcard {
+        width: 20rem;
+        margin-top: 10px;
+        padding: 10px;
+        height: 100%;
+    }
+    
+    .reviewimgbox {
+        width: 100%;
+        height: 20rem;
+    }
+    
+    .modalimgbox {
+        border: 2px solid rgb(173, 173, 173);
+        height: 20rem;
+        position: relative;
+    }
+    
+    .reviewimgbox img {
+        height: 100%;
+        margin-top: 1rem;
+        border-radius: 0.5rem;
+    }
+    
+    .modalbot a {
+        display: block;
+        margin: 0 auto;
+        text-align: center;
+        text-decoration: none;
+        width: 10rem;
+        background-color: #ff9a9a;
+        border-radius: 1rem;
+        padding: 0 0.5rem;
+        color: #374b73;
+        box-shadow: 3px 3px 3px #ff9a9a;
+    }
+    
+    .modalbot a:hover {
+        transform: scale(1.2);
+        transition: ease-in-out 1s;
+        font-size: 1.1rem;
+        text-decoration: underline;
+    }
+    
+    .modalimg {
+        background-color: rgb(196, 196, 196);
+        height: 100%;
+    }
+    
+    .modalimg img {
+        height: 100%;
+        width: 100%;
+    }
+    
+    .modaltitle {
+        border-bottom: 0.2rem solid #374b73;
+    }
+    /* 광고배너1 */
+    
+    .adbanner {
+        margin: 3rem 0;
+        height: 10rem;
+        background: #efffbb;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .adbanner:hover {
+        box-shadow: 0 2px 2px 0 #999999;
+    }
+    
+    .adbanner .bannertxt p:nth-child(1) {
+        color: #ff7a7a;
+    }
+    
+    .adbanner .bannertxt p:nth-child(2) {
+        color: #666666;
+    }
+    
+    .rowimg {
+        height: 80%;
+    }
+    
+    .rowimg img {
+        height: 100%;
+    }
+    /* 공방효과 */
+    
+    .product-box:nth-child(3n-2) {}
+    
+    .product-box:nth-child(3n-1) {}
+    
+    .product-box:nth-child(3n) {}

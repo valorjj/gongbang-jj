@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/calendar.css}">
+    <link rel="stylesheet" th:href="@{/css/time_select.css}">
+</head>
+
+<body>
+<div th:replace="common.html::common"></div>
+<div th:replace="header.html::header"></div>
+
+<!--
+    @Author : 김정진
+    @Date : 2022-02-03
+    @Content :
+    1. 본인이 등록한 클래스 상세
+    2. 캘린더를 선택해서 날짜를 선택
+    3. 시간을 선택해서 시작 시간, 종료 시간 등록
+-->
+<script th:src="@{/js/timeselect.js}"></script>
+<div class="wrap">
+    <form th:action="@{/room/timeSelectController}" method="get" onsubmit="return inputCheck()">
+        <input type="hidden" th:value="${room.roomNo}" name="roomNo">
+        <div class="container">
+            <h3 class="my-3 title">강의등록</h3>
+            <div class="row">
+                <div class="col-md-7">
+                    <!-- 이미지 출력 -->
+                    <div class="row">
+                        <div class="col-5 gbimg">
+                            <img th:src="@{'/roomimg/' + ${room.roomImgEntities.get(0).roomImg}}" class="img-fluid"
+                                 style="width: 100%;">
+                        </div>
+                        <div class="col-6 offset-1 listbox">
+                            <ul class="list-group">
+                                <li class="list-group-item" th:text="'제목 : '+ ${room.roomTitle}">
+                                </li>
+                                <li class="list-group-item" th:text="'내용 : '+ ${room.roomContent}"></li>
+                                <li class="list-group-item"
+                                    th:text="'주소 : '+ ${#strings.listSplit(room.roomAddress, ',')[0]}"></li>
+                                <li class="list-group-item" th:text="'최대인원 : '+ ${room.roomMax}"></li>
+                                <li class="list-group-item" th:text="'카테고리 : '+ ${room.roomCategory}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <!--
+                    1. 캘린더 출력
+                    2. 클릭 이벤트 발생 시 날짜 데이터 전달
+                    -->
+                    <div class="calendarbox">
+                        <div class="sec_cal">
+                            <div class="cal_nav">
+                                <a href="javascript:;" class="nav-btn go-prev">prev</a>
+                                <div class="year-month"></div>
+                                <a href="javascript:;" class="nav-btn go-next">next</a>
+                            </div>
+                            <div class="cal_wrap">
+                                <div class="days">
+                                    <div class="day">MON</div>
+                                    <div class="day">TUE</div>
+                                    <div class="day">WED</div>
+                                    <div class="day">THU</div>
+                                    <div class="day">FRI</div>
+                                    <div class="day">SAT</div>
+                                    <div class="day">SUN</div>
+                                </div>
+                                <div class="dates"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--
+                    1. 시간 선택
+                    -->
+                    <div class="time-select-wrapper">
+                        <!-- 캘린더에서 선택한 날짜를 input 안에 집어넣습니다 -->
+                        <div class="mb-3">
+                            <label class="my-2" for="selectedDate"><span
+                                    style="color: #ffffff; font-weight: bold; background-color: #000000; padding: 0 0.5rem; border-radius: 0.2rem; margin: 1rem 0;">선택</span>
+                                된
+                                날짜</label>
+                            <input onchange="inputCheck();" type="text" id="selectedDate" class="form-control" disabled>
+                            <input type="hidden" id="roomDate" name="roomDate" class="form-control">
+                            <span id="dateMsg"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="my-2" for="beginTime"><span
+                                    style="color: #374b73; font-weight: bold; background-color: #a1e9ff; padding: 0 0.5rem; border-radius: 0.2rem;">시작</span>
+                                시간
+                                선택</label>
+                            <select onchange="inputCheck();" name="beginTime" id="beginTime"
+                                    class="form-select form-select-lg">
+                                <option value="9">시작 시간 선택</option>
+                                <option th:each="number : ${#numbers.sequence(9,23,1)}" th:value="${number}"
+                                        th:text="${number}+'시'"></option>
+                            </select>
+                            <span id="beginTimeMsg"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="my-2" for="endTime"><span
+                                    style="color: #ff7676; font-weight: bold; background-color: #ffdbdb; padding: 0 0.5rem; border-radius: 0.2rem; margin: 1rem 0;">종료</span>
+                                시간 선택</label>
+                            <select onchange="inputCheck();" name="endTime" id="endTime"
+                                    class="form-select form-select-lg">
+                                <option value="10">종료 시간 선택</option>
+                                <option th:each="number : ${#numbers.sequence(10,24,1)}" th:value="${number}"
+                                        th:text="${number}+'시'"></option>
+                            </select>
+                            <span id="endTimeMsg"></span>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <input type="submit" value="클래스 시간 등록" class="time-select-btn">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script th:src="@{/js/calendar.js}"></script>
+
+</body>
+
+</html>

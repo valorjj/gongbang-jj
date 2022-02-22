@@ -1,0 +1,59 @@
+@charset "UTF-8";
+.wrap {
+    font-family: CookieRun-Regular;
+}
+
+.title {
+    border-bottom: 5px solid #374b73;
+    display: inline-block;
+}
+
+.gbimg {
+    border-radius: 1rem;
+}
+
+.gbimg img {
+    border-radius: 1rem;
+    width: 100%;
+    box-shadow: 5px 5px 5px grey;
+}
+
+.listbox ul {
+    border-radius: 1rem;
+    box-shadow: 5px 5px 5px #ff9a9a;
+}
+
+.listbox li {
+    background: #ffdbdb !important;
+    border-bottom: 2px solid #ffffff;
+}
+
+.time-select-btn {
+    padding: 1.2rem;
+    margin: 0.5rem;
+    background-color: #374b73;
+    border: 3px solid #ff9a9a;
+    border-radius: 1rem;
+    color: #ffffff;
+    margin-bottom: 1rem;
+}
+
+.time-select-btn:hover {
+    background: #ff9a9a;
+    color: black;
+    transform: scale(1.2);
+    transition: ease-in-out 0.4s;
+}
+
+.calendarbox {
+    width: 28rem;
+    height: 35rem;
+}
+
+.cal_wrap {
+    box-shadow: 5px 5px 5px lightgray;
+}
+
+.days {
+    font-weight: bold;
+}

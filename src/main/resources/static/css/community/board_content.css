@@ -1,0 +1,34 @@
+.boardcontents {
+    margin-top: 2rem;
+    margin-left: 2rem;
+}
+
+.community-table-tr {
+    background: #374b73;
+}
+
+.community-table-tr th {
+    color: white !important;
+}
+
+.community-table-tr td {
+    border: 2px solid #fff;
+    border-radius: 0.2rem;
+    color: white !important;
+}
+
+.community-table tr:not(:first-child) td {
+    background: rgba(rgb(255, 124, 124), rgb(73, rgb(146, 146, 255), 73), blue, 0.5) !important;
+}
+
+.addbtn button {
+    border-radius: 1rem;
+    border: 1px solid #374b73;
+}
+
+
+/* 페이징버튼 */
+
+.pagination ul li {
+    background-color: #374b73 !important;
+}

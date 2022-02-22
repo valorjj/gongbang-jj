@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>개설중인 클래스 리스트</title>
+    <link rel="stylesheet" th:href="@{/css/room/room_list.css}">
+    <!--    <style>
+            #map_div{
+                overflow: hidden;
+            }
+        </style>-->
+    <style>
+        #map_div {
+            overflow: hidden;
+        }
+
+        .wrap1 {}
+
+        .wrap1 .close {
+            z-index: 99;
+        }
+
+
+
+
+    </style>
+</head>
+
+<body>
+
+<div th:replace="common.html::common"></div>
+<div th:replace="header.html::header"></div>
+<!--
+@Author : 김정진
+@Date : 2022-02-08
+
+1. 검색해서 들어오면 리스트로 출력
+2. '지도 표시하기' 버튼을 클릭하면 화면 전환 후 지도 출력
+-->
+
+<div class="wrap">
+    <div class="container">
+        <div class="row ">
+            <div th:if="${listSize == 0}" style="margin-top: 5.0rem;">
+
+                개설된 강의가 없습니다 ㅜ.ㅜ
+
+            </div>
+            <!-- 룸 1개당 반복문-->
+            <div th:if="${listSize != 0}" class="col-md-6 leftcontents" style="margin-top: 2rem;">
+                <div class="roomlist" th:each="room : ${roomEntities}" th:if="${room.roomStatus.equals('승인완료')}">
+                    <div class="row roombox d-flex">
+                        <!-- 좌측 지도 -->
+                        <div class="roomboxcontentimgbox col-7">
+                            <div class="roomboxcontentimg w-100">
+                                <img class="img-fluid"
+                                     th:src="@{ '/roomimg/' + ${room.roomImgEntities.get(0).roomImg} }">
+                            </div>
+                            <div class="roomboxtoptxt">
+                                <div class="gongbangdetail">
+                                    <a th:href="@{ '/room/view/' + ${room.roomNo} }" class="logo">
+                                        <input class="detailbtn" type="button" value="공방상세보기"></a>
+                                </div>
+                                <div>
+                                    <input class="roadbtn" type="button" value="길찾기"
+                                           th:onclick="roomnavy([[${room.roomNo}]])" data-bs-target="#modalnavy"
+                                           data-bs-toggle="modal">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 우측출력글 -->
+                        <div class="roomboxcontent col-4">
+                            <div th:text="${'공방번호 : ' +room.roomNo}"></div>
+                            <div th:text="${'공방명 : ' +room.roomTitle}"></div>
+                            <div th:text="${'공방구분 : ' +room.roomCategory}"></div>
+                            <div th:text="${'참여인원 : ' + room.roomMax}"></div>
+                            <div th:text="${'진행상태 : ' + room.roomStatus}"></div>
+                            <div th:text="${#strings.listSplit('공방주소 : ' + room.roomAddress,',')[0]}"></div>
+
+                        </div>
+                        <br>
+                    </div>
+                </div>
+
+                <div th:if="${#lists.size(roomEntities) != 0}" class="contenttext">
+                    <input type="hidden" th:value="${ roomEntities.number + 1 }" id="current-page">
+                    <input type="hidden" th:value="${keyword}" id="room-list-keyword">
+                    <input type="hidden" th:value="${category}" id="room-list-category">
+                    <input type="hidden" th:value="${local}" id="room-list-local">
+                </div>
+
+                <div th:if="${#lists.size(roomEntities) != 0}">
+                    <!-- 페이징 처리 -->
+                    <ul class="pagination justify-content-center" th:with="start = ${ T(Math).floor( roomEntities.number / 2 ) * 2 + 1 } ,
+                                     last = ( ${ start + 9 < roomEntities.totalPages ?  start + 9 : roomEntities.totalPages } )">
+                        <!-- 첫페이지이동 -->
+                        <li class="page-item">
+                            <a class="page-link" th:href="@{ /room/list( page = 1 ) }"> 처음 </a>
+                        </li>
+                        <!-- 이전페이지이동 -->
+                        <li class="page-item" th:class="${roomEntities.first} ? 'disabled' ">
+                            <!-- 첫번페이지에서 이전페이지이동 표시 x -->
+                            <a class="page-link"
+                               th:href="${roomEntities.first} ? '#' : @{ /room/list( page = ${ roomEntities.number } ) }">
+                                이전 </a>
+                        </li>
+                        <!-- 페이지번호 -->
+                        <li class="page-item" th:each="page : ${#numbers.sequence( start , last ) }">
+                            <a class="page-link" th:href="@{ /room/list( page = ${page} ) }" th:text="${page}"></a>
+                        </li>
+                        <!-- 다음페이지이동 -->
+                        <li class="page-item" th:class="${roomEntities.last} ? 'disabled' ">
+                            <a class="page-link"
+                               th:href="${roomEntities.last} ? '#' : @{ /room/list( page = ${roomEntities.number+2} ) }">
+                                다음
+                            </a>
+                        </li>
+                        <!-- 마지막페이지 이동 -->
+                        <li class="page-item">
+                            <a class="page-link" th:href="@{ /room/list( page=${roomEntities.totalPages} ) }"> 마지막
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+            <div th:if="${listSize != 0}" class="col-md-5 offset-1" id="map-default-wrapper">
+                <div class="mb-1 h3 mb-3">
+                    오픈된 <span class="text-info">공방</span>을확인하세요!
+                </div>
+                <div id="map" class="">
+                    <!-- 맵 팝업
+                     -->
+                    <div id="mappopup">
+
+                        <div id="contents">
+                            <!-- 사이드바 내용물 -->
+                            <!-- <div>
+                                <div class="markcontents" style='padding:0 5px;background:black;'>" + position.roomNo + "," + position.roomImg + "<br><a href='/room/view/" + position.roomNo + "'>바로가기</a></div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <a href="javascript:void(0)" </a>
+
+    <div id="marker"></div> -->
+
+
+<!-- 길찾기 모달  -->
+<div class="modal fade" id="modalnavy" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content rounded-5 shadow">
+            <div class="modal-header p-5 pb-4 border-bottom-0">
+                <h2 class="fw-bold mb-0 text-center w-100">
+                    <p class="text-center">찾아오는 길</p>
+                </h2>
+                <input id="road" type="hidden">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        style="width:2rem;"></button>
+                <!-- 닫기 버튼 -->
+            </div>
+            <div class="modal-body p-5 pt-0" id="modalnavy1">
+                <div class="ft_area">
+                    <div class="ft_select_wrap">
+                        <div class="ft_select text-center">
+                            <select id="selectLevel">
+                                <option value="0" selected="selected">교통최적+추천</option>
+                                <option value="1">교통최적+무료우선</option>
+                                <option value="2">교통최적+최소시간</option>
+                                <option value="3">교통최적+초보</option>
+                                <option value="4">교통최적+고속도로우선</option>
+                                <option value="10">최단거리+유/무료</option>
+                                <option value="12">이륜차도로우선</option>
+                                <option value="19">교통최적+어린이보호구역 회피</option>
+                            </select> <select id="year">
+                            <option value="N" selected="selected">교통정보 표출 옵션</option>
+                            <option value="Y">Y</option>
+                            <option value="N">N</option>
+                        </select>
+                            <button class="mt-3 searchroadbtn" id="btn_select">길찾기</button>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="map_act_btn_wrap clear_box"></div>
+                    <div class="clear"></div>
+                </div>
+                <div id="map_wrap" class="map_wrap">
+                    <div id="map_div"></div>
+                </div>
+                <br>
+                <div class="map_act_btn_wrap clear_box"></div>
+                <p id="result"></p>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 길 찾기 인증키는 실제 사용할 때만 사용해야하므로 주석처리 해둡니다. 사용할 때는 주석 해제 해야합니다. -->
+<!--    <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xx1a649f9e9e5642ed82f72ada2ff00e9d"></script>-->
+
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c4b311c12f156511eb9b89bf63938e65&libraries=clusterer"></script>
+<script th:src="@{/js/roomview.js}"></script>
+<script th:src="@{/js/roomnavy.js}"></script>
+<script>
+    + function($) {
+        'use strict';
+
+        $(document).on('click.bs.sidebar.data-api', '[data-toggle="sidebar"]', function(e) {
+            e.preventDefault();
+            $(".sidebar").toggleClass("toggled");
+            $(".has-sidebar").toggleClass("toggled");
+        });
+    }(jQuery);
+
+
+
+
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/community/view_post.css}">
+</head>
+<body>
+
+<script th:src="@{/js/community/view_post.js}"></script>
+
+<div class="container" th:id=" 'viewPost' + ${post.postNo}">
+    <div class="view-post-wrapper">
+
+        <div class="mb-3">
+            <span>제목</span>
+            <div th:text="${post.postTitle}" class=""></div>
+        </div>
+
+        <div class="mb-3">
+            <div class="row">
+                <div class="col-5">
+                    <span>작성자</span>
+                    <div th:text="${post.memberEntity.memberId}"></div>
+                </div>
+                <div class="col-5">
+                    <span>작성일</span>
+                    <div th:text="${post.createdDate}"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <div th:utext="${post.postContent}"></div>
+        </div>
+
+        <div style="background-color: #eceff1;">
+            <div class="post-image-wrapper">
+                <div th:if="${#lists.size(post.postImgEntities) == 1}">
+                    <div>
+                        <img style="width: 14rem; height: 14rem;"
+                             th:src="@{'/postimg/' + ${post.postImgEntities.get(0).postImg}" alt="">
+                    </div>
+                </div>
+                <div id="jjslick" th:if="${#lists.size(post.postImgEntities) > 1}">
+                    <div>
+                        <img style="width: 14rem; height: 14rem;"
+                             th:src="@{'/postimg/'+${post.postImgEntities.get(0).postImg} }" class="img-fluid">
+                    </div>
+                    <div th:each="num : ${#numbers.sequence(1, post.postImgEntities.size()-1)}">
+                        <img style="width: 14rem; height: 14rem;"
+                             th:src="@{'/postimg/' + ${post.postImgEntities.get(num).postImg} }" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="mb-3 post-btn-cluster">
+        <button>답글</button>
+        <button>수정</button>
+        <button>삭제</button>
+        <button th:onclick="goToPostList( [[${boardNo}]] );">목록</button>
+    </div>
+
+    <div class="mb3 post-reply-wrapper" th:id=" 'post-reply-wrapper' + ${post.postNo}">
+        <div class="post-reply-container">
+            <div class="post-reply-wrapper" th:id=" 'post-reply-wrapper' + ${post.postNo}">
+                <!-- 댓글 칸 최상단에는 작성 칸 위치-->
+                <div class="new-reply-wrapper" th:id=" 'new-reply-wrapper' + ${post.postNo}">
+                    <div class="row">
+                        <div class="col-3">
+                            <div>
+                                <span>작성자</span>
+                                <div th:text="${session.logindto.memberId}"></div>
+                            </div>
+                            <div>
+                                <!-- 현재 시간 불러오기 -->
+                                <span>현재시간</span>
+                                <div th:text="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd HH:mm:s')}"></div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <textarea name="" th:id=" 'newReplyContent' + ${post.postNo}" cols="40" rows="6"></textarea>
+                        </div>
+                        <div class="col-3">
+                            <button th:onclick="createNewReply( [[ ${post.postNo} ]] );">댓글등록</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- js 로 넘어갈 값 -->
+            <input type="hidden" th:value="${memberEntity.memberId}" id="postLoginMemberId">
+            <input type="hidden" th:value="${post.postNo}" id="postNo">
+
+            <div class="post-reply-area"></div>
+
+            <!-- 등록된 댓글 출력-->
+            <div class="post-reply-content-wrapper" th:id=" 'post-reply-content-wrapper' + ${postNo} ">
+                <div class="row post-reply-content-container" th:id=" 'post-reply-content-container' + ${postNo} "
+                     th:each="reply : ${replies}">
+                    <div class="post-reply-content" th:id=" 'post-reply-content' + ${postNo} ">
+                        <div class="col-3">
+                            <span>작성자</span>
+                            <div th:text="${reply.memberEntity.memberId}"></div>
+                        </div>
+                        <div class="col-9">
+                            <div th:text="${reply.postReplyContent}"></div>
+                        </div>
+                        <div class="col-12">
+                            <button class="add-reply-child" th:id="'child' + ${reply.postReplyNo}"
+                                    th:data-tab="${reply.postReplyNo}">
+                                답글달기
+                            </button>
+                            <button>수정</button>
+                            <button>삭제</button>
+                        </div>
+
+                        <!-- 대댓글 출력 영역 시작 -->
+                        <!-- 컨트롤러에서 부모 댓글에 해당하는 대댓글을 Model 로 받아와서 출력한다. -->
+                        <!--
+                        1. 부모 댓글의 replyNo 를 target 으로 가지며
+                        2. depth 가 1 이상인 replyNo 를 출력한다.
+                        3. 부모는 depth = 0 인 경우만 호출하고
+                        4. 자식은 depth > 0 인 경우만 호출한다.
+                        5. 자식 댓글은 replyNo 에 종속되어야한다.
+                        -->
+                        <div class="reply-child-wrapper" th:id=" 'reply-child-wrapper' + ${reply.postReplyNo}">
+                            <div th:each=" child : ${childReplies}" class="reply-child-container"
+                                 th:id=" 'reply-child-container' + ${child.postReplyNo} ">
+                                <div class="reply-child-content" th:id=" 'reply-child-content' + ${child.postReplyNo} ">
+                                    <div th:if="${reply.postReplyNo} == ${child.postReplyTarget}"
+                                         th:text="${child.postReplyContent}" class="reply-child"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 대댓글 출력 영역 종료 -->
+                        <!-- 대댓글 등록 시 나타날 영역-->
+                        <div style="display: none;" class="reply-child-section" th:data-tab="${reply.postReplyNo}"
+                             th:id="'child-section' + ${reply.postReplyNo}">
+                            <div class="row">
+                                <div class="col-md-2 offset-3" th:text="${memberEntity.memberId}"></div>
+                                <div class="col-md-5">
+                                        <textarea th:id="'child-content' + ${reply.postReplyNo}" cols="25" rows="5"
+                                                  placeholder="대댓글..." style="width: 100%;"></textarea>
+                                </div>
+                                <div class="col-md-2">
+                                    <button
+                                            th:id="'child-btn'+${reply.postReplyNo}">등록
+                                    </button>
+                                    <button class="child-cancel-btn" th:id="${reply.postReplyNo}"
+                                            th:section-tab="${reply.postReplyNo}">
+                                        취소
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/slick/slick.min.js}"></script>
+
+<script>
+
+$(function(){
+    $('#jjslick').slick({
+        centerMode: true,
+        centerPadding: '60px',
+        slidesToShow: 3,
+        responsive: [
+            {
+                breakpoint: 768,
+                settings: {
+                arrows: false,
+                centerMode: true,
+                centerPadding: '40px',
+                slidesToShow: 3
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                arrows: false,
+                centerMode: true,
+                centerPadding: '40px',
+                slidesToShow: 1
+                }
+            }
+        ]
+    });
+})
+
+
+
+</script>
+
+
+</body>
+</html>

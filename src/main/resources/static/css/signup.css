@@ -1,0 +1,54 @@
+@charset "UTF-8";
+.outline {
+    background: hsla(0, 0%, 100%, .5);
+    padding: 2rem;
+    border-radius: 5rem;
+    box-shadow: 5px 3px 30px black;
+    transform: scale(0.85);
+    margin-top: 0rem;
+}
+
+
+
+.outlineinner {
+    background: white;
+    background: hsla(0, 0%, 100%, .8);
+    border-radius: 5rem;
+}
+
+.form-floating {
+    border: solid 1px #ff9a9a;
+    border-radius: 2rem;
+    margin: 1rem 1rem;
+}
+
+.form-floating input {
+    border-radius: 2rem;
+    border: 1px solid;
+}
+
+#formsubmit {
+    background-color: #374b73;
+    color: white;
+    font-weight: bold;
+}
+
+.snssignup a{
+    text-decoration: none;
+    color: #374b73 !important;
+    text-shadow: rgb(0, 0, 0) 1px 1px 1px;
+}
+
+video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 120%;
+    object-fit: cover;
+    object-position: center;
+    z-index: -10;
+    overflow-y: hidden;
+}
+
+/**/

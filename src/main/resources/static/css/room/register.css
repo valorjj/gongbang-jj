@@ -1,0 +1,455 @@
+@charset "UTF-8";
+body {
+    padding: 0px;
+    margin: 0px;
+}
+
+.register-detail-wrapper svg {
+    width: 1.2rem;
+    margin: 0 0.2rem;
+    fill: #000000 !important;
+}
+
+
+/*
+클래스 등록 내부 컨텐츠 시작
+*/
+
+
+/* 전체박스 및 폰트적용 */
+
+.register-detail-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-family: CookieRun-Regular;
+}
+
+
+/* 탭박스 */
+
+.tab-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
+.tab-wrapperinner {
+    position: fixed;
+    top: 7rem;
+    left: 0;
+    z-index: 10;
+    transition: top 0.2s ease-in-out;
+}
+
+.tab-wrappernav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tab-wrappernav li {
+    margin: 0 1rem;
+}
+
+.sticky {
+    position: fixed;
+    top: 1rem;
+    width: 100%;
+}
+
+
+/* .sticky + .register-detail-inner {
+
+} */
+
+
+/* .tab-wrapper::after {
+display: block;
+content: "";
+clear: both;
+} */
+
+
+/* 폼박스 */
+
+.register-detail-inner-a {
+    top: 6rem;
+    position: relative;
+    padding: 1.0rem;
+    background: #EAF4F4;
+}
+
+.register-detail-inner {
+    top: 6rem;
+    position: relative;
+    padding: 1.0rem;
+}
+
+.register-content-wrapper {
+    margin: 2rem 1rem;
+    padding: 1.0rem;
+    background: #EAF4F4;
+    box-shadow: 3px 3px 3px #ff9a9a;
+}
+
+
+.register-content-wrapper label {
+    background-color: #ffdbdb;
+    padding: 0 1rem;
+    border-radius: 1rem;
+    display: block;
+}
+
+/*
+클래스 등록 내부 컨텐츠 종료
+*/
+
+
+/*
+하단 탭 이벤트 시작
+*/
+
+ul.tabs {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+}
+
+ul.tabs li {
+    border: 2px dashed #ff9a9a;
+    height: 2rem;
+    background: #e6fffa;
+    font-weight: bold;
+    color: rgb(161, 161, 161);
+    cursor: pointer;
+    padding: 0 1rem;
+    border-radius: 1rem;
+    width: 12rem;
+    text-align: center;
+}
+
+ul.tabs li:hover {
+    transform: scale(1.1);
+    transition: 1s;
+}
+
+ul.tabs li.current {
+    width: 12rem;
+    text-align: center;
+    line-height: 2rem;
+    background: #67d5bf;
+    font-weight: bold;
+    color: rgb(255, 255, 255);
+    border-radius: 1px;
+    margin: 10px 5px;
+    border: 2px solid #ff9a9a;
+    cursor: pointer;
+    padding: 0 1rem;
+    border-radius: 1rem;
+}
+
+
+/*
+하단 탭 이벤트 종료
+*/
+
+
+/*
+탭 이벤트 컨텐츠 시작
+*/
+
+.tab-content {
+    display: none;
+    background-color: #ffffff;
+    height: auto;
+}
+
+.tab-content.current {
+    display: inherit;
+}
+
+
+/*
+탭 이벤트 컨텐츠 종료
+*/
+
+
+/*
+체크 박스 & 라디오 버튼 시작
+*/
+
+.form-check-input {
+    padding: 0.5rem;
+    margin: 0.5rem;
+}
+
+.form-check {
+    padding: 0.5rem;
+    margin: 1.0rem;
+}
+
+
+/*
+체크 박스 & 라디오 버튼 종료
+*/
+
+
+/* 이미지 미리 보기 */
+
+:root {
+    --bgColor: #fff1ed;
+    --hoverBg: #ff9a9a;
+    --text: #bbb;
+}
+
+.image-drag-wrapper {
+    width: 100%;
+    margin: 5.0rem auto;
+    text-align: center;
+}
+
+.image-label {
+    width: 100%;
+    height: 100%;
+    margin: 0px auto;
+    cursor: pointer;
+    background-color: var(--bgColor);
+}
+
+.inner {
+    width: 100%;
+    height: 128px;
+    margin: 64px auto;
+    border-radius: 12px;
+    font-size: 16px;
+    line-height: 128px;
+    background-color: var(--bgColor);
+    color: var(--text);
+}
+
+@media (any-hover: hover) {
+    .image-label:hover {
+        background-color: var(--hoverBg);
+    }
+}
+
+.image-label--hover {
+    background-color: var(--hoverBg);
+}
+
+.preview-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.0rem;
+}
+
+.preview {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    align-items: center;
+    background-color: var(--bgColor);
+}
+
+.embed-img {
+    object-position: center;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+
+/* 슬라이더 CSS */
+
+
+/* The slider itself */
+
+.slider {
+    -webkit-appearance: none;
+    /* Override default CSS styles */
+    appearance: none;
+    width: 100%;
+    /* Full-width */
+    height: 25px;
+    /* Specified height */
+    background: #fff1ed;
+    /* Grey background */
+    outline: none;
+    /* Remove outline */
+    opacity: 0.7;
+    /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s;
+    /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+}
+
+
+/* Mouse-over effects */
+
+.slider:hover {
+    opacity: 1;
+    /* Fully shown on mouse-over */
+}
+
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    /* Override default look */
+    appearance: none;
+    width: 25px;
+    /* Set a specific slider handle width */
+    height: 25px;
+    /* Slider handle height */
+    background: #374b73;
+    /* Green background */
+    cursor: pointer;
+    /* Cursor on hover */
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    /* Set a specific slider handle width */
+    height: 25px;
+    /* Slider handle height */
+    background: #374b73;
+    /* Green background */
+    cursor: pointer;
+    /* Cursor on hover */
+}
+
+
+/* 첫번째 탭 */
+
+#tab-1 {
+    border: 1px dashed gray;
+    padding: 2rem;
+}
+
+.tab-1-title {
+    background: #ffdbdb;
+    padding: 0 1rem;
+    border-radius: 1rem;
+}
+
+.registerbox>div:first-child {
+    margin: 0 1rem;
+    background: #ffdbdb;
+    padding: 0 1rem;
+    border-radius: 1rem;
+}
+
+.register-tip {
+    background-color: #E6E9EC;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 10px;
+}
+
+.register-content-wrappertextarea textarea {
+    width: 90%;
+    margin: 1rem 0;
+}
+
+.image-drag-wrapper label {
+    height: auto;
+}
+
+.image-drag-wrapper .inner {
+    height: 3rem;
+    line-height: 3rem;
+}
+
+
+/* 두번째 탭 */
+
+#tab-2 {
+    border: 1px dashed gray;
+    padding: 2rem;
+}
+
+.tab-2-title {
+    background: #ffdbdb;
+    padding: 0 1rem;
+    border-radius: 1rem;
+}
+
+
+/* 세번째 탭 */
+
+#tab-3 {
+    border: 1px dashed gray;
+    padding: 2rem;
+}
+
+.tab-3-title {
+    background: #ffdbdb;
+    padding: 0 1rem;
+    border-radius: 1rem;
+}
+
+.addressform button {
+    background-color: #374b73;
+    color: #ff9a9a;
+    border-radius: 0.5rem;
+}
+
+.lastbtn {
+    display: flex;
+    justify-content: center;
+}
+
+.lastbtn input {
+    background-color: #ff9a9a;
+    color: #374b73;
+    border-radius: 0.5rem;
+    text-align: center;
+    width: 10rem;
+    font-size: 1.5rem;
+    height: 3rem;
+}
+
+.lastbtn input:hover {
+    background-color: #374b73;
+    color: white;
+    transform: scale(1.05);
+    transition: all ease-in-out 1s;
+}
+
+/* 주소버튼 */
+.adsbtn {
+    background-color: #374b73;
+    color: #ff9a9a !important;
+    padding: 0 0.2rem;
+    border-radius: 0.2rem;
+    box-shadow: 3px 3px 3px #ff9a9a;
+
+}
+
+.adsbtn:hover {
+    transform: scale(1.05);
+    transition: all ease-in-out 0.3s;
+}
+
+/* 공방등록 */
+#class-register-btn {
+    background-color: #374b73;
+    color: #ff9a9a !important;
+    padding: 0 0.2rem;
+    border-radius: 0.2rem;
+    box-shadow: 3px 3px 3px #ff9a9a;
+    width: 8rem;
+    height: 3rem;
+}
+
+#class-register-btn:hover {
+    transform: scale(1.05);
+    transition: all ease-in-out 0.3s;
+    color: #67d5bf !important; 
+    font-size: 1.3rem;
+    width: 10rem;
+}

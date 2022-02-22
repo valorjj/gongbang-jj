@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/member/payment.css}">
+</head>
+
+<body>
+<div th:replace="common.html::common"></div>
+<div th:replace="header.html::header"></div>
+
+<!--
+@Author : 김정진
+@Date : 2022-02-16
+@Params :
+1. info : RoomPaymentDto
+    1. roomDate -> 클래스 개설 날짜 (YYYY-MM-DD)
+    2. roomTime -> 클래스 시간 (HH, HH)
+    3. person -> 클래스 신청한 인원 수
+    4. price -> 총 지불해야하는 금액
+2. member -> 결제 시도하는 회원 엔티티
+3. room -> 결제 대상인 클래스 엔티티
+-->
+<div class="wrap">
+
+
+    <form th:action="@{/member/memberPay}" method="post">
+
+        <input type="hidden" th:value="${room.roomNo}" name="roomNo">
+        <input type="hidden" th:value="${info.roomTime}" name="roomTime">
+        <input type="hidden" th:value="${info.roomDate}" name="roomDate">
+        <input type="hidden" th:value="${info.person}" name="person">
+        <input type="hidden" th:value="${info.price}" name="price">
+
+        <div class="container" style="margin-top: 2.0rem;">
+            <div class="row">
+                <!-- 좌측 컨텐츠  -->
+                <div class="col-md-6 member-payment-class-info text-center">
+                    <div class="payment-header payment-header-a"><span>클래스 티켓 정보</span></div>
+                    <div class="payment-left-wrapper">
+
+                        <div class="left-item">
+                            <!-- 대표 이미지 1장 출력 -->
+                            <img src="" alt="">
+                        </div>
+
+                        <div class="left-item">
+                            <div style="font-size: 1.0rem;">클래스</div>
+                            <div th:text="${room.roomTitle}" style="color: gray;"></div>
+                        </div>
+
+                        <div class="left-item">
+                            <div style="font-size: 1.0rem;">일시</div>
+                            <div th:text="${info.roomDate}" style="color: gray;"></div>
+                        </div>
+
+                        <div class="left-item">
+                            <div style="font-size: 1.0rem;">클래스 주소</div>
+                            <div th:text="${#strings.arraySplit(room.roomAddress, ',')[0]}" style="color: gray;">장소
+                            </div>
+                        </div>
+
+                        <!-- 연락처가 입력되어있는지, 아닌지 판단해서 없다면 입력받는다. -->
+                        <div class="left-item">
+                            <div style="font-size: 1.0rem;">연락처</div>
+                            <input type="text" value="" id="paymentPhone1" name="phoneNumber"
+                                   placeholder="연락가능한 번호를 입력해주세요">
+                            <div class="isTyped1 mx-2"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- 우측컨텐츠 컨텐츠  -->
+                <div class="col-md-6 member-payment-price text-center">
+                    <div class="payment-header payment-header-b"><span>결제 정보</span></div>
+                    <div>
+                        <div class="payment-right-wrapper">
+                            <div class="payment-title-1 payment-person">
+                                <div>선택한 인원 수</div>
+                                <div th:text="${info.person}"></div>
+                            </div>
+                            <div class="payment-title-1 payment-billing">
+                                <div class="payment-billinginner">
+                                    <div id="price-per-person ">
+                                        <div>1명 당 가격</div>
+                                        <div th:text="${room.roomPrice} "></div>
+                                    </div>
+                                    <div>X</div>
+                                    <div id="selected-number ">
+                                        <div>선택인원</div>
+                                        <div th:text="${info.person} "></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="payment-title-2 payment-final-price">
+                            <div>총 결제하실 금액 :</div>
+                            <div th:text="${info.price} " id="final-price " style="font-size: 1.8rem; "></div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="confirmcontents ">
+                    <!-- 드롭 다운 -->
+                    <div class="info-section d-flex">
+                        <div class="mx-1">취소 및 환불 안내</div>
+                        <div class="mx-1">드롭 다운 작성하세요</div>
+                    </div>
+
+                    <!-- 드롭 다운 -->
+                    <div class="info-section d-flex">
+                        <div class="mx-1">결제 안내(포인트 차감)</div>
+                        <div class="mx-1">드롭 다운 작성하세요</div>
+                    </div>
+
+                    <div class="payment-confirm ">
+                        <div class="my-2">포인트 차감 시키며 결제 완료하기</div>
+                        <input id="confirm-btn" type="button" value="결제하기 " style="width: 100%;" class="pulse-button">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+
+    $(function(){
+        $(".isTyped1").html("연락처를 입력해주세요. ");
+        var regPhone = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/g;
+        $("#paymentPhone1").keyup(function(){
+            var phone1 = $("#paymentPhone1").val();
+            if(!regPhone.test(phone1)){
+                $(".isTyped1").html("유효한 연락처가 아닙니다. ");
+            } else{
+                $(".isTyped1").html("");
+            }
+        });
+        $("#confirm-btn").click(function(){
+            if($(".isTyped1").html() == ""){
+                $("form").submit();
+            } else {
+                alert("연락처를 입력하지 않으셨습니다.");
+            }
+        });
+    });
+
+</script>
+
+</body>
+
+</html>

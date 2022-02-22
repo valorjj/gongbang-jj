@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/summernote/summernote-lite.css}">
+    <link rel="stylesheet" th:href="@{/css/channelcard.css}">
+    <link rel="stylesheet" th:href="@{/css/member/channel.css}">
+</head>
+
+<body>
+    <div th:replace="common.html::common"></div>
+    <div th:replace="header.html::header"></div>
+    <!-- 섬머노트 -->
+    <script th:src="@{/js/summernote/summernote-lite.js}"></script>
+    <script th:src="@{/js/summernote/lang/summernote-ko-KR.js}"></script>
+
+    <div class="wrap">
+
+
+        <!-- 레이아웃 01-27 조지훈-->
+        <div class="container" id="channelmain">
+            <div class="title h3 subtitle">개인채널</div>
+            <div class="row">
+                <div>
+                    <div class="hannelmaintop">
+                        <div class="hannelmaintopimgbox">
+                            <img class="channelimg img-fluid" th:if="${memberEntity.channelImg == null}" src="/img/default-profile-photo.png" alt="">
+                            <img class="channelimg img-fluid" th:if="${memberEntity.channelImg != null}" th:src="@{'/channelimg/' + ${memberEntity.channelImg}}" alt="">
+                        </div>
+                        <div class="col-md-6 col-6 text-center my-3">
+                            <div class="topbox">
+                                <div class="changeimg" sec:authorize="isAuthenticated()" th:if="${session.logindto.memberNo == memberEntity.memberNo}">
+
+                                </div>
+                                <p><span th:text="${'채널명 : ' + memberEntity.channelTitle}" id="channelname"></span></p>
+                                <div>
+                                    <span id="classaddress" th:if="${memberEntity.roomEntities.size != 0}" th:text="${'공방주소 : ' +  #strings.listSplit(memberEntity.RoomEntities.get(0).roomAddress,',')[0] }"></span>
+                                </div>
+                                <button class="btn my-3" data-bs-target="#channelregistration" data-bs-toggle="modal">채널
+                                    정보 등록/수정
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <div class="tabnav">
+                        <!-- 02-15 조지훈 -->
+                        <ul class="nav mb-3" id="pills-tab" role="tablist">
+                            <li class="nav-item active" role="presentation" id="hoverli">
+                                <button class="nav-link btn" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">홈
+                                </button>
+                            </li>
+                            <li class="nav-item btn" role="presentation">
+                                <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">클래스
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                <hr>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
+                         aria-labelledby="pills-home-tab">
+                        <div class="row">
+                            <div class="col-md-8" id="channelContentBox">
+                                <div class="h4 subtitle"><strong>강사 소개</strong></div>
+                                <div id="channelContentnull" th:if="${memberEntity.channelContent == null}">
+                                    작성된 소개글이 없습니다.
+                                </div>
+                                <div id="channelContent" th:if="${memberEntity.channelContent != null}"
+                                     th:utext="${memberEntity.channelContent}"></div>
+                            </div>
+                            <div class="col-md-4" id="reviewbox">
+                                <div class="h4 subtitle"><strong>클래스후기</strong></div>
+                                <div class="row" th:each="room : ${memberEntity.roomEntities}">
+                                    <div th:each="reply : ${room.replyEntities}">
+                                        <div class="col-md-8">
+                                            <h5 th:text="${reply.roomEntity.roomTitle}"></h5><br>
+                                            <span th:text="${#temporals.format(reply.createdDate,'yyyy-MM-dd')}">날짜</span><br>
+                                            <span th:text="${reply.replyContent}">내용</span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <img id="reviewimg"
+                                                 th:src="@{'/replyimg/' + ${reply.replyImgEntities.get(0).replyImg}}"
+                                                 alt="" class="img-fluid">
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+
+                        </div>
+                        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                            <div class="band">
+                                <div id="channelClassNull" th:if="${memberEntity.roomEntities.size == 0}">
+                                    아직 등록된 클래스가 없습니다.
+                                </div>
+                                <div class="item" th:if="${memberEntity.roomEntities.size != 0}" th:each="room : ${memberEntity.roomEntities}">
+                                    <a th:href="@{'/room/view/' + ${room.roomNo}}" class="card">
+                                        <div class="thumb">
+                                            <img id="channelclassimg" th:src="@{'/roomimg/' + ${room.roomImgEntities.get(0).roomImg} }" alt="" style="width: 340px; height: 270px;">
+                                        </div>
+                                        <article>
+                                            <h2 th:text="${room.roomTitle}"></h2>
+                                            <p th:text="${room.roomContent}"></p>
+                                            <span th:text="${room.roomCategory}"></span>
+                                        </article>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+        </div>
+        <!-- 채널정보 등록 02-17 조지훈 -->
+        <div class="modal fade" tabindex="-1" id="channelregistration" data-bs-keyword="false" data-bs-backdrop="static">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content rounded-4 shadow">
+                    <div class="modal-body p-4 text-center">
+                        <h5 class="mb-0"> 채널 정보 등록/수정 </h5>
+                        <p class="mb-3"> 채널 정보를 등록/수정 하실수 있습니다.</p>
+                        <form action="/member/channelregistration" method="post" enctype="multipart/form-data">
+                            <input type="hidden" th:value="${memberEntity.memberNo}" name="memberNo">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control rounded-4" id="channelTitle" name="channelTitle" placeholder="채널명" th:value="${memberEntity.channelTitle}">
+                                <label for="channelTitle">채널명</label>
+                            </div>
+                            <div>
+                                <textarea id="summernote" name="channelContent" th:utext="${memberEntity.channelContent}"></textarea>
+                            </div>
+                            <block id="existingfile">
+                                <span th:text="${realimg}" id="test"></span> <button type="button" th:onclick="channelimgdelete([[${memberEntity.memberNo}]]);">기본 이미지 사용</button>
+                                <input type="file" name="memberImg" id="file"> <br>
+                            </block>
+
+                            <div class="modalbtn d-flex flex-nowrap p-0">
+                                <input type="submit" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0 border-right mx-2" value="수정">
+                                <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0 mx-2" data-bs-dismiss="modal">나가기
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="footer.html :: footer"></div>
+
+    <script th:src="@{/js/registerclass.js}"></script>
+    <!-- 02-17 channel.js 호출 -->
+    <script th:src="@{/js/channel.js}"></script>
+    <script src="">
+        $(document).ready(function() {
+            //여기 아래 부분
+
+        $('#summernote').summernote({
+            height: 200, // 에디터 높이
+            minHeight: null, // 최소 높이
+            maxHeight: null, // 최대 높이
+            focus: true, // 에디터 로딩후 포커스를 맞출지 여부
+            lang: "ko-KR", // 한글 설정
+            placeholder: '최대 2048자까지 쓸 수 있습니다' //placeholder 설정
+        });
+    });
+
+</script>
+    <script src="">
+    $(document).ready(function() {
+        //여기 아래 부분
+
+        $('#summernote').summernote({
+            height: 200, // 에디터 높이
+            minHeight: null, // 최소 높이
+            maxHeight: null, // 최대 높이
+            focus: true, // 에디터 로딩후 포커스를 맞출지 여부
+            lang: "ko-KR", // 한글 설정
+            placeholder: '최대 2048자까지 쓸 수 있습니다' //placeholder 설정
+        });
+    });
+
+</script>
+</body>
+
+</html>

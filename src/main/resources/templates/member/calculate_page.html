@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        #pageHeader {
+        background-color: pink;
+        color: navy;
+        }
+    </style>
+    <link rel="stylesheet" th:href="@{/css/register.css}">
+</head>
+<body>
+<div th:replace="common.html::common"></div>
+<div th:replace="header.html::header"></div>
+<div class="container">
+    <br>
+    <div id="pageHeader"><h3><strong>통계 페이지</strong></h3></div>
+    <hr>
+    <div class="row">
+        <div class="col-md-2">
+            <div class="tab-wrapper">
+                <ul class="tabs nav d-flex flex-column">
+                    <li class="nav-item tab-link current" data-tab="tab-1">주 통계</li>
+                    <li class="nav-item tab-link" data-tab="tab-2"></li>
+                    <li class="nav-item tab-link" data-tab="tab-3"></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div id="tab-1" class="tab-content current">
+                <h3><strong>주 통계</strong></h3>
+                <select onchange="chartChange()" id="chart_year">
+                    <option value="2021">2021년</option>
+                    <option value="2022">2022년</option>
+                    <option value="2023">2023년</option>
+                    <option value="2024">2024년</option>
+                    <option value="2025">2025년</option>
+                </select>
+                <select onchange="chartChange()" id="chart_month">
+                    <option value="1" >1월</option>
+                    <option value="2">2월</option>
+                    <option value="3">3월</option>
+                    <option value="4">4월</option>
+                    <option value="5">5월</option>
+                    <option value="6">6월</option>
+                    <option value="7">7월</option>
+                    <option value="8">8월</option>
+                    <option value="9">9월</option>
+                    <option value="10">10월</option>
+                    <option value="11">11월</option>
+                    <option value="12">12월</option>
+                </select>
+                <select onchange="chartChange()" id="chart_week">
+                    <option value="1~10">1~10</option>
+                    <option value="11~20">11~20</option>
+                    <option value="21~30">21~30</option>
+                </select>
+                <input type="hidden" id="memberNo" name="memberNo" th:value="${session.logindto.memberNo}">
+                <div style="width: 900px; height: 700px;">
+                    <!--차트가 그려질 부분-->
+                    <canvas id="myChart1"></canvas>
+                </div>
+            </div>
+            <div id="tab-2" class="tab-content">
+                <h1>하이</h1>
+            </div>
+            <div id="tab-3" class="tab-content">
+                <h1>하이</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script th:src="@{/js/chart.js}"></script>
+
+</body>
+</html>

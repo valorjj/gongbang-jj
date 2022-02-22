@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- 반응형 웹을 위한 미디어쿼리 선언부 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>공방프로젝트 미디어쿼리</title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div id="wrap">
+        <div th:replace="common.html::common"></div>
+        <header>
+            <div th:replace="header.html::header"></div>
+        </header>
+        <main>
+            <div th:replace="main.html::main"></div>
+        </main>
+        <footer>
+            <div th:replace="footer.html::footer"></div>
+        </footer>
+    </div>
+</body>
+
+</html>

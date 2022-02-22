@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/css/member/member_class.css}">
+</head>
+
+<body>
+    <div th:replace="common.html::common"></div>
+    <div th:replace="header.html::header"></div>
+    <div class="container wrap">
+        <div class="title h3">내가 등록한 클래스</div>
+        <div class="row">
+            <div class="nav justify-content-end mb-5 successbtn">
+                <a th:href="@{/member/calculate}"><button class="">정산 페이지</button></a>
+            </div>
+            <table class="table table-striped tablecontents text-center">
+                <tr class="firsttr">
+                    <th class="text-white">대표사진</th>
+                    <th class="text-white">클래스명</th>
+                    <th class="text-white">클래스 개설일</th>
+                    <th class="text-white">승인상태</th>
+                    <th class="text-white">비고</th>
+                </tr>
+                <tr class="secondtr" th:each="room : ${roomDtos}">
+                    <!-- 클래스 이미지 출력-->
+                    <td style="">
+                        <img th:src=" '/roomimg/'+${room.roomImgEntities.get(0).roomImg}" alt="" class="img-fluid" style="height:100%">
+                    </td>
+                    <!-- 클래스 타이틀 출력-->
+                    <td class="tableroomname" style="width:20%;">
+                        <a class="" th:href="@{ '/room/view/'+${room.roomNo}}">
+                            <span th:text="${room.roomTitle}"></span>
+                        </a>
+                    </td>
+                    <!-- 클래스 개설일 출력 -->
+                    <!--
+                    여기서 클래스 개설일은 강좌가 실제로 열리는 날 X
+                    사용자가 처음으로 강좌를 개설한 날짜
+                    -->
+                    <td style="width:12.5%;" th:text="${#strings.arraySplit(room.createdDate, 'T')[0]}"></td>
+                    <!-- 강좌 승인 상태 -->
+                    <td style="width:12.5%;" th:text="${room.roomStatus}"></td>
+                    <!-- 버튼 클러스터-->
+                    <td style="width:25%;">
+                        <a th:href="@{ '/room/timeSelectPage/'+${room.roomNo}}" style="text-decoration: none;">
+                            <button type="button" class="btn btn-outline-primary">강의등록</button>
+                        </a>
+                        <a th:href="@{ '/room/update/' + ${room.roomNo} }" style="text-decoration: none;">
+                            <button type="button" class="btn btn-outline-success">내용 수정</button>
+                        </a>
+                        <button type="button" class="btn btn-outline-danger" th:onclick="roomdeletemodal([[${room.roomNo}]])">삭제</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+<!-- 삭제 모달 02-18 조지훈 -->
+<div class="modal fade classmodal" tabindex="-1" id="roomdelete" data-bs-keyword="false" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-body p-4 text-center">
+                <h5 class="mb-0"> 클래스 <span class="text-danger" style="font-size: 1.2rem;">삭제</span> </h5>
+                <p class="mb-3" id=""> 개설하신 클래스를 삭제하시겠습니까? </p>
+                <input type="hidden" name="roomNo" id="roomNo">
+                <div class="flex-nowrap p-0 modalbtn">
+                    <button type="button"
+                            class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0 border-right"
+                            onclick="roomdelete()">
+                        삭제
+                    </button>
+                    <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0"
+                            data-bs-dismiss="modal">나가기
+                    </button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 삭제 모달 end -->
+<script th:src="@{/js/roomdelete.js}"></script>
+<div th:replace="footer.html::footer"></div>
+</body>
+
+</html>

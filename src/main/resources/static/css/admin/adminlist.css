@@ -1,0 +1,217 @@
+.wrap {
+    font-family: CookieRun-Regular;
+}
+
+
+/* 좌측 컨텐츠 :: 네비*/
+
+.admin-list-wrapper {
+    margin-top: 3rem;
+}
+
+.table-wrapper {
+    margin-top: 3rem;
+}
+
+.outbox {
+    margin-bottom: 2rem;
+}
+
+.submitbtn_a button {
+    width: 15rem;
+    background: #a1e9ff;
+    font-weight: bold;
+}
+
+.submitbtn_b button {
+    width: 15rem;
+    background: #f0a2ff;
+    font-weight: bold;
+}
+
+.submitbtn_a button {
+    --hover: #66c887;
+}
+
+.submitbtn_b button {
+    --hover: #ff408f;
+}
+
+.slide:hover,
+.slide:focus {
+    box-shadow: inset 20rem 0 0 0 var(--hover);
+    transition: 1s;
+}
+
+ul.tabs {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+}
+
+ul.tabs li,
+ul.tabs li.current {
+    cursor: pointer;
+    border-radius: 1rem;
+    box-shadow: 3px 3px 3px #374b73;
+    line-height: 3rem;
+    background: #ffdbdb;
+    margin: 0.3rem 0;
+    font-size: 1.2rem;
+}
+
+ul.tabs li:hover {
+    transform: scale(1.1);
+    transition: all ease-in-out 0.4s;
+}
+
+ul.tabs li.current {
+    background: #374b73;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.tab-content {
+    display: none;
+    background-color: #ffffff;
+    height: auto;
+}
+
+.tab-content.current {
+    display: inherit;
+}
+
+#chartdiv {
+    margin-top: 2.5rem;
+    width: 100%;
+    height: 500px;
+}
+
+.admin-select-wrapper:first {
+    display: flex;
+    justify-content: start;
+    margin-top: 2.0rem;
+    padding: 0.8rem;
+}
+
+.admin-select-wrapper:first-child .admin-select-content {
+    display: inherit;
+    justify-content: left;
+    align-items: center;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+}
+
+
+/* 테이블 */
+
+.admintabletr {
+    background: #374b73;
+}
+
+.admintabletr td {
+    border: 2px solid #fff;
+    border-radius: 0.2rem;
+    color: white !important;
+}
+
+.admintable tr:not(:first-child) td {
+    background-color: #ffdbdb;
+    border: 2px solid #fff;
+}
+
+
+/* 검색버튼 */
+
+.adminsearch button {
+    background-color: #374b73;
+    color: white;
+    border-radius: 0.3rem;
+}
+
+.addaccess {
+    border-radius: 1rem;
+}
+
+
+/* 모달텍스트 */
+
+.modaltxt {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.modaltxt button {
+    font-size: 1rem;
+    margin: 0 1rem;
+    border: 1px solid #374b73;
+    width: 15%;
+    margin: 1rem 1rem;
+    border-radius: 1rem;
+    color: #374b73;
+}
+
+.modaltxt button:hover {
+    background-color: #f0a2ff;
+    color: white;
+    transform: scale(1.05);
+    transition: 0.5s all ease-in-out;
+}
+
+
+/* 페이징박스 */
+
+.pagingbox ul {
+    margin-top: 3rem;
+}
+
+.pagingbox ul li {
+    margin: 0 0.2rem;
+}
+
+.pagingbox ul li a {
+    color: white !important;
+    background-color: #374b73!important;
+    border-radius: 0.4rem !important;
+}
+
+.pagingbox ul li a:hover {
+    background: #ffdbdb !important;
+    color: #374b73 !important;
+}
+
+
+/* 통계 */
+
+.admin-select-wrapper {
+    height: 4rem;
+}
+
+.admin-select-wrapper button {
+    background-color: #a1e9ff !important;
+    border-radius: 1rem;
+    height: 2rem;
+    margin: 0 auto;
+    border: none !important;
+    box-shadow: 3px 3px 10px #374b73;
+    width: 8rem;
+}
+
+.admin-select-wrapper button:hover {
+    transform: scale(1.05);
+    transition: all 0.3s ease-in-out;
+    font-size: 1.2rem;
+    color: #374b73;
+}
+
+.admin-chart-content {
+    margin-top: -1.3rem;
+    height: 35rem;
+}
+
+.admin-chart-wrapper span {
+    background-color: #f4bcff;
+    padding: 0.2rem 0.3rem;
+    border-radius: 0.3rem;
+}
