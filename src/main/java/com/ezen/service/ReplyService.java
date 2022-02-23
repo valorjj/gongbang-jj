@@ -64,7 +64,7 @@ public class ReplyService {
                 // 인텔리 전용 경로
                 // String dir = "C:\\gongbang\\build\\resources\\main\\static\\replyimg";
                 // 리눅스 경로
-                String dir = "/home/ec2-user/gongbang/build/resources/main/static/replyimg";
+                String dir = "/home/ec2-user/gongbang-jj/build/resources/main/static/replyimg";
 
                 String filepath = dir + "/" + uuidfile;
                 try {

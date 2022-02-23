@@ -593,7 +593,7 @@ public class MemberController { // C S
                 uuidfile = uuid.toString() + "_" + file.getOriginalFilename().replaceAll("_", "-"); // 02-17 조지훈
                 // String dir = "C:\\gongbang\\build\\resources\\main\\static\\channelimg";
 
-                String dir = "/home/ec2-user/gongbang/build/resources/main/static/channelimg";
+                String dir = "/home/ec2-user/gongbang-jj/build/resources/main/static/channelimg";
 
                 String filepath = dir + "/" + uuidfile;
                 file.transferTo(new File(filepath));
