@@ -98,8 +98,8 @@ public class PostService {
                 UUID uuid = UUID.randomUUID();
                 uuidfile = uuid.toString() + "_" + Objects.requireNonNull(file.getOriginalFilename()).replaceAll("_", "-");
 
-                String dir = "/home/ec2-user/gongbang-jj/build/resources/main/static/postimg";
-                String filepath = dir + "/" + uuidfile;
+                String dir = "C:\\gongbang-jj\\out\\production\\resources\\static\\postimg";
+                String filepath = dir + "\\" + uuidfile;
 
                 try {
                     file.transferTo(new File(filepath));

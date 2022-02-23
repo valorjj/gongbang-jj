@@ -546,7 +546,28 @@ public class MemberController { // C S
 
     // [정산 페이지 맵핑]
     @GetMapping("/calculate")
-    public String calculate() {
+    public String calculate(Model model) {
+
+        HttpSession session = request.getSession();
+        MemberDto loginDto = (MemberDto) session.getAttribute("logindto");
+        MemberEntity memberEntity = null;
+        if (loginDto != null) {
+            if (memberRepository.findById(loginDto.getMemberNo()).isPresent())
+                memberEntity = memberRepository.findById(loginDto.getMemberNo()).get();
+            // [로그인이 되어있는 상태]
+            assert memberEntity != null;
+            if (memberEntity.getChannelImg() == null) {
+                // [채널에 등록된 이미지가 없는 경우]
+                model.addAttribute("isLoginCheck", 1);
+            } else {
+                model.addAttribute("isLoginCheck", 2);
+            }
+            model.addAttribute("memberEntity", memberEntity);
+        }
+
+
+
+
         return "member/calculate_page";
     }
 
@@ -592,10 +613,8 @@ public class MemberController { // C S
                 UUID uuid = UUID.randomUUID();
                 uuidfile = uuid.toString() + "_" + file.getOriginalFilename().replaceAll("_", "-"); // 02-17 조지훈
                 // String dir = "C:\\gongbang\\build\\resources\\main\\static\\channelimg";
-
-                String dir = "/home/ec2-user/gongbang-jj/build/resources/main/static/channelimg";
-
-                String filepath = dir + "/" + uuidfile;
+                String dir = "C:\\gongbang-jj\\out\\production\\resources\\static\\channelimg";
+                String filepath = dir + "\\" + uuidfile;
                 file.transferTo(new File(filepath));
             }
             memberService.channelregistration(
