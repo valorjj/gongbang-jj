@@ -1270,8 +1270,7 @@
                         </div>
                         <div class="card-content">
                             <div class="card-header-is_closed">
-                                <div class="card-header-text">모집중</div>
-                                <div class="card-header-text">마감임박</div>
+                                <div class="card-header-text" style="padding: 12px;">모집중</div>
                             </div>
                             <h1 class="card-title">
                                 <a th:href="@{'/room/view/' + ${room.roomNo} }">
@@ -1279,14 +1278,14 @@
                                 </a>
                             </h1>
                             <h2 class="card-sub-title">
-                                ##태그 구현 후 추가바람##
+                                <div th:text="${'리뷰평균:' + room.roomAvg}"></div>
+
                             </h2>
                             <div class="description">
                                 <p th:text="${'작성자:' + room.memberEntity.memberName}">
                                 </p>
                                 <p th:text="${'공방컨텐츠: ' + room.roomContent}">
                                 </p>
-                                <p th:text="${'리뷰평균:' + room.roomAvg}"></p>
                             </div>
                             <div th:text="${'공방가격: ' + room.roomPrice}" id="room-price" class="room-price"></div>
                             <hr>
@@ -1320,26 +1319,30 @@
                 <div class="card review" th:each="reply : ${replylist}">
                     <div class="reviewimgbox">
                         <a href="" th:data-bs-target="${ '#modal' + reply.replyNo }" data-bs-toggle="modal">
-                            <img th:src="@{'/replyimg/' + ${reply.replyImgEntities.get(0).replyImg}}" class="card-img-top"/>
+                            <img th:src="@{'/replyimg/' + ${reply.replyImgEntities.get(0).replyImg}}"
+                                 class="card-img-top"/>
                         </a>
                     </div>
 
                     <div class="card-body">
                         <div class="card-title" th:text="${'개설공방 :' + reply.roomEntity.roomTitle}">
                         </div>
-                        <p class="card-text" th:text="${'리뷰내용 :' +reply.replyContent}">
-                        </p>
-                        <!-- 별점 출력-->
-                        <p th:if="${reply.replyStar == 1}"> &starf;
-                        </p>
-                        <p th:if="${reply.replyStar == 2}"> &starf;&starf;
-                        </p>
-                        <p th:if="${reply.replyStar == 3}"> &starf;&starf;&starf;
-                        </p>
-                        <p th:if="${reply.replyStar == 4}"> &starf;&starf;&starf;&starf;
-                        </p>
-                        <p th:if="${reply.replyStar == 5}"> &starf;&starf;&starf;&starf;&starf;
-                        </p>
+                        <div class="d-flex" style="display: inline-block;">
+                            <!-- 리뷰 내용은 조금만 나오게 잘라서 받아와야한다. -->
+                            <div class="card-text" th:text="${'리뷰내용 :' + reply.replyContent}">
+                            </div>
+                            <!-- 별점 출력-->
+                            <div th:if="${reply.replyStar == 1}"> &starf;
+                            </div>
+                            <div th:if="${reply.replyStar == 2}"> &starf;&starf;
+                            </div>
+                            <div th:if="${reply.replyStar == 3}"> &starf;&starf;&starf;
+                            </div>
+                            <div th:if="${reply.replyStar == 4}"> &starf;&starf;&starf;&starf;
+                            </div>
+                            <div th:if="${reply.replyStar == 5}"> &starf;&starf;&starf;&starf;&starf;
+                            </div>
+                        </div>
                     </div>
 
                     <!-- 리뷰카드 모달 -->
@@ -1486,6 +1489,8 @@
 
 
         })
+
+
 
 </script>
 
