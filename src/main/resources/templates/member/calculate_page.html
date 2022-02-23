@@ -7,6 +7,46 @@
         background-color: pink;
         color: navy;
         }
+
+        ul.tabs {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+
+        ul.tabs li,
+        ul.tabs li.current {
+            cursor: pointer;
+            border-radius: 1rem;
+            box-shadow: 3px 3px 3px #374b73;
+            line-height: 3rem;
+            background: #ffdbdb;
+            margin: 0.3rem 0;
+            font-size: 1.2rem;
+        }
+
+        ul.tabs li:hover {
+            transform: scale(1.1);
+            transition: all ease-in-out 0.4s;
+        }
+
+        ul.tabs li.current {
+            background: #374b73;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .tab-content {
+            display: none;
+            background-color: #ffffff;
+            height: auto;
+        }
+
+        .tab-content.current {
+            display: inherit;
+        }
+
+
     </style>
     <link rel="stylesheet" th:href="@{/css/register.css}">
 </head>
@@ -29,7 +69,34 @@
 
         <div class="col-md-9">
             <div id="tab-1" class="tab-content current">
-                <!-- 해당 멤버가 개설한 강의를 결제한 회원들 신청 내역 -->
+
+                <div class="row">
+                    div.col-
+                </div>
+
+                <div class="table-wrapper">
+                    <div class="table-section">
+                        <!-- 해당 멤버가 개설한 강의를 결제한 회원들 신청 내역 -->
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>회원번호</th>
+                                <th>회원아이디</th>
+                                <th>회원이메일</th>
+                                <th>연락처</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each=" customer : ${customers}">
+                                <td th:text="${customer.memberNo}"></td>
+                                <td th:text="${customer.memberId}"></td>
+                                <td th:text="${customer.memberEmail}"></td>
+                                <td th:text="${customer.memberPhone}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
             </div>
             <div id="tab-2" class="tab-content">
@@ -41,6 +108,22 @@
         </div>
     </div>
 </div>
+
+<script>
+
+    $("ul.tabs li").click(function() {
+
+        var tabId = $(this).attr("data-tab");
+
+        $("ul.tabs li").removeClass("current");
+        $(".tab-content").removeClass("current");
+
+        $(this).addClass("current");
+        $("#" + tabId).addClass("current");
+    });
+
+
+</script>
 
 
 </body>

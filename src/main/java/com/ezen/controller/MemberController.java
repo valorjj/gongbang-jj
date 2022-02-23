@@ -583,7 +583,25 @@ public class MemberController { // C S
             model.addAttribute("memberEntity", memberEntity);
         }
 
+        // 내가 만든 강좌에 예약한 [MemberEntity] 를 출력하는 것에 목표입니다.
 
+        List<MemberEntity> memberEntities = null;
+
+        // 1. 특정 회원이 개설한 클래스를 전부 불러옵니다.
+        assert loginDto != null;
+        List<RoomEntity> roomEntities = roomRepository.findMyGongbang(loginDto.getMemberNo());
+        List<HistoryEntity> historyEntities = historyRepository.findAll();
+        List<MemberEntity> memberAsCustomer = new ArrayList<MemberEntity>();
+
+        for (RoomEntity roomEntity : roomEntities) {
+            for (HistoryEntity historyEntity : historyEntities) {
+                if (roomEntity.getRoomNo() == historyEntity.getRoomEntity().getRoomNo()) {
+                    // 1. 회원이 개설한 공방에 예약한 사람들만 리스트에 추가시킨다.
+                    memberAsCustomer.add(memberRepository.findById(historyEntity.getMemberEntity().getMemberNo()).get());
+                }
+            }
+        }
+        model.addAttribute("customers", memberAsCustomer);
         return "member/calculate_page";
     }
 
