@@ -28,7 +28,7 @@ import java.util.function.Function;
 
 @RequestMapping("/member")
 @Controller
-public class MemberController { // C S
+public class MemberController {
 
     @Autowired
     private MemberService memberService;
@@ -735,8 +735,9 @@ public class MemberController { // C S
                 UUID uuid = UUID.randomUUID();
                 uuidfile = uuid.toString() + "_" + file.getOriginalFilename().replaceAll("_", "-"); // 02-17 조지훈
                 // String dir = "C:\\gongbang\\build\\resources\\main\\static\\channelimg";
-                String dir = "C:\\gongbang-jj\\out\\production\\resources\\static\\channelimg";
-                String filepath = dir + "\\" + uuidfile;
+                String dir = "/home/ec2-user/gongbang-jj/build/resources/main/static/channelimg";
+
+                String filepath = dir + "/" + uuidfile;
                 file.transferTo(new File(filepath));
             }
             memberService.channelregistration(

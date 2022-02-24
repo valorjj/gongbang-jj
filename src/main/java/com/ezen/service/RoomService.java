@@ -78,11 +78,11 @@ public class RoomService {
                 // 인텔리전용
                 // String dir = "C:\\gongbang\\build\\resources\\main\\static\\roomimg";
                 // 리눅스 전용
-                String dir = "C:\\gongbang-jj\\out\\production\\resources\\static\\roomimg";
+                String dir = "/home/ec2-user/gongbang-jj/build/resources/main/static/roomimg";
 
                 // 3. 저장될 파일의 전체 [현재는 절대]경로
                 // 3.1 프로젝트 경로를 맞춘다.
-                String filepath = dir + "\\" + uuidfile;
+                String filepath = dir + "/" + uuidfile;
 
                 try {
                     // 4. 지정한 경로에 파일을 저장시킨다.

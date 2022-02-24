@@ -152,7 +152,7 @@
                                     </a>
                                 </li>
 
-                                <li class="community">
+                                <li class="community" sec:authorize="hasRole('ADMIN')">
                                     <a class="nav-link" th:href="@{/community/list}">
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                              xmlns:cc="http://creativecommons.org/ns#"
