@@ -9,6 +9,7 @@ import com.ezen.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,8 +21,10 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 
 @RequestMapping("/member")
 @Controller
@@ -333,6 +336,7 @@ public class MemberController { // C S
 
         // 8. 최종적으로 회원이 가진 포인트를 감소시킵니다.
         memberEntity.setMemberPoint(memberEntity.getMemberPoint() - price);
+
         int memberPoint;
         if (historyEntity.getHistoryPoint() == 0) {
             memberPoint = 0;
@@ -593,11 +597,95 @@ public class MemberController { // C S
         List<HistoryEntity> historyEntities = historyRepository.findAll();
         List<MemberEntity> memberAsCustomer = new ArrayList<MemberEntity>();
 
+        Page<MemberEntity> memberWithPage = new Page<MemberEntity>() {
+            @Override
+            public int getTotalPages() {
+                return 0;
+            }
+
+            @Override
+            public long getTotalElements() {
+                return 0;
+            }
+
+            @Override
+            public <U> Page<U> map(Function<? super MemberEntity, ? extends U> converter) {
+                return null;
+            }
+
+            @Override
+            public int getNumber() {
+                return 0;
+            }
+
+            @Override
+            public int getSize() {
+                return 0;
+            }
+
+            @Override
+            public int getNumberOfElements() {
+                return 0;
+            }
+
+            @Override
+            public List<MemberEntity> getContent() {
+                return null;
+            }
+
+            @Override
+            public boolean hasContent() {
+                return false;
+            }
+
+            @Override
+            public Sort getSort() {
+                return null;
+            }
+
+            @Override
+            public boolean isFirst() {
+                return false;
+            }
+
+            @Override
+            public boolean isLast() {
+                return false;
+            }
+
+            @Override
+            public boolean hasNext() {
+                return false;
+            }
+
+            @Override
+            public boolean hasPrevious() {
+                return false;
+            }
+
+            @Override
+            public Pageable nextPageable() {
+                return null;
+            }
+            @Override
+            public Pageable previousPageable() {
+                return null;
+            }
+
+            @Override
+            public Iterator<MemberEntity> iterator() {
+                return null;
+            }
+        };
+
         for (RoomEntity roomEntity : roomEntities) {
             for (HistoryEntity historyEntity : historyEntities) {
                 if (roomEntity.getRoomNo() == historyEntity.getRoomEntity().getRoomNo()) {
-                    // 1. 회원이 개설한 공방에 예약한 사람들만 리스트에 추가시킨다.
+                    // 1. 내가 개설한 공방을 예약한 사람
+                    int myCustomerNo = historyEntity.getMemberEntity().getMemberNo();
+
                     memberAsCustomer.add(memberRepository.findById(historyEntity.getMemberEntity().getMemberNo()).get());
+                    // memberWithPage.add();
                 }
             }
         }

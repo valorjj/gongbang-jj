@@ -88,17 +88,6 @@ function calendarInit() {
             // var currentMonth = currentMonth + 1; for 문 안에서 사용하니 자꾸 숫자가 증가한다.
             // var dayId = currentYear+"".concat(',', tmp, ',', i);
             calendar.innerHTML = calendar.innerHTML + '<div onclick="test('+currentYear+','+currentMonth+','+i+')" class="day current day-select" id="'+dayId+'">' + i + '</div>';
-            /*
-            해당 버튼 id 를 부여해서 클릭 이벤트를 부여한다. -> 일단 실패
-            */
-
-            /*
-            addEventListener 가 먹히지 않는다. 왜 안먹히는지 원인을 찾는 중인데 일단 잠정 보류
-            날짜가 출력되는 html 내에 script 선언해서 테스트해봐야함
-            var dayPickedId = "#" + dayId;
-            var dayPicked = $(dayPickedId);
-            dayPicked.addEventListener("click", () => { alert("hi"); });
-            */
         }
 
         // 다음달

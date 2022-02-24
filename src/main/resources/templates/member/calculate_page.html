@@ -47,6 +47,8 @@
         }
 
 
+
+
     </style>
     <link rel="stylesheet" th:href="@{/css/register.css}">
 </head>
@@ -70,11 +72,20 @@
         <div class="col-md-9">
             <div id="tab-1" class="tab-content current">
 
+                <!-- -->
                 <div class="row">
-                    div.col-
+                    <div> 총 신청 인원 수</div>
+                    <div th:text="${#lists.size(customers)}">총 신청한 사람</div>
+                </div>
+
+                <!-- ajax 통해서 바로바로 검색할 수 있도록 스크립트 추가 요망-->
+                <div class="row">
+                    <label for="member-calculate-search">검색</label>
+                    <input onchange="memberCalSearch();" type="text" class="form-control" id="member-calculate-search">
                 </div>
 
                 <div class="table-wrapper">
+                    <!-- 테이블 출력 -->
                     <div class="table-section">
                         <!-- 해당 멤버가 개설한 강의를 결제한 회원들 신청 내역 -->
                         <table class="table table-striped">
@@ -91,10 +102,48 @@
                                 <td th:text="${customer.memberNo}"></td>
                                 <td th:text="${customer.memberId}"></td>
                                 <td th:text="${customer.memberEmail}"></td>
-                                <td th:text="${customer.memberPhone}"></td>
+                                <td th:if="${customer.memberPhone != null}" th:text="${customer.memberPhone}"></td>
+                                <td th:if="${customer.memberPhone == null}" th:text="${'연락처가 등록되지 않았습니다.'}"></td>
                             </tr>
                             </tbody>
                         </table>
+
+
+                    </div>
+                    <!-- 페이지 네이션-->
+                    <div class="pagingbox">
+                        <ul id="pagination-section" class="pagination justify-content-center" th:with="start = ${ T(Math).floor( roomEntities.number / 10 ) * 10 + 1 } ,
+                                                     last = ( ${ start + 9 < roomEntities.totalPages ?  start + 9 : roomEntities.totalPages } )">
+
+                            <li class="page-item">
+                                <a class="page-link" th:href="@{/admin/adminlist( page = 1 ) }"> 처음 </a>
+                            </li>
+
+                            <li class="page-item" th:class="${roomEntities.first} ? 'disabled' ">
+
+                                <a class="page-link"
+                                   th:href="${roomEntities.first} ? '#' : @{/admin/adminlist( page = ${ roomEntities.number } ) }">
+                                    이전 </a>
+                            </li>
+
+                            <li class="page-item" th:each="page : ${#numbers.sequence( start , last ) }">
+                                <a class="page-link" th:href="@{/admin/adminlist( page = ${page} ) }"
+                                   th:text="${page}"></a>
+                            </li>
+
+                            <li class="page-item" th:class="${roomEntities.last} ? 'disabled' ">
+                                <a class="page-link"
+                                   th:href="${roomEntities.last} ? '#' : @{/admin/adminlist( page = ${roomEntities.number+2} ) }">
+                                    다음
+                                </a>
+                            </li>
+
+                            <li class="page-item">
+                                <a class="page-link"
+                                   th:href="@{/admin/adminlist( page=${roomEntities.totalPages} ) }">
+                                    마지막 </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
@@ -121,6 +170,8 @@
         $(this).addClass("current");
         $("#" + tabId).addClass("current");
     });
+
+
 
 
 </script>

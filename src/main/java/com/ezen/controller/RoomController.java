@@ -163,9 +163,7 @@ public class RoomController {
             }
         }
         roomEntities = roomService.getRoomEntityBySearch(pageable, keyword, local, category);
-
         int roomSize = 0;
-        System.out.println("#####" + roomEntities.get().count());
         model.addAttribute("listSize", roomEntities.get().count());
 
         if (roomEntities != null) {
@@ -620,11 +618,9 @@ public class RoomController {
     @ResponseBody
     public JSONObject getRoomEntityByTimeTableToJson(@RequestParam("activeId") String roomDate,
                                                      @RequestParam("roomNo") int roomNo) {
-
         HttpSession session = request.getSession();
         MemberDto loginDto = (MemberDto) session.getAttribute("logindto");
         int memberNo = loginDto.getMemberNo();
-
         JSONObject jsonObject = new JSONObject(); // json
         JSONArray jsonArray = new JSONArray(); // json
         // roomNo 에 해당하는 TimeTable 엔티티만 리스트에 담아서 호출한다.
