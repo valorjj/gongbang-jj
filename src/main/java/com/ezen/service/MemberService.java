@@ -6,6 +6,11 @@ import com.ezen.domain.entity.MemberEntity;
 import com.ezen.domain.entity.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -240,13 +245,30 @@ public class MemberService implements UserDetailsService {
             return false;
         }
     }
-    // @Transactional
-    // public boolean channelupdate(MemberEntity memberEntity) {
-    // try {
-    //
-    // }catch (Exception e) {}
-    //
-    // return true;
-    // }
+
+
+    // [개인 정산 페이지에 출력될 데이터를 호출하는 영역]
+    public Page<MemberEntity> getMemberList(@PageableDefault Pageable pageable, int memberNo, String keyword) {
+        Page<MemberEntity> memberEntities = null;
+        // 1. 검색이 존재하지 않는 경우
+        if (keyword == null) {
+            memberEntities = memberRepository.getMyCustomerList1(pageable, memberNo);
+        }
+        // 2. 검색이 존재하는 경우
+        else {
+            memberEntities = memberRepository.getMyCustomerList2(pageable, memberNo, keyword);
+        }
+
+        int page = -1;
+        if (pageable.getPageNumber() == 0) {
+            page = 0;
+        } else {
+            page = pageable.getPageNumber() - 1;
+        }
+        pageable = PageRequest.of(page, 4, Sort.by(Sort.Direction.DESC, "memberNo"));
+
+        return memberEntities;
+
+    }
 
 }

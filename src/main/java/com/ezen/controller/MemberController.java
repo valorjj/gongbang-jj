@@ -2,10 +2,16 @@ package com.ezen.controller;
 
 import com.ezen.domain.dto.MemberDto;
 import com.ezen.domain.dto.RoomPaymentDto;
+import com.ezen.domain.dto.myCustomerDTO;
 import com.ezen.domain.entity.*;
 import com.ezen.domain.entity.repository.*;
 import com.ezen.service.MemberService;
 import com.ezen.service.RoomService;
+import org.hibernate.SQLQuery;
+import org.hibernate.criterion.Projections;
+import org.hibernate.transform.Transformers;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,14 +22,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 
 @RequestMapping("/member")
@@ -307,11 +313,15 @@ public class MemberController {
             }
         }
 
+        // 해당 클래스를 개설한 사람을 찾아서 엔티티에 추가시킨다.
+        int classOwner = memberRepository.findMemberByRoomNo(roomNo);
+
         // 3. HistoryEntity 에 멤버 정보, 클래스 정보를 들록합니다.
         HistoryEntity historyEntity = HistoryEntity.builder()
                 .memberEntity(memberEntity)
                 .roomEntity(roomEntity)
                 .timeTableEntity(timeTableTmp)
+                .roomMadeBy(classOwner)
                 .build();
 
         // 4. 예약내역 저장하고 저장번호 받아오기
@@ -566,131 +576,130 @@ public class MemberController {
         return "1";
     }
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
+
     // [정산 페이지 맵핑]
     @GetMapping("/calculate")
-    public String calculate(Model model) {
+    public String calculate(Model model, @PageableDefault Pageable pageable) {
 
         HttpSession session = request.getSession();
-        MemberDto loginDto = (MemberDto) session.getAttribute("logindto");
-        MemberEntity memberEntity = null;
-        if (loginDto != null) {
-            if (memberRepository.findById(loginDto.getMemberNo()).isPresent())
-                memberEntity = memberRepository.findById(loginDto.getMemberNo()).get();
-            // [로그인이 되어있는 상태]
-            assert memberEntity != null;
-            if (memberEntity.getChannelImg() == null) {
-                // [채널에 등록된 이미지가 없는 경우]
-                model.addAttribute("isLoginCheck", 1);
-            } else {
-                model.addAttribute("isLoginCheck", 2);
-            }
-            model.addAttribute("memberEntity", memberEntity);
+        // 1. 검색이 결과를 받는다.
+        String keyword = request.getParameter("keyword");
+        // 1.1 검색이 존재하지 않는 경우
+        if (keyword == null) {
+            keyword = (String) session.getAttribute("calculateSearch");
+        }
+        // 1.2 검색이 존재하는 경우
+        else {
+            session.setAttribute("calculateSearch", keyword);
         }
 
-        // 내가 만든 강좌에 예약한 [MemberEntity] 를 출력하는 것에 목표입니다.
+        MemberDto loginDto = (MemberDto) session.getAttribute("logindto");
+        int memberNo = loginDto.getMemberNo();
 
-        List<MemberEntity> memberEntities = null;
+        MemberEntity memberEntity = null;
 
-        // 1. 특정 회원이 개설한 클래스를 전부 불러옵니다.
-        assert loginDto != null;
-        List<RoomEntity> roomEntities = roomRepository.findMyGongbang(loginDto.getMemberNo());
-        List<HistoryEntity> historyEntities = historyRepository.findAll();
-        List<MemberEntity> memberAsCustomer = new ArrayList<MemberEntity>();
+        if (memberRepository.findById(loginDto.getMemberNo()).isPresent())
+            memberEntity = memberRepository.findById(loginDto.getMemberNo()).get();
+        // [로그인이 되어있는 상태]
+        assert memberEntity != null;
+        if (memberEntity.getChannelImg() == null) {
+            // [채널에 등록된 이미지가 없는 경우]
+            model.addAttribute("isLoginCheck", 1);
+        } else {
+            model.addAttribute("isLoginCheck", 2);
+        }
+        model.addAttribute("memberEntity", memberEntity);
 
-        Page<MemberEntity> memberWithPage = new Page<MemberEntity>() {
-            @Override
-            public int getTotalPages() {
-                return 0;
-            }
+        // 2. 내가 개설한 클래스에 등록한 회원 내역을 불러옵니다.
+        Page<MemberEntity> myCustomerList = memberService.getMemberList(pageable, memberNo, keyword);
 
-            @Override
-            public long getTotalElements() {
-                return 0;
-            }
+        System.out.println(myCustomerList);
 
-            @Override
-            public <U> Page<U> map(Function<? super MemberEntity, ? extends U> converter) {
-                return null;
-            }
+        model.addAttribute("myCustomers", myCustomerList);
 
-            @Override
-            public int getNumber() {
-                return 0;
-            }
+        return "member/calculate_page";
+    }
 
-            @Override
-            public int getSize() {
-                return 0;
-            }
 
-            @Override
-            public int getNumberOfElements() {
-                return 0;
-            }
+    // [정산 페이지 맵핑 : 검색 결과]
+    @GetMapping("/calculateSearch")
+    public String calculateSearch(Model model, @PageableDefault Pageable pageable) {
+        HttpSession session = request.getSession();
+        // 1. 검색이 결과를 받는다.
+        String keyword = request.getParameter("keyword");
+        // 1.1 검색이 존재하지 않는 경우
+        if (keyword == null) {
+            keyword = (String) session.getAttribute("calculateSearch");
+        }
+        // 1.2 검색이 존재하는 경우
+        else {
+            session.setAttribute("calculateSearch", keyword);
+        }
 
-            @Override
-            public List<MemberEntity> getContent() {
-                return null;
-            }
+        MemberDto loginDto = (MemberDto) session.getAttribute("logindto");
+        int memberNo = loginDto.getMemberNo();
 
-            @Override
-            public boolean hasContent() {
-                return false;
-            }
+        MemberEntity memberEntity = null;
 
-            @Override
-            public Sort getSort() {
-                return null;
-            }
+        if (memberRepository.findById(loginDto.getMemberNo()).isPresent())
+            memberEntity = memberRepository.findById(loginDto.getMemberNo()).get();
+        // [로그인이 되어있는 상태]
+        assert memberEntity != null;
+        if (memberEntity.getChannelImg() == null) {
+            // [채널에 등록된 이미지가 없는 경우]
+            model.addAttribute("isLoginCheck", 1);
+        } else {
+            model.addAttribute("isLoginCheck", 2);
+        }
+        model.addAttribute("memberEntity", memberEntity);
 
-            @Override
-            public boolean isFirst() {
-                return false;
-            }
+        // 2. 내가 개설한 클래스에 등록한 회원 내역을 불러옵니다.
+        Page<MemberEntity> myCustomerList = memberService.getMemberList(pageable, memberNo, keyword);
+        model.addAttribute("myCustomers", myCustomerList);
 
-            @Override
-            public boolean isLast() {
-                return false;
-            }
+        return "member/calculate_table";
+    }
 
-            @Override
-            public boolean hasNext() {
-                return false;
-            }
+    // [정산 페이지 맵핑 : 차트]
+    // 날짜 선택 JSON 변환
+    @GetMapping("/calculateTimeSelect")
+    @ResponseBody
+    public JSONObject calculateTimeSelect(@RequestParam("member-select-date") String date) {
 
-            @Override
-            public boolean hasPrevious() {
-                return false;
-            }
+        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
 
-            @Override
-            public Pageable nextPageable() {
-                return null;
-            }
-            @Override
-            public Pageable previousPageable() {
-                return null;
-            }
+        List<MemberEntity> myCustomerList = memberRepository.findAll();
+        List<HistoryEntity> historyList = historyRepository.findAll();
+        List<TimeTableEntity> timeTableEntities = timeTableRepository.findAll();
 
-            @Override
-            public Iterator<MemberEntity> iterator() {
-                return null;
-            }
-        };
+        // 해당 멤버가 예약한 내역을 json 으로 넘긴다.
+        for (HistoryEntity historyEntity : historyList) {
+            for (MemberEntity myCustomer : myCustomerList) {
+                if (myCustomer.getMemberNo() == historyEntity.getMemberEntity().getMemberNo()) {
+                    JSONObject data = new JSONObject();
+                    // 1. 해당 강좌 개설 날짜 : YYYY-MM-DD
+                    data.put("date", timeTableRepository.findById(historyEntity.getTimeTableEntity().getTimeTableNo()).get());
+                    // 2. 해당 결제 금액
+                    data.put("price", historyEntity.getHistoryPoint());
+                    // 3. 카테고리
+                    data.put("category", historyEntity.getRoomEntity().getRoomCategory());
+                    // 4. 지역
+                    data.put("category", historyEntity.getRoomEntity().getRoomLocal());
+                    // 5. 해당 강좌
+                    data.put("roomNo", historyEntity.getRoomEntity().getRoomNo());
 
-        for (RoomEntity roomEntity : roomEntities) {
-            for (HistoryEntity historyEntity : historyEntities) {
-                if (roomEntity.getRoomNo() == historyEntity.getRoomEntity().getRoomNo()) {
-                    // 1. 내가 개설한 공방을 예약한 사람
-                    int myCustomerNo = historyEntity.getMemberEntity().getMemberNo();
-
-                    memberAsCustomer.add(memberRepository.findById(historyEntity.getMemberEntity().getMemberNo()).get());
-                    // memberWithPage.add();
+                    jsonArray.add(data);
                 }
             }
         }
-        model.addAttribute("customers", memberAsCustomer);
-        return "member/calculate_page";
+
+        jsonObject.put("memberHistory", jsonArray);
+        return jsonObject;
+
     }
 
     // 02-15 채널 정보 출력 - 조지훈
@@ -735,9 +744,9 @@ public class MemberController {
                 UUID uuid = UUID.randomUUID();
                 uuidfile = uuid.toString() + "_" + file.getOriginalFilename().replaceAll("_", "-"); // 02-17 조지훈
                 // String dir = "C:\\gongbang\\build\\resources\\main\\static\\channelimg";
-                String dir = "/home/ec2-user/gongbang-jj/build/resources/main/static/channelimg";
+                String dir = "C:\\Users\\re_mu\\IdeaProjects\\jj\\out\\production\\resources\\static\\channelimg";
 
-                String filepath = dir + "/" + uuidfile;
+                String filepath = dir + "\\" + uuidfile;
                 file.transferTo(new File(filepath));
             }
             memberService.channelregistration(

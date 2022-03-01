@@ -46,15 +46,14 @@
             display: inherit;
         }
 
-
-
-
     </style>
     <link rel="stylesheet" th:href="@{/css/register.css}">
 </head>
 <body>
 <div th:replace="common.html::common"></div>
 <div th:replace="header.html::header"></div>
+
+
 <div class="container">
     <br>
     <div id="pageHeader"><h3><strong>통계 페이지</strong></h3></div>
@@ -75,13 +74,30 @@
                 <!-- -->
                 <div class="row">
                     <div> 총 신청 인원 수</div>
-                    <div th:text="${#lists.size(customers)}">총 신청한 사람</div>
+                    <div th:text="${#lists.size(myCustomers)}">총 신청한 사람</div>
                 </div>
 
                 <!-- ajax 통해서 바로바로 검색할 수 있도록 스크립트 추가 요망-->
                 <div class="row">
-                    <label for="member-calculate-search">검색</label>
-                    <input onchange="memberCalSearch();" type="text" class="form-control" id="member-calculate-search">
+                    <div class="col-4">
+                        <select name="" id="calculate-table-arrange-1">
+                            <option value="">최신순</option>
+                            <option value="">오래된순</option>
+                        </select>
+
+                    </div>
+                    <div class="col-4">
+                        <select name="" id="calculate-table-arrange-2">
+                            <option value="">개설한 클래스</option>
+                            <option value="" th:each="myRoom : ${myRoomList}"></option>
+                        </select>
+                    </div>
+                    <div class="col-4">
+                        <label for="member-calculate-search">검색</label>
+                        <input type="text" class="form-control"
+                               id="member-calculate-search">
+                        <button id="member-calculate-search-btn">검색</button>
+                    </div>
                 </div>
 
                 <div class="table-wrapper">
@@ -98,7 +114,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each=" customer : ${customers}">
+                            <tr th:each="customer : ${myCustomers}">
                                 <td th:text="${customer.memberNo}"></td>
                                 <td th:text="${customer.memberId}"></td>
                                 <td th:text="${customer.memberEmail}"></td>
@@ -107,11 +123,9 @@
                             </tr>
                             </tbody>
                         </table>
-
-
                     </div>
                     <!-- 페이지 네이션-->
-                    <div class="pagingbox">
+                    <!--<div class="pagingbox">
                         <ul id="pagination-section" class="pagination justify-content-center" th:with="start = ${ T(Math).floor( roomEntities.number / 10 ) * 10 + 1 } ,
                                                      last = ( ${ start + 9 < roomEntities.totalPages ?  start + 9 : roomEntities.totalPages } )">
 
@@ -144,14 +158,49 @@
                                     마지막 </a>
                             </li>
                         </ul>
-                    </div>
+                    </div>-->
                 </div>
 
             </div>
             <div id="tab-2" class="tab-content">
 
+                <!-- 내가 개설한 전체 강좌 시간 순서-->
+                <div class="mb-3 row">
+                    <div class="col-3">
+                        <select name="" id="member-calculate-select-year">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <select name="" id="member-calculate-select-month">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <select name="" id="member-calculate-select-day">
+                            <option value=""></option>
+                        </select>
+
+                    </div>
+                </div>
+
+                <!-- 내가 개설한 개별 강좌 roomNo 선택 -->
+                <div class="mb-3">
+                    <div class="class-3">
+                        <select name="" id=""></select>
+                    </div>
+                </div>
+
+                <!-- 차트 그리기 -->
+                <div class="member-chart-wrapper ">
+                    <div class="member-chart-content ">
+                        <div id="chartdiv"></div>
+                    </div>
+                </div>
+
             </div>
             <div id="tab-3" class="tab-content">
+
 
             </div>
         </div>
@@ -171,11 +220,8 @@
         $("#" + tabId).addClass("current");
     });
 
-
-
-
 </script>
 
-
+<script th:src="@{/js/member/member_calculate.js}"></script>
 </body>
 </html>

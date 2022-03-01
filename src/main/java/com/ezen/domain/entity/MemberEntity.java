@@ -52,7 +52,6 @@ public class MemberEntity extends BaseTimeEntity {
     @Column(name = "channelImg")
     private String channelImg;
 
-
     @Enumerated(EnumType.STRING)
     @Column
     private Role memberGrade; // 회원등급

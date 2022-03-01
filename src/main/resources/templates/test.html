@@ -1,0 +1,97 @@
+<!-- 리뷰 후기 카드 출력 02-04 조지훈 작성중 -->
+<div class="row p-2">
+    <h3 style="background-color: #fff1ed">공방리뷰</h3>
+    <div id="main-review-slick">
+        <div class="card review" th:each="reply : ${replylist}">
+            <div class="reviewimgbox">
+                <a href="" th:data-bs-target="${ '#modal' + reply.replyNo }" data-bs-toggle="modal">
+                    <img th:src="@{'/replyimg/' + ${reply.replyImgEntities                                          .get(0).replyImg}}"
+                         class="card-img-top"/></a>
+            </div>
+            <div class="card-body">
+                <div class="card-title" th:text="${'개설공방 :' + reply.roomEntity.roomTitle}">
+                </div>
+                <p class="card-text" th:text="${'리뷰내용 :' +reply.replyContent}">
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:each="reply : ${replylist}">
+    <!-- 리뷰카드 모달 -->
+    <div class="modal" tabindex="-1" data-bs-keyboard="false" data-bs-backdrop="static"
+         role="dialog" th:id="${'modal'+reply.replyNo}" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content rounded-5 shadow">
+                <div class="modal-header p-5 pb-4 border-bottom-0">
+                    <h2 class="fw-bold mb-0 modaltitle">리뷰 상세페이지
+                    </h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-5 pt-0">
+                    <div th:id="${'carousel' +reply.replyNo}" class="carousel slide"
+                         data-bs-ride="carousel">
+                        <!-- 모달상단 -->
+                        <div class="carousel-inner modalimgbox">
+                            <!-- 반복문 -->
+                            <div class="carousel-item active modalimg">
+                                <img th:src="@{'/replyimg/'+${reply.replyImgEntities.get(0).replyImg} }"
+                                     alt="..."/>
+                            </div>
+                            <div class="carousel-item modalimg"
+                                 th:each="replyimg : ${reply.replyImgEntities}">
+                                <img th:src="@{'/replyimg/'+${replyimg.replyImg} }" alt="..."/>
+                            </div>
+                            <div class="modalbtn">
+                                <!-- <input type="button"> -->
+                                <button class="carousel-control-prev" type="button"
+                                        th:data-bs-target="${'#carousel'+reply.replyNo}"
+                                        data-bs-slide="prev">
+                                    <<
+                                </button>
+                                <button class="carousel-control-next" type="button"
+                                        th:data-bs-target="${'#carousel'+reply.replyNo}"
+                                        data-bs-slide="next">
+                                    >>
+                                </button>
+                            </div>
+
+                        </div>
+                        <!-- 모달하단 -->
+                        <div class="modalbot">
+                            <div class="mt-3">
+                                <h3 class="fw-bold"
+                                    th:text="${'공방클래스 : '+ reply.roomEntity.roomTitle}">
+                                </h3>
+                                <hr/>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p class="mt-2"
+                                       th:text="${'강사 : ' + reply.memberEntity.memberName}">
+                                    </p>
+
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="mt-2"
+                                         th:text="${'리뷰내용 : ' + reply.replyContent}">
+                                    </div>
+                                    <div th:text="${'리뷰일 : ' +  #temporals.format(reply.createdDate,'yyyy-MM-dd')}">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <hr/>
+                            <a th:href="@{'/room/view/' +${reply.roomEntity.roomNo } }">
+                                클래스 바로가기
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 리뷰카드 모달 end -->

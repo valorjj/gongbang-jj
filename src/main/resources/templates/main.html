@@ -1251,21 +1251,13 @@
                     <button type="button" class="slick-next">Next</button>
                 </div>
                 <!-- 슬라이드 닷 -->
-                <div class=""></div>
             </div>
-
-            <!-- 등록된 리스트를 card 형식으로 출력하는 부분 시작-->
-            <!-- 나중에 수정할 것-->
-
-            <!-- 등록된 리스트를 card 형식으로 출력하는 부분 종료 -->
 
             <!-- 카드출력부분 -->
             <div class="row product-boxoutline p-2">
                 <h3>진행중인 공방</h3>
-                <div class="product-box" data-aos-anchor-placement="top-center">
-                    <!DOCTYPE html>
+                <div class="product-box" id="main-gongbang-slick" data-aos-anchor-placement="top-center">
                     <div class="product-card" th:each="room : ${roomlist}" data-aos="zoom-in">
-
                         <div class="card-thumbnail">
                             <img th:if="${room.roomImgEntities != null}" class="card-img"
                                  th:src="@{ '/roomimg/' + ${room.roomImgEntities.get(0).roomImg} }"/>
@@ -1316,115 +1308,117 @@
             <!-- 개설된 강의 출력 종료 -->
 
             <!-- 리뷰 후기 카드 출력 02-04 조지훈 작성중 -->
-            <div class="row  p-2">
+            <div class="row p-2">
                 <h3>공방리뷰</h3>
-                <div class="card review" th:each="reply : ${replylist}">
-                    <div class="reviewimgbox">
-                        <a href="" th:data-bs-target="${ '#modal' + reply.replyNo }" data-bs-toggle="modal">
-                            <img th:src="@{'/replyimg/' + ${reply.replyImgEntities.get(0).replyImg}}"
-                                 class="card-img-top"/>
-                        </a>
-                    </div>
-
-                    <div class="card-body">
-                        <div class="card-title" th:text="${'개설공방 :' + reply.roomEntity.roomTitle}">
+                <div id="main-review-slick">
+                    <div class="card review" th:each="reply : ${replylist}">
+                        <div class="reviewimgbox">
+                            <a href="" th:data-bs-target="${ '#modal' + reply.replyNo }" data-bs-toggle="modal">
+                                <img th:src="@{'/replyimg/' + ${reply.replyImgEntities.get(0).replyImg}}"
+                                     class="card-img-top"/>
+                            </a>
                         </div>
-                        <div class="d-flex" style="display: inline-block;">
-                            <!-- 리뷰 내용은 조금만 나오게 잘라서 받아와야한다. -->
-                            <div class="card-text" th:text="${'리뷰내용 :' + reply.replyContent}">
-                            </div>
-                            <!-- 별점 출력-->
-                            <div th:if="${reply.replyStar == 1}"> &starf;
-                            </div>
-                            <div th:if="${reply.replyStar == 2}"> &starf;&starf;
-                            </div>
-                            <div th:if="${reply.replyStar == 3}"> &starf;&starf;&starf;
-                            </div>
-                            <div th:if="${reply.replyStar == 4}"> &starf;&starf;&starf;&starf;
-                            </div>
-                            <div th:if="${reply.replyStar == 5}"> &starf;&starf;&starf;&starf;&starf;
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 리뷰카드 모달 -->
-                    <div class="modal" tabindex="-1" data-bs-keyboard="false" data-bs-backdrop="static" role="dialog"
-                         th:id="${'modal'+reply.replyNo}" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content rounded-5 shadow">
-                                <div class="modal-header p-5 pb-4 border-bottom-0">
-                                    <h2 class="fw-bold mb-0 modaltitle">리뷰 상세페이지
-                                    </h2>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
+                        <div class="card-body">
+                            <div class="card-title" th:text="${'개설공방 :' + reply.roomEntity.roomTitle}">
+                                <div class="d-flex" style="display: inline-block;">
+                                    <!-- 리뷰 내용은 조금만 나오게 잘라서 받아와야한다. -->
+                                    <div class="card-text" th:text="${'리뷰내용 :' + reply.replyContent}">
+                                    </div>
+                                    <!-- 별점 출력-->
+                                    <div th:if="${reply.replyStar == 1}"> &starf;
+                                    </div>
+                                    <div th:if="${reply.replyStar == 2}"> &starf;&starf;
+                                    </div>
+                                    <div th:if="${reply.replyStar == 3}"> &starf;&starf;&starf;
+                                    </div>
+                                    <div th:if="${reply.replyStar == 4}"> &starf;&starf;&starf;&starf;
+                                    </div>
+                                    <div th:if="${reply.replyStar == 5}"> &starf;&starf;&starf;&starf;&starf;
+                                    </div>
                                 </div>
-                                <div class="modal-body p-5 pt-0">
-                                    <div th:id="${'carousel' +reply.replyNo}" class="carousel slide"
-                                         data-bs-ride="carousel">
-                                        <!-- 모달상단 -->
-                                        <div class="carousel-inner modalimgbox">
-                                            <!-- 반복문 -->
-                                            <div class="carousel-item active modalimg">
-                                                <img th:src="@{'/replyimg/'+${reply.replyImgEntities.get(0).replyImg} }"
-                                                     alt="..."/>
-                                            </div>
-                                            <div class="carousel-item modalimg"
-                                                 th:each="replyimg : ${reply.replyImgEntities}">
-                                                <img th:src="@{'/replyimg/'+${replyimg.replyImg} }" alt="..."/>
-                                            </div>
-                                            <div class="modalbtn">
-                                                <!-- <input type="button"> -->
-                                                <button class="carousel-control-prev" type="button"
-                                                        th:data-bs-target="${'#carousel'+reply.replyNo}"
-                                                        data-bs-slide="prev">
-                                                    <<
-                                                </button>
-                                                <button class="carousel-control-next" type="button"
-                                                        th:data-bs-target="${'#carousel'+reply.replyNo}"
-                                                        data-bs-slide="next">
-                                                    >>
-                                                </button>
-                                            </div>
+                            </div>
+                        </div>
+                        <!-- 리뷰카드 모달 -->
+                        <div class="modal" tabindex="-1" data-bs-keyboard="false" data-bs-backdrop="static"
+                             role="dialog"
+                             th:id="${'modal'+reply.replyNo}" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content rounded-5 shadow">
+                                    <div class="modal-header p-5 pb-4 border-bottom-0">
+                                        <h2 class="fw-bold mb-0 modaltitle">리뷰 상세페이지
+                                        </h2>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body p-5 pt-0">
+                                        <div th:id="${'carousel' +reply.replyNo}" class="carousel slide"
+                                             data-bs-ride="carousel">
+                                            <!-- 모달상단 -->
+                                            <div class="carousel-inner modalimgbox">
+                                                <!-- 반복문 -->
+                                                <div class="carousel-item active modalimg">
+                                                    <img th:src="@{'/replyimg/'+${reply.replyImgEntities.get(0).replyImg} }"
+                                                         alt="..."/>
+                                                </div>
+                                                <div class="carousel-item modalimg"
+                                                     th:each="replyimg : ${reply.replyImgEntities}">
+                                                    <img th:src="@{'/replyimg/'+${replyimg.replyImg} }" alt="..."/>
+                                                </div>
+                                                <div class="modalbtn">
+                                                    <!-- <input type="button"> -->
+                                                    <button class="carousel-control-prev" type="button"
+                                                            th:data-bs-target="${'#carousel'+reply.replyNo}"
+                                                            data-bs-slide="prev">
+                                                        <<
+                                                    </button>
+                                                    <button class="carousel-control-next" type="button"
+                                                            th:data-bs-target="${'#carousel'+reply.replyNo}"
+                                                            data-bs-slide="next">
+                                                        >>
+                                                    </button>
+                                                </div>
 
-                                        </div>
-                                        <!-- 모달하단 -->
-                                        <div class="modalbot">
-                                            <div class="mt-3">
-                                                <h3 class="fw-bold" th:text="${'공방클래스 : '+ reply.roomEntity.roomTitle}">
-                                                </h3>
+                                            </div>
+                                            <!-- 모달하단 -->
+                                            <div class="modalbot">
+                                                <div class="mt-3">
+                                                    <h3 class="fw-bold"
+                                                        th:text="${'공방클래스 : '+ reply.roomEntity.roomTitle}">
+                                                    </h3>
+                                                    <hr/>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <p class="mt-2"
+                                                           th:text="${'강사 : ' + reply.memberEntity.memberName}">
+                                                        </p>
+
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="mt-2" th:text="${'리뷰내용 : ' + reply.replyContent}">
+                                                        </div>
+                                                        <div th:text="${'리뷰일 : ' +  #temporals.format(reply.createdDate,'yyyy-MM-dd')}">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <hr/>
+                                                <a th:href="@{'/room/view/' +${reply.roomEntity.roomNo } }">
+                                                    공방클래스 바로가기
+                                                </a>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <p class="mt-2"
-                                                       th:text="${'강사 : ' + reply.memberEntity.memberName}">
-                                                    </p>
-
-                                                </div>
-                                                <div class="col-md-8">
-                                                    <div class="mt-2" th:text="${'리뷰내용 : ' + reply.replyContent}">
-                                                    </div>
-                                                    <div th:text="${'리뷰일 : ' +  #temporals.format(reply.createdDate,'yyyy-MM-dd')}">
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <hr/>
-                                            <a th:href="@{'/room/view/' +${reply.roomEntity.roomNo } }">
-                                                공방클래스 바로가기
-                                            </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <!-- 리뷰카드 모달 end -->
                     </div>
-                    <!-- 리뷰카드 모달 end -->
                 </div>
             </div>
 
-        </div>
 
+        </div>
         <!-- 광고배너 -->
         <div class="adbanner row col-8 offset-2 d-flex">
             <div class=" bannertxt col-6 ">
@@ -1434,11 +1428,8 @@
             <div class=" rowimg col-2 ">
                 <img src=" https://mochaclass.com/static/media/main_event_bn2.30f11cc4.svg " alt=" ">
             </div>
-
         </div>
     </main>
-
-
 </div>
 
 <script>
@@ -1491,6 +1482,13 @@
 
 
         })
+
+
+
+
+
+
+
 
 
 

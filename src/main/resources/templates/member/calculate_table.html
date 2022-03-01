@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>회원번호</th>
+        <th>회원아이디</th>
+        <th>회원이메일</th>
+        <th>연락처</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="customer : ${myCustomers}">
+        <td th:text="${customer.memberNo}"></td>
+        <td th:text="${customer.memberId}"></td>
+        <td th:text="${customer.memberEmail}"></td>
+        <td th:if="${customer.memberPhone != null}" th:text="${customer.memberPhone}"></td>
+        <td th:if="${customer.memberPhone == null}" th:text="${'연락처가 등록되지 않았습니다.'}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

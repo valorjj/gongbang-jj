@@ -276,14 +276,14 @@ public class AdminController {
         List<HistoryEntity> historyEntities = historyRepository.findAll();
 
         // 1. RoomEntity
-        // 1. roomCategory
-        // 2. roomLocal
+            // 1. roomCategory
+            // 2. roomLocal
         // 2. TimeTableEntity
-        // 1. roomDate
-        // 2. roomTime
+            // 1. roomDate
+            // 2. roomTime
         // 3. HistoryEntity
-        // 1. historyPoint
-        // 2. createdDate
+            // 1. historyPoint
+            // 2. createdDate
 
         // 2. 회원들이 예약한 내역을 roomDate 순으로 정렬해야한다.
         // 2.1 timetable entity 에 저장된 예약 목록을 뽑는다.

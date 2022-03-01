@@ -1,4 +1,3 @@
-
 /*
 @Author : 김정진
 @Date : 2022-02-09~
@@ -13,6 +12,24 @@ $(document).ready(function() {
 // [클래스 예약 진행하는 함수]
 // [해당 날짜를 클릭하면 개설된 강좌와 신청 버튼을 출력합니다]
 function daySelect(year , month , day, roomNo){
+
+
+    let today1 = new Date();
+
+    // 년도 getFullYear()
+
+    let year1 = today1.getFullYear();
+
+    // 월 getMonth() (0~11로 1월이 0으로 표현되기 때문에 + 1을 해주어야 원하는 월을 구할 수 있다.)
+
+    let month1 = today1.getMonth() + 1
+
+    // 일 getDate()
+
+    let date2 = today1.getDate(); // 일
+
+    var date1 = year1 + '-' + month1 + '-' + date2;
+
     // 선택한 날짜의 아이디 : YYYY-MM-DD
     var date = year + "-" + (month + 1) + "-" + day;
     // view 에 선택한 날짜를 텍스트로 보여줍니다.
@@ -81,6 +98,7 @@ function daySelect(year , month , day, roomNo){
                     var roomDate = room.date;
                     var realMax = room.timeMax;
 
+
                     var diff1 = new Date(date1);
                     diff1 *=1;
                     var diff2 = new Date(roomDate);
@@ -113,7 +131,9 @@ function daySelect(year , month , day, roomNo){
                        roomhtml += "</div>";
 
                        $("#time-select-inner").append(roomhtml);
-                   }
+
+                    }
+
                 });
             }
         }
@@ -236,8 +256,6 @@ function calendarInit(data, roomNo) {
         var dataSplit = data.split(",");
 
         // 이번달 달력 출력하는 반복문
-
-
         for (var i = 1; i <= nextDate; i++) {
             var flag = false;
             // id : YYYY-MM-DD
@@ -289,4 +307,3 @@ function calendarInit(data, roomNo) {
         $(".dates").load(location.href + ".dates");
     });
 }
-
