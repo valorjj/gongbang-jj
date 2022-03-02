@@ -89,7 +89,7 @@
                     <div class="col-4">
                         <select name="" id="calculate-table-arrange-2">
                             <option value="">개설한 클래스</option>
-                            <option value="" th:each="myRoom : ${myRoomList}"></option>
+                            <option th:text="${myRoom.roomTitle}" th:each="myRoom : ${myRooms}"></option>
                         </select>
                     </div>
                     <div class="col-4">
@@ -102,9 +102,9 @@
 
                 <div class="table-wrapper">
                     <!-- 테이블 출력 -->
-                    <div class="table-section">
+                    <div class="member-table-section">
                         <!-- 해당 멤버가 개설한 강의를 결제한 회원들 신청 내역 -->
-                        <table class="table table-striped">
+                        <table class="table member-table table-striped">
                             <thead>
                             <tr>
                                 <th>회원번호</th>

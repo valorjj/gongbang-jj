@@ -249,9 +249,11 @@ public class MemberService implements UserDetailsService {
 
     // [개인 정산 페이지에 출력될 데이터를 호출하는 영역]
     public Page<MemberEntity> getMemberList(@PageableDefault Pageable pageable, int memberNo, String keyword) {
+
         Page<MemberEntity> memberEntities = null;
+
         // 1. 검색이 존재하지 않는 경우
-        if (keyword == null) {
+        if (keyword == null || keyword.equals("")) {
             memberEntities = memberRepository.getMyCustomerList1(pageable, memberNo);
         }
         // 2. 검색이 존재하는 경우

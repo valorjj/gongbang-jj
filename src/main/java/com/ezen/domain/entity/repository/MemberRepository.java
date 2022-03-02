@@ -28,19 +28,32 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Integer> {
     Integer findMemberByRoomNo(@Param("roomNo") int roomNo);
 
     // [키워드가 존재하지 않는 경우] 특정 멤버가 개설한 클래스에 등록한 회원 내역 불러오기
-    String myCustomerQuery1 = "select T.* from member T where memberNo = (select H.memberNo from member M join history H on H.roomMadeBy = :memberNo group by H.memberNo)";
+    String myCustomerQuery1 = "select T.* from member T " +
+            "where memberNo = " +
+            "(select H.memberNo from member M " +
+            "join history H on H.roomMadeBy = :memberNo group by H.memberNo)";
 
     @Query(nativeQuery = true, value = myCustomerQuery1)
     Page<MemberEntity> getMyCustomerList1(Pageable pageable, @Param("memberNo") int memberNo);
 
+    // [키워드가 존재하지 않고]
+    // [멤버가 개설한 특정 공방에 예약한 회원을]
+    // 공방 고유 번호를 기준으로 가져오기
+    String getMyCustomerQuery3 = "select T.* from member T "
+            + "where memberNo = "
+            + "(select H.memberNo from member M "
+            + "join history H on H.roomMadeBy = :memberNo AND H.roomNo = :roomNo group by H.memberNo";
+
+    @Query(nativeQuery = true, value = getMyCustomerQuery3)
+    Page<MemberEntity> getMyCustomerList3(Pageable pageable, @Param("memberNo") int memberNo, @Param("roomNo") int roomNo);
+
     // [키워드가 존재하는 경우] 특정 멤버가 개설한 클래스에 등록한 회원 내역 불러오기
     // 특정 멤버가 개설한 클래스에 등록한 회원 내역 불러오기 : 전체 조회
     String myCustomerQuery2 = "select T.* from member T where memberNo = (select H.memberNo from member M join history H on H.roomMadeBy = :memberNo group by H.memberNo) AND "
-            + "T.memberId = :keyword OR "
-            + "T.memberNo = :keyword OR "
-            + "T.memberPhone = :keyword OR "
-            + "T.memberGender = :keyword OR "
-            + "T.memberName = :keyword";
+            + "T.memberId like %:keyword% OR "
+            + "T.memberPhone like %:keyword% OR "
+            + "T.memberGender like %:keyword% OR "
+            + "T.memberName like %:keyword%";
 
     @Query(nativeQuery = true, value = myCustomerQuery2)
     Page<MemberEntity> getMyCustomerList2(Pageable pageable, @Param("memberNo") int memberNo, @Param("keyword") String keyword);
