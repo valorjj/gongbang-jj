@@ -444,7 +444,7 @@ public class RoomService {
     @Transactional
     public boolean roomdelete(int roomNo) {
         Optional<RoomEntity> entityOptional = roomRepository.findById(roomNo);
-        if (entityOptional != null) {
+        if (entityOptional.isPresent()) {
             roomRepository.delete(entityOptional.get());
             return true;
         }
@@ -489,11 +489,11 @@ public class RoomService {
                 // String dir = "C:\\gongbang\\build\\resources\\main\\static\\roomimg";
 
                 // 리눅스 경로
-                String dir = "/home/ec2-user/gongbang/build/resources/main/static/roomimg";
+                String dir = "C:\\Users\\re_mu\\IdeaProjects\\jj\\out\\production\\resources\\static\\roomimg";
 
                 // 3. 저장될 파일의 전체 [현재는 절대]경로
                 // 3.1 프로젝트 경로를 맞춘다.
-                String filepath = dir + "/" + uuidfile;
+                String filepath = dir + "\\" + uuidfile;
 
                 try {
                     file.transferTo(new File(filepath));
@@ -506,6 +506,7 @@ public class RoomService {
                         .build();
                 int roomImgNo = roomImgRepository.save(roomImgEntity).getRoomImgNo();
                 RoomImgEntity roomImgEntitySaved = roomImgRepository.findById(roomImgNo).get();
+                assert savedRoomEntity != null;
                 savedRoomEntity.getRoomImgEntities().add(roomImgEntitySaved);
             }
             return true;

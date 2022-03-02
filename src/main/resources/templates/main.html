@@ -1253,7 +1253,7 @@
                 <!-- 슬라이드 닷 -->
             </div>
 
-            <!-- 카드출력부분 -->
+            <!-- '승인완료' 처리된 공방 출력 시작 -->
             <div class="row product-boxoutline p-2">
                 <h3>진행중인 공방</h3>
                 <div class="product-box" id="main-gongbang-slick" data-aos-anchor-placement="top-center">
@@ -1417,7 +1417,6 @@
                 </div>
             </div>
 
-
         </div>
         <!-- 광고배너 -->
         <div class="adbanner row col-8 offset-2 d-flex">
@@ -1460,7 +1459,9 @@
             $('#main-gongbang-slick').slick({
                 centerMode: true,
                 centerPadding: '60px',
-                slidesToShow: 2,
+                slidesToShow: 3,
+                slidesToScroll: 2,
+                vertical: false,
                 responsive: [{
                     breakpoint: 768,
                     settings: {
@@ -1482,13 +1483,6 @@
 
         })
 
-
-
-
-
-
-
-
 </script>
 
 <!-- 개발자 js 가져오기 : 지역, 카테고리 slick 관련 스크립트 -->
@@ -1497,7 +1491,6 @@
 <script th:src=" @{/js/maincarousel.js} "></script>
 <!-- 메인 탭 캐러셀 js 가져오기 -->
 <script th:src=" @{/js/maintabcarousel.js} "></script>
-
 <!-- 메인 탭 캐러셀 js 가져오기 -->
 <script th:src=" @{/js/maincard.js} "></script>
 

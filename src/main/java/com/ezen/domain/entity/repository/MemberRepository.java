@@ -18,10 +18,8 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Integer> {
 
     Optional<MemberEntity> findBymemberEmail(String memberEmail);
 
-    // ###########################################################
-    // ############ @Date : 2022-02-26 ###########################
-    // ############## [개인 정산 페이지 : calculate.html] ###########
-    // ###########################################################
+    // @Date : 2022-02-26
+    // [개인 정산 페이지 : calculate.html]
 
     // roomNo 를 찾아서 member Entity 정보 찾기
     @Query(nativeQuery = true, value = "select R.memberNo from member M join room R on R.roomNo = :roomNo group by R.memberNo")

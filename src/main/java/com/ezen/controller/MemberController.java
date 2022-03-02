@@ -754,9 +754,9 @@ public class MemberController {
                 UUID uuid = UUID.randomUUID();
                 uuidfile = uuid.toString() + "_" + file.getOriginalFilename().replaceAll("_", "-"); // 02-17 조지훈
                 // String dir = "C:\\gongbang\\build\\resources\\main\\static\\channelimg";
-                String dir = "/Users/gimjeongjin/IdeaProjects/gongbang-jj/out/production/resources/static/channelimg";
+                String dir = "C:\\Users\\re_mu\\IdeaProjects\\jj\\out\\production\\resources\\static\\channelimg";
 
-                String filepath = dir + "/" + uuidfile;
+                String filepath = dir + "\\" + uuidfile;
                 file.transferTo(new File(filepath));
             }
             memberService.channelregistration(
