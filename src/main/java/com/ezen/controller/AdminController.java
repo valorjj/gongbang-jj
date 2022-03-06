@@ -213,57 +213,57 @@ public class AdminController {
     @ResponseBody
     public JSONObject roomToJSON() {
 
-        Comparator<TimeTableEntity> comparator = new Comparator<TimeTableEntity>() {
-            // TimeTableEntity 를 날짜순으로 정렬한다.
-            // roomDate --> YYYY : MM : DD 로 정렬시킨다.
-            @Override
-            public int compare(TimeTableEntity o1, TimeTableEntity o2) {
-
-                String dateCompare1 = "";
-                String dateCompare2 = "";
-
-                String dateYear1 = o1.getRoomDate().split("-")[0];
-                String dateYear2 = o2.getRoomDate().split("-")[0];
-
-                String dateMonth1 = "";
-                String dateMonth2 = "";
-
-                String dateDay1 = "";
-                String dateDay2 = "";
-
-                if (Integer.parseInt(o1.getRoomDate().split("-")[1]) < 10) {
-                    dateMonth1 = "0" + o1.getRoomDate().split("-")[1];
-                } else {
-                    dateMonth1 = o1.getRoomDate().split("-")[1];
-                }
-
-                if (Integer.parseInt(o1.getRoomDate().split("-")[2]) < 10) {
-                    dateDay1 = "0" + o1.getRoomDate().split("-")[2];
-                } else {
-                    dateDay1 = o1.getRoomDate().split("-")[2];
-                }
-
-                if (Integer.parseInt(o2.getRoomDate().split("-")[1]) < 10) {
-                    dateMonth2 = "0" + o2.getRoomDate().split("-")[1];
-                } else {
-                    dateMonth2 = o2.getRoomDate().split("-")[1];
-                }
-
-                if (Integer.parseInt(o2.getRoomDate().split("-")[2]) < 10) {
-                    dateDay2 = "0" + o2.getRoomDate().split("-")[2];
-                } else {
-                    dateDay2 = o2.getRoomDate().split("-")[2];
-                }
-
-                dateCompare1 = dateYear1 + dateMonth1 + dateDay1;
-                dateCompare2 = dateYear2 + dateMonth2 + dateDay2;
-
-                int time1 = Integer.parseInt(dateCompare1);
-                int time2 = Integer.parseInt(dateCompare2);
-
-                return time1 - time2;
-            }
-        };
+//        Comparator<TimeTableEntity> comparator = new Comparator<TimeTableEntity>() {
+//            // TimeTableEntity 를 날짜순으로 정렬한다.
+//            // roomDate --> YYYY : MM : DD 로 정렬시킨다.
+//            @Override
+//            public int compare(TimeTableEntity o1, TimeTableEntity o2) {
+//
+//                String dateCompare1 = "";
+//                String dateCompare2 = "";
+//
+//                String dateYear1 = o1.getRoomDate().split("-")[0];
+//                String dateYear2 = o2.getRoomDate().split("-")[0];
+//
+//                String dateMonth1 = "";
+//                String dateMonth2 = "";
+//
+//                String dateDay1 = "";
+//                String dateDay2 = "";
+//
+//                if (Integer.parseInt(o1.getRoomDate().split("-")[1]) < 10) {
+//                    dateMonth1 = "0" + o1.getRoomDate().split("-")[1];
+//                } else {
+//                    dateMonth1 = o1.getRoomDate().split("-")[1];
+//                }
+//
+//                if (Integer.parseInt(o1.getRoomDate().split("-")[2]) < 10) {
+//                    dateDay1 = "0" + o1.getRoomDate().split("-")[2];
+//                } else {
+//                    dateDay1 = o1.getRoomDate().split("-")[2];
+//                }
+//
+//                if (Integer.parseInt(o2.getRoomDate().split("-")[1]) < 10) {
+//                    dateMonth2 = "0" + o2.getRoomDate().split("-")[1];
+//                } else {
+//                    dateMonth2 = o2.getRoomDate().split("-")[1];
+//                }
+//
+//                if (Integer.parseInt(o2.getRoomDate().split("-")[2]) < 10) {
+//                    dateDay2 = "0" + o2.getRoomDate().split("-")[2];
+//                } else {
+//                    dateDay2 = o2.getRoomDate().split("-")[2];
+//                }
+//
+//                dateCompare1 = dateYear1 + dateMonth1 + dateDay1;
+//                dateCompare2 = dateYear2 + dateMonth2 + dateDay2;
+//
+//                int time1 = Integer.parseInt(dateCompare1);
+//                int time2 = Integer.parseInt(dateCompare2);
+//
+//                return time1 - time2;
+//            }
+//        };
 
         // RoomEntity 를 JSON 으로 변환 후 js 로 넘겨주는 역할
         JSONObject jsonObject = new JSONObject();
@@ -273,20 +273,20 @@ public class AdminController {
         List<HistoryEntity> historyEntities = historyRepository.findAll();
 
         // 1. RoomEntity
-            // 1. roomCategory
-            // 2. roomLocal
+        // 1. roomCategory
+        // 2. roomLocal
         // 2. TimeTableEntity
-            // 1. roomDate
-            // 2. roomTime
+        // 1. roomDate
+        // 2. roomTime
         // 3. HistoryEntity
-            // 1. historyPoint
-            // 2. createdDate
+        // 1. historyPoint
+        // 2. createdDate
 
         // 2. 회원들이 예약한 내역을 roomDate 순으로 정렬해야한다.
         // 2.1 timetable entity 에 저장된 예약 목록을 뽑는다.
 
         List<TimeTableEntity> timeTableEntities = timeTableRepository.findAll();
-        timeTableEntities.sort(comparator);
+        // timeTableEntities.sort(comparator);
 
         // map 을 이용해서 중복을 제거한다.
         Map<String, Integer> myMap = new TreeMap<String, Integer>();
@@ -298,7 +298,6 @@ public class AdminController {
             for (HistoryEntity historyEntity : historyList) {
 
                 RoomEntity roomEntity = null;
-                JSONObject data = new JSONObject();
 
                 String date = timeTableEntity.getRoomDate();
 
@@ -319,11 +318,76 @@ public class AdminController {
             }
         }
 
+        // json 데이터 변환
         for (String s : myMap.keySet()) {
-            JSONObject data = new JSONObject();
-            data.put("date", s);
-            data.put("person", myMap.get(s));
-            jsonArray.add(data);
+
+            for (HistoryEntity historyEntity : historyEntities) {
+
+                JSONObject data = new JSONObject();
+                RoomEntity roomEntity = null;
+
+                int roomNo = historyEntity.getRoomEntity().getRoomNo();
+
+                if (roomRepository.findById(roomNo).isPresent()) {
+                    roomEntity = roomRepository.findById(roomNo).get();
+                }
+
+                assert roomEntity != null;
+                data.put("category", roomEntity.getRoomCategory());
+                data.put("local", roomEntity.getRoomLocal());
+
+                data.put("date", s);
+                data.put("person", myMap.get(s));
+
+                jsonArray.add(data);
+
+            }
+
+        }
+
+        jsonObject.put("history", jsonArray);
+        return jsonObject;
+
+    }
+
+    @GetMapping("/roomJSON2")
+    @ResponseBody
+    public JSONObject roomToJSON2() {
+
+        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+
+        // 1. historyEntities 는 전체 회원이 예약한 내역이다.
+        List<HistoryEntity> historyEntities = historyRepository.findAll();
+
+        List<TimeTableEntity> timeTableEntities = timeTableRepository.findAll();
+
+
+        for (TimeTableEntity timeTableEntity : timeTableEntities) {
+
+            List<HistoryEntity> historyList = timeTableEntity.getHistoryEntity();
+
+            for (HistoryEntity historyEntity : historyList) {
+
+                JSONObject data = new JSONObject();
+                RoomEntity roomEntity = null;
+
+                String date = timeTableEntity.getRoomDate();
+
+                int roomNo = historyEntity.getRoomEntity().getRoomNo();
+                if (roomRepository.findById(roomNo).isPresent()) {
+                    roomEntity = roomRepository.findById(roomNo).get();
+                }
+
+                assert roomEntity != null;
+                int person = historyEntity.getHistoryPoint() / roomEntity.getRoomPrice();
+
+                data.put("category", roomEntity.getRoomCategory());
+                data.put("local", roomEntity.getRoomLocal());
+
+                jsonArray.add(data);
+
+            }
         }
 
         jsonObject.put("history", jsonArray);

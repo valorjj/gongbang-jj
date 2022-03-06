@@ -88,7 +88,7 @@
                                     </a>
                                 </button>
                             </li>
-                            <li sec:authorize="isAuthenticated()">
+                            <li sec:authorize="isAuthenticated()" th:if="${session.logindto != null}">
                                 <button th:if="${session.logindto.memberNo != roomEntity.memberEntity.memberNo}"
                                         th:onclick="roomLike( [[ ${roomEntity.roomNo} ]], [[ ${session.logindto.memberNo} ]] );">
                                     <span th:if="${count==1}" id="like">♥</span>

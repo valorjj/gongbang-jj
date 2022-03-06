@@ -30,8 +30,6 @@
 <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
 
-<script th:src="@{/js/adminChart.js}"></script>
-
 <div class="wrap">
     <div class="container admin-list-wrapper">
         <div class="row">
@@ -90,15 +88,14 @@
 
                     <div class="table-wrapper">
                         <div id="table-section">
-                            <table class="table table-striped admintable text-center" id="admin-table">
+                            <table class="table table-striped admintable text-center" id="admin-table" style="font-size:0.4rem;">
                                 <tr class="admintabletr">
-                                    <td>등록번호</td>
-                                    <td>클래스명</td>
-                                    <td>카테고리</td>
-                                    <td>정원</td>
-                                    <td>공방주소</td>
-                                    <td>승인상태</td>
-                                    <td>등록일자</td>
+                                    <td width="3%">등록번호</td>
+                                    <td width="25%">클래스명</td>
+                                    <td width="5%">카테고리</td>
+                                    <td width="15%">공방주소</td>
+                                    <td width="17%">승인상태</td>
+                                    <td width="10%">등록일자</td>
                                     <td colspan="2">비고</td>
                                 </tr>
 
@@ -111,7 +108,6 @@
                                         </a>
                                     </td>
                                     <td th:text="${room.roomCategory}"></td>
-                                    <td th:text="${room.roomMax}+'명'"></td>
                                     <td th:text="${#strings.listSplit(room.roomAddress,',')[0]}"></td>
                                     <td>
                                         <span th:if="${room.roomStatus.equals('검토중')}" th:text="${room.roomStatus}"
@@ -332,6 +328,7 @@
                     <!-- 차트 그리기 -->
                     <div class="admin-chart-wrapper ">
                         <div class="admin-chart-content ">
+                            <h3> 통계 차트 </h3>
                             <div id="chartdiv "></div>
                         </div>
                     </div>

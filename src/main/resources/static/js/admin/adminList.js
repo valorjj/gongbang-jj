@@ -21,7 +21,7 @@ function adminCategorySelectBtn() {
 
     $.ajax({
         crossDomain: true,
-        url: "/admin/roomJSON",
+        url: "/admin/roomJSON2",
         contentType: "application/json; charset=utf-8",
         method: "GET",
         dataType: "json",
@@ -216,7 +216,7 @@ function adminLocalSelectBtn() {
 
     $.ajax({
         crossDomain: true,
-        url: "/admin/roomJSON",
+        url: "/admin/roomJSON2",
         contentType: "application/json; charset=utf-8",
         method: "GET",
         dataType: "json",
