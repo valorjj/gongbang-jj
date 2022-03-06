@@ -126,6 +126,7 @@ public class PostService {
 
     // 게시물 삭제
     public boolean deletePost(int postNo) {
+
         Optional<PostEntity> post = postRepository.findById(postNo);
         if (post.isPresent()) {
             postRepository.delete(post.get()); // 게시물 삭제
@@ -133,11 +134,13 @@ public class PostService {
         } else {
             return false;
         }
+
     }
 
     // [댓글 등록]
     @Transactional
     public boolean replyWrite(String replyContent, @Lazy int postNo) {
+
         // 1. 로그인 세션을 호출해서 댓글 입력하는 회원 정보를 불러온다.
         HttpSession session = request.getSession();
         MemberDto loginDTO = (MemberDto) session.getAttribute("loginSession");
@@ -147,6 +150,7 @@ public class PostService {
         PostEntity post = null;
         if (postRepository.findById(postNo).isPresent())
             post = postRepository.findById(postNo).get();
+
         // 3. Reply 엔티티를 builder 를 통해서 생성한다.
         // 3.1 부모 댓글은 order, depth 은 '0' 이고
         // 3.2 replyTarget 은 -1 값을 부여한다.
@@ -171,11 +175,13 @@ public class PostService {
         assert post != null;
         post.getPostReplyEntities().add(savedReply);
         return true;
+
     }
 
     // [대댓글 등록]
     @Transactional
     public boolean replyChildWrite(String content, int replyNo, int postNo) {
+
         // 1. 로그인 세션을 호출해서 댓글 입력하는 회원 정보를 불러온다.
         HttpSession session = request.getSession();
         MemberDto loginDTO = (MemberDto) session.getAttribute("loginSession");
@@ -185,10 +191,13 @@ public class PostService {
         PostEntity postEntity = null;
         if (postRepository.findById(postNo).isPresent())
             postEntity = postRepository.findById(postNo).get();
+
         // 3. 대댓글을 등록한다.
         // 3.1 게시글 번호, 부모 댓글 번호, 작성 내용을 인수로 받는다.
         // 3.2 부모 댓글 depth=0 부터 시작해서 자식 댓글은 +1
+
         PostReplyEntity parentReply = null;
+
         if (postReplyRepository.findById(replyNo).isPresent())
             parentReply = postReplyRepository.findById(replyNo).get();
         assert parentReply != null;

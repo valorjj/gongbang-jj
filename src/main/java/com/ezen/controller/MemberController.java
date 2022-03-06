@@ -673,6 +673,52 @@ public class MemberController {
         return "member/calculate_table";
     }
 
+    // [정산 페이지 맵핑 : 특정 클래스 선택]
+    @GetMapping("/calculateSearch2")
+    public String calculateSearch2(Model model, @PageableDefault Pageable pageable) {
+
+        int roomNo = Integer.parseInt(request.getParameter("roomNo"));
+
+        HttpSession session = request.getSession();
+        // 1. 검색이 결과를 받는다.
+        String keyword = request.getParameter("keyword");
+        // 1.1 검색이 존재하지 않는 경우
+        if (keyword == null) {
+            keyword = (String) session.getAttribute("calculateSearch");
+        }
+        // 1.2 검색이 존재하는 경우
+        else {
+            session.setAttribute("calculateSearch", keyword);
+        }
+
+        MemberDto loginDto = (MemberDto) session.getAttribute("logindto");
+        int memberNo = loginDto.getMemberNo();
+
+        MemberEntity memberEntity = null;
+
+        if (memberRepository.findById(loginDto.getMemberNo()).isPresent())
+            memberEntity = memberRepository.findById(loginDto.getMemberNo()).get();
+        // [로그인이 되어있는 상태]
+        assert memberEntity != null;
+        if (memberEntity.getChannelImg() == null) {
+            // [채널에 등록된 이미지가 없는 경우]
+            model.addAttribute("isLoginCheck", 1);
+        } else {
+            model.addAttribute("isLoginCheck", 2);
+        }
+        model.addAttribute("memberEntity", memberEntity);
+
+        // 2. 내가 개설한 클래스에 등록한 회원 내역을 불러옵니다.
+        Page<MemberEntity> myCustomerList = memberService.getMemberList2(pageable, memberNo, roomNo, keyword);
+        model.addAttribute("myCustomers", myCustomerList);
+
+        // 3. 내가 개설한 클래스 목록을 출력합니다.
+        List<RoomEntity> myRoomList = roomService.getmyroomlist();
+        model.addAttribute("myRooms", myRoomList);
+
+        return "member/calculate_table";
+    }
+
     // [정산 페이지 맵핑 : 차트]
     // 날짜 선택 JSON 변환
     @GetMapping("/calculateTimeSelect")
@@ -754,7 +800,7 @@ public class MemberController {
                 UUID uuid = UUID.randomUUID();
                 uuidfile = uuid.toString() + "_" + file.getOriginalFilename().replaceAll("_", "-"); // 02-17 조지훈
                 // String dir = "C:\\gongbang\\build\\resources\\main\\static\\channelimg";
-                String dir = "C:\\Users\\re_mu\\IdeaProjects\\jj\\out\\production\\resources\\static\\channelimg";
+                String dir = "C:\\gongbang\\out\\production\\resources\\static\\channelimg";
 
                 String filepath = dir + "\\" + uuidfile;
                 file.transferTo(new File(filepath));

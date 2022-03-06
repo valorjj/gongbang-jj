@@ -46,14 +46,14 @@
             display: inherit;
         }
 
+
+
     </style>
     <link rel="stylesheet" th:href="@{/css/register.css}">
 </head>
 <body>
 <div th:replace="common.html::common"></div>
 <div th:replace="header.html::header"></div>
-
-
 <div class="container">
     <br>
     <div id="pageHeader"><h3><strong>통계 페이지</strong></h3></div>
@@ -84,12 +84,12 @@
                             <option value="">최신순</option>
                             <option value="">오래된순</option>
                         </select>
-
                     </div>
                     <div class="col-4">
-                        <select name="" id="calculate-table-arrange-2">
+                        <select id="calculate-table-arrange-2">
                             <option value="">개설한 클래스</option>
-                            <option th:text="${myRoom.roomTitle}" th:each="myRoom : ${myRooms}"></option>
+                            <option th:each="myRoom : ${myRooms}" th:text="${myRoom.roomTitle}"
+                                    th:value="${myRoom.roomNo}"></option>
                         </select>
                     </div>
                     <div class="col-4">
@@ -219,6 +219,8 @@
         $(this).addClass("current");
         $("#" + tabId).addClass("current");
     });
+
+
 
 </script>
 

@@ -27,7 +27,7 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Integer> {
 
     // [키워드가 존재하지 않는 경우] 특정 멤버가 개설한 클래스에 등록한 회원 내역 불러오기
     String myCustomerQuery1 = "select T.* from member T " +
-            "where memberNo = " +
+            "where memberNo in " +
             "(select H.memberNo from member M " +
             "join history H on H.roomMadeBy = :memberNo group by H.memberNo)";
 
@@ -37,17 +37,20 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Integer> {
     // [키워드가 존재하지 않고]
     // [멤버가 개설한 특정 공방에 예약한 회원을]
     // 공방 고유 번호를 기준으로 가져오기
+    // 공방 select 시 목록 출력
     String getMyCustomerQuery3 = "select T.* from member T "
-            + "where memberNo = "
+            + "where memberNo IN "
             + "(select H.memberNo from member M "
-            + "join history H on H.roomMadeBy = :memberNo AND H.roomNo = :roomNo group by H.memberNo";
+            + "join history H on H.roomMadeBy = :memberNo AND H.roomNo = :roomNo group by H.memberNo)";
 
     @Query(nativeQuery = true, value = getMyCustomerQuery3)
     Page<MemberEntity> getMyCustomerList3(Pageable pageable, @Param("memberNo") int memberNo, @Param("roomNo") int roomNo);
 
     // [키워드가 존재하는 경우] 특정 멤버가 개설한 클래스에 등록한 회원 내역 불러오기
     // 특정 멤버가 개설한 클래스에 등록한 회원 내역 불러오기 : 전체 조회
-    String myCustomerQuery2 = "select T.* from member T where memberNo = (select H.memberNo from member M join history H on H.roomMadeBy = :memberNo group by H.memberNo) AND "
+    // 문제 : 조건1 AND 조건2 OR 조건3 이렇게 하면 원하는 결과가 안나옴
+    // select H.memberNo from member M join history H on H.roomMadeBy = :memberNo group by H.memberNo 에서 찾아온 H.memberNo 를 select 문 안에 넣어야한다.
+    String myCustomerQuery2 = "select T.* from member T where memberNo IN (select H.memberNo from member M join history H on H.roomMadeBy = :memberNo group by H.memberNo) OR "
             + "T.memberId like %:keyword% OR "
             + "T.memberPhone like %:keyword% OR "
             + "T.memberGender like %:keyword% OR "

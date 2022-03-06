@@ -267,7 +267,35 @@ public class MemberService implements UserDetailsService {
         } else {
             page = pageable.getPageNumber() - 1;
         }
-        pageable = PageRequest.of(page, 4, Sort.by(Sort.Direction.DESC, "memberNo"));
+
+        pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "memberNo"));
+
+        return memberEntities;
+
+    }
+
+    // [개설된 공방 리스트 클릭시 호출]
+    public Page<MemberEntity> getMemberList2(@PageableDefault Pageable pageable, int memberNo, int roomNo, String keyword) {
+
+        Page<MemberEntity> memberEntities = null;
+
+        // 1. 검색이 존재하지 않는 경우
+        if (keyword == null || keyword.equals("")) {
+            memberEntities = memberRepository.getMyCustomerList3(pageable, memberNo, roomNo);
+        }
+        // 2. 검색이 존재하는 경우
+        else {
+            memberEntities = memberRepository.getMyCustomerList2(pageable, memberNo, keyword);
+        }
+
+        int page = -1;
+        if (pageable.getPageNumber() == 0) {
+            page = 0;
+        } else {
+            page = pageable.getPageNumber() - 1;
+        }
+
+        pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "memberNo"));
 
         return memberEntities;
 

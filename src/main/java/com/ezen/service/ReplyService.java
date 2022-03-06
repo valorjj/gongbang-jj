@@ -62,7 +62,7 @@ public class ReplyService {
                 uuidfile = uuid.toString() + "_" + Objects.requireNonNull(file.getOriginalFilename()).replaceAll("_", "-");
 
                 // 인텔리 전용 경로
-                String dir = "C:\\Users\\re_mu\\IdeaProjects\\jj\\out\\production\\resources\\static\\replyimg";
+                String dir = "C:\\gongbang\\out\\production\\resources\\static\\replyimg";
                 // 리눅스 경로
                 // String dir = "/home/ec2-user/gongbang-jj/build/resources/main/static/replyimg";
 
