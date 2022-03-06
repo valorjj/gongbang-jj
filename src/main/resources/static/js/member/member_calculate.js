@@ -1,5 +1,5 @@
 
-
+    // 멤버 정산 페이지 : 검색 기능 연결
     $("#member-calculate-search-btn").click(function(){
         var memberSearch = $("#member-calculate-search").val();
         $.ajax({
@@ -26,3 +26,6 @@
             }
         });
     });
+
+
+

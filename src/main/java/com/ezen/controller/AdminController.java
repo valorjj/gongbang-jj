@@ -25,10 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 @Controller
@@ -291,7 +288,11 @@ public class AdminController {
         List<TimeTableEntity> timeTableEntities = timeTableRepository.findAll();
         timeTableEntities.sort(comparator);
 
+        // map 을 이용해서 중복을 제거한다.
+        Map<String, Integer> myMap = new TreeMap<String, Integer>();
+
         for (TimeTableEntity timeTableEntity : timeTableEntities) {
+
             List<HistoryEntity> historyList = timeTableEntity.getHistoryEntity();
 
             for (HistoryEntity historyEntity : historyList) {
@@ -299,9 +300,7 @@ public class AdminController {
                 RoomEntity roomEntity = null;
                 JSONObject data = new JSONObject();
 
-                data.put("date", timeTableEntity.getRoomDate()); // YYYY-MM-DD
-                data.put("beginTime", timeTableEntity.getRoomTime().split(",")[0]); // HH, HH
-                data.put("endTime", timeTableEntity.getRoomTime().split(",")[1]); // HH, HH
+                String date = timeTableEntity.getRoomDate();
 
                 // 3. 현재 예약건에 해당하는 강좌 정보
                 int roomNo = historyEntity.getRoomEntity().getRoomNo();
@@ -309,21 +308,24 @@ public class AdminController {
                     roomEntity = roomRepository.findById(roomNo).get();
                 }
 
-                assert roomEntity != null;
-                data.put("category", roomEntity.getRoomCategory());
-                data.put("local", roomEntity.getRoomLocal());
-
-                // 4. 예약 정보
-                data.put("createdDate", historyEntity.getCreatedDate()); // 예약이 완료된 날짜
-                data.put("price", historyEntity.getHistoryPoint()); // 회원이 결제한 금액
-
                 // 5. 신청한 인원 수 : 결제 금액 / 클래스 1명당 금액
                 int person = historyEntity.getHistoryPoint() / roomEntity.getRoomPrice();
-                data.put("person", person);
 
-                jsonArray.add(data);
+                if (myMap.containsKey(date)) {
+                    myMap.put(date, myMap.get(date) + person);
+                } else {
+                    myMap.put(date, person);
+                }
             }
         }
+
+        for (String s : myMap.keySet()) {
+            JSONObject data = new JSONObject();
+            data.put("date", s);
+            data.put("person", myMap.get(s));
+            jsonArray.add(data);
+        }
+
         jsonObject.put("history", jsonArray);
         return jsonObject;
 

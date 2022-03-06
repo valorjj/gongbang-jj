@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" th:href="@{/css/admin/adminlist.css}">
@@ -19,7 +18,6 @@
         .admin-figure .figure-item{
             display: inline;
         }
-
     </style>
 </head>
 
@@ -326,7 +324,7 @@
                         </div>
 
                         <div class="col-4 admin-select-content admin-select-btn" id="admin-chart-btn">
-                            <button onclick="adminSelectBtn();" id="admin-chart-category">차트보기</button>
+                            <button onclick="adminSelectBtn();">차트보기</button>
 
                         </div>
                     </div>
@@ -342,11 +340,8 @@
             </div>
         </div>
     </div>
-
     <script th:src="@{/js/admin/adminList.js} "></script>
     <script th:src="@{/js/roomlist.js} "></script>
-
 </div>
 </body>
-
 </html>

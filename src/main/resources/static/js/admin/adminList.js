@@ -213,6 +213,7 @@ function adminLocalSelectBtn() {
     adminHTML += "<div id='chartdiv'> </div>";
     adminHTML += "<div>";
     $(".admin-chart-wrapper").html(adminHTML);
+
     $.ajax({
         crossDomain: true,
         url: "/admin/roomJSON",
@@ -602,7 +603,6 @@ function adminSelectBtn() {
                         // 2. history.date 에 해당하는 값들 중 day 만 가져옵니다.
 
                         var historyDate = history.date; // 강의가 개설된 날짜
-                        console.log(historyDate);
                         var historyPerson = history.person; // 신청한 인원 수
                         var historyDay = historyDate.split("-")[0] + "-" + (historyDate.split("-")[1]) + "-" + (historyDate.split("-")[2] - 1);
 
@@ -611,10 +611,9 @@ function adminSelectBtn() {
 
                         am5.time.add(date, "day", 1);
                         var dateTest = date.getTime();
-                        console.log("dateTest >>>> " + dateTest);
                         // js array 에 데이터 추가하는 방법
-                        // 1. Array.push() : 배열의 끝에 요소 추가
-                        // 2. Array.unshift() : 배열의 앞에 요소 추가
+                            // 1. Array.push() : 배열의 끝에 요소 추가
+                            // 2. Array.unshift() : 배열의 앞에 요소 추가
                         var historyDay = historyDate.split("-")[0] + historyDate.split("-")[1] + historyDate.split("-")[2];
                         // key : value
                         var data = { date: dateTest, value: historyPerson };
@@ -692,10 +691,8 @@ function adminSelectBtn() {
                             orientation: "horizontal"
                         }));
 
-
                         // Set data
                         var data = dataArray;
-                        console.log(data);
 
                         series.data.setAll(data);
 

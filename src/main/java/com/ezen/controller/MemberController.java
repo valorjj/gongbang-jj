@@ -2,20 +2,15 @@ package com.ezen.controller;
 
 import com.ezen.domain.dto.MemberDto;
 import com.ezen.domain.dto.RoomPaymentDto;
-import com.ezen.domain.dto.myCustomerDTO;
 import com.ezen.domain.entity.*;
 import com.ezen.domain.entity.repository.*;
 import com.ezen.service.MemberService;
 import com.ezen.service.RoomService;
-import org.hibernate.SQLQuery;
-import org.hibernate.criterion.Projections;
-import org.hibernate.transform.Transformers;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,13 +19,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.util.*;
-import java.util.function.Function;
 
 @RequestMapping("/member")
 @Controller
@@ -721,36 +714,60 @@ public class MemberController {
 
     // [정산 페이지 맵핑 : 차트]
     // 날짜 선택 JSON 변환
-    @GetMapping("/calculateTimeSelect")
+    @GetMapping("/calculateChart")
     @ResponseBody
-    public JSONObject calculateTimeSelect(@RequestParam("member-select-date") String date) {
+    @Transactional
+    public JSONObject calculateChart(@PageableDefault Pageable pageable) {
+
+        HttpSession session = request.getSession();
+
+        MemberDto loginDto = (MemberDto) session.getAttribute("logindto");
+        int memberNo = loginDto.getMemberNo();
+
+        MemberEntity memberEntity = null;
+
+        if (memberRepository.findById(loginDto.getMemberNo()).isPresent())
+            memberEntity = memberRepository.findById(loginDto.getMemberNo()).get();
 
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
 
-        List<MemberEntity> myCustomerList = memberRepository.findAll();
+        Page<MemberEntity> myCustomerList = null;
+        // 내가 개설한 클래스에 등록한 회원만을 가져와야한다.
+        myCustomerList = memberRepository.getMyCustomerList1(pageable, memberNo);
         List<HistoryEntity> historyList = historyRepository.findAll();
         List<TimeTableEntity> timeTableEntities = timeTableRepository.findAll();
 
-        // 해당 멤버가 예약한 내역을 json 으로 넘긴다.
-        for (HistoryEntity historyEntity : historyList) {
-            for (MemberEntity myCustomer : myCustomerList) {
-                if (myCustomer.getMemberNo() == historyEntity.getMemberEntity().getMemberNo()) {
-                    JSONObject data = new JSONObject();
-                    // 1. 해당 강좌 개설 날짜 : YYYY-MM-DD
-                    data.put("date", timeTableRepository.findById(historyEntity.getTimeTableEntity().getTimeTableNo()).get());
-                    // 2. 해당 결제 금액
-                    data.put("price", historyEntity.getHistoryPoint());
-                    // 3. 카테고리
-                    data.put("category", historyEntity.getRoomEntity().getRoomCategory());
-                    // 4. 지역
-                    data.put("category", historyEntity.getRoomEntity().getRoomLocal());
-                    // 5. 해당 강좌
-                    data.put("roomNo", historyEntity.getRoomEntity().getRoomNo());
+        // map 을 이용해서 중복을 제거한다.
+        Map<String, Integer> myMap = new TreeMap<String, Integer>();
 
-                    jsonArray.add(data);
+        for (HistoryEntity historyEntity : historyList) {
+
+            for (MemberEntity myCustomer : myCustomerList) {
+
+                if (myCustomer.getMemberNo() == historyEntity.getMemberEntity().getMemberNo()) {
+
+                    RoomEntity roomEntity = roomRepository.findById(historyEntity.getRoomEntity().getRoomNo()).get();
+                    int person = historyEntity.getHistoryPoint() / roomEntity.getRoomPrice();
+
+                    TimeTableEntity timeTableEntity = timeTableRepository.findById(historyEntity.getTimeTableEntity().getTimeTableNo()).get();
+                    String date = timeTableEntity.getRoomDate();
+
+                    // 동일한 날짜 값이 들어오면 더해서 업데이트 시켜야한다.
+                    if (myMap.containsKey(date)) {
+                        myMap.put(date, myMap.get(date) + person);
+                    } else {
+                        myMap.put(date, person);
+                    }
                 }
             }
+        }
+
+        for (String s : myMap.keySet()) {
+            JSONObject data = new JSONObject();
+            data.put("date", s);
+            data.put("person", myMap.get(s));
+            jsonArray.add(data);
         }
 
         jsonObject.put("memberHistory", jsonArray);
