@@ -98,11 +98,12 @@ function daySelect(year , month , day, roomNo){
                     var roomDate = room.date;
                     var realMax = room.timeMax;
 
-
                     var diff1 = new Date(date1);
                     diff1 *=1;
                     var diff2 = new Date(roomDate);
                     diff2 *=1;
+
+
                     if(diff2 >= diff1){
                         console.log("현재 날짜가 클릭한 날짜보다 앞섭니다. ");
                         var roomhtml = "<div class='col-md-8'>";
@@ -122,15 +123,15 @@ function daySelect(year , month , day, roomNo){
                     } else{
                         console.log("클릭한 날짜가 현재 날짜보다 앞섭니다. ");
                         var roomhtml = "<div class='col-md-8'>";
-                       roomhtml += "<div class='classContent' style='border: 3px solid #374b73; background-color: #ffffff; color: #374b73; padding: 0.5rem;'>";
-                       roomhtml += "<div> 클래스 이름 : " + roomTitle + "</div>";
-                       roomhtml += "<div> <span> 시작시간 : " + roomBeginTime + "</span>  <span> 종료시간 : " + roomEndTime + "</span> </div>";
-                       roomhtml += "<div> 지역 : " + roomLocal + "</div>";
-                       roomhtml += "<div> 신청 가능한 인원 : " + realMax + "</div>";
-                       roomhtml += "</div>";
-                       roomhtml += "</div>";
+                        roomhtml += "<div class='classContent' style='border: 3px solid #374b73; background-color: #ffffff; color: #374b73; padding: 0.5rem;'>";
+                        roomhtml += "<div> 클래스 이름 : " + roomTitle + "</div>";
+                        roomhtml += "<div> <span> 시작시간 : " + roomBeginTime + "</span>  <span> 종료시간 : " + roomEndTime + "</span> </div>";
+                        roomhtml += "<div> 지역 : " + roomLocal + "</div>";
+                        roomhtml += "<div> 신청 가능한 인원 : " + realMax + "</div>";
+                        roomhtml += "</div>";
+                        roomhtml += "</div>";
 
-                       $("#time-select-inner").append(roomhtml);
+                        $("#time-select-inner").append(roomhtml);
 
                     }
 

@@ -3,9 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <style>
+
+        .wrap {
+            font-family: CookieRun-Regular;
+        }
+
         #pageHeader {
         background-color: pink;
         color: navy;
+        }
+
+        .member-calculate-wrapper{
+            margin-top: 3rem;
         }
 
         ul.tabs {
@@ -45,25 +54,34 @@
         .tab-content.current {
             display: inherit;
         }
+
+        .table-wrapper {
+            margin-top: 3rem;
+        }
+
         #chartdiv {
             width: 100%;
             height: 500px;
             max-width: 100%
         }
+
+
+
     </style>
 </head>
 
 <body>
-    <div th:replace="common.html::common"></div>
-    <div th:replace="header.html::header"></div>
-    <!-- Resources -->
-    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+<div th:replace="common.html::common"></div>
+<div th:replace="header.html::header"></div>
+<!-- Resources -->
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
 
-    <script th:src="@{/js/member/member_chart.js}"></script>
+<script th:src="@{/js/member/member_chart.js}"></script>
 
-    <div class="container">
+<div class="wrap">
+    <div class="container member-calculate-wrapper">
         <br>
         <div id="pageHeader"><h3><strong>통계 페이지</strong></h3></div>
         <hr>
@@ -76,14 +94,11 @@
                     </ul>
                 </div>
             </div>
-
             <div class="col-md-9">
                 <div id="tab-1" class="tab-content current">
-
-                    <!-- -->
                     <div class="row">
                         <div> 총 신청 인원 수</div>
-                        <div th:text="${#lists.size(myCustomers)}">총 신청한 사람</div>
+                        <div th:text="${howmany}">총 신청한 사람</div>
                     </div>
 
                     <!-- ajax 통해서 바로바로 검색할 수 있도록 스크립트 추가 요망-->
@@ -134,40 +149,41 @@
                             </table>
                         </div>
                         <!-- 페이지 네이션-->
-                        <!--<div class="pagingbox">
-                            <ul id="pagination-section" class="pagination justify-content-center" th:with="start = ${ T(Math).floor( roomEntities.number / 10 ) * 10 + 1 } ,
-                                                         last = ( ${ start + 9 < roomEntities.totalPages ?  start + 9 : roomEntities.totalPages } )">
-
+                        <div class="pagingbox">
+                            <ul id="pagination-section" class="pagination justify-content-center" th:with="start = ${ T(Math).floor( myCustomers.number / 10 ) * 10 + 1 } ,
+                                                         last = ( ${ start + 9 < myCustomers.totalPages ?  start + 9 : myCustomers.totalPages } )">
                                 <li class="page-item">
-                                    <a class="page-link" th:href="@{/admin/adminlist( page = 1 ) }"> 처음 </a>
+                                    <a class="page-link" th:href="@{/member/calculate( page = 1 ) }">
+                                        처음
+                                    </a>
                                 </li>
 
-                                <li class="page-item" th:class="${roomEntities.first} ? 'disabled' ">
-
+                                <li class="page-item" th:class="${myCustomers.first} ? 'disabled' ">
                                     <a class="page-link"
-                                       th:href="${roomEntities.first} ? '#' : @{/admin/adminlist( page = ${ roomEntities.number } ) }">
-                                        이전 </a>
+                                       th:href="${myCustomers.first} ? '#' : @{/member/calculate( page = ${ myCustomers.number } ) }">
+                                        이전
+                                    </a>
                                 </li>
 
                                 <li class="page-item" th:each="page : ${#numbers.sequence( start , last ) }">
-                                    <a class="page-link" th:href="@{/admin/adminlist( page = ${page} ) }"
+                                    <a class="page-link" th:href="@{ /member/calculate( page = ${page} ) }"
                                        th:text="${page}"></a>
                                 </li>
 
-                                <li class="page-item" th:class="${roomEntities.last} ? 'disabled' ">
+                                <li class="page-item" th:class="${myCustomers.last} ? 'disabled' ">
                                     <a class="page-link"
-                                       th:href="${roomEntities.last} ? '#' : @{/admin/adminlist( page = ${roomEntities.number+2} ) }">
+                                       th:href="${myCustomers.last} ? '#' : @{/member/calculate( page = ${myCustomers.number+2} ) }">
                                         다음
                                     </a>
                                 </li>
 
                                 <li class="page-item">
                                     <a class="page-link"
-                                       th:href="@{/admin/adminlist( page=${roomEntities.totalPages} ) }">
+                                       th:href="@{ /member/calculate( page=${myCustomers.totalPages} ) }">
                                         마지막 </a>
                                 </li>
                             </ul>
-                        </div>-->
+                        </div>
                     </div>
 
                 </div>
@@ -175,31 +191,31 @@
                 <div id="tab-2" class="tab-content">
 
                     <!-- 내가 개설한 전체 강좌 시간 순서-->
-                    <div class="mb-3 row">
-                        <div class="col-3">
-                            <select name="" id="member-calculate-select-year">
-                                <option value=""></option>
-                            </select>
-                        </div>
-                        <div class="col-3">
-                            <select name="" id="member-calculate-select-month">
-                                <option value=""></option>
-                            </select>
-                        </div>
-                        <div class="col-3">
-                            <select name="" id="member-calculate-select-day">
-                                <option value=""></option>
-                            </select>
+                    <!--                <div class="mb-3 row">-->
+                    <!--                    <div class="col-3">-->
+                    <!--                        <select name="" id="member-calculate-select-year">-->
+                    <!--                            <option value=""></option>-->
+                    <!--                        </select>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="col-3">-->
+                    <!--                        <select name="" id="member-calculate-select-month">-->
+                    <!--                            <option value=""></option>-->
+                    <!--                        </select>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="col-3">-->
+                    <!--                        <select name="" id="member-calculate-select-day">-->
+                    <!--                            <option value=""></option>-->
+                    <!--                        </select>-->
 
-                        </div>
-                    </div>
+                    <!--                    </div>-->
+                    <!--                </div>-->
 
                     <!-- 내가 개설한 개별 강좌 roomNo 선택 -->
-                    <div class="mb-3">
-                        <div class="class-3">
-                            <select name="" id=""></select>
-                        </div>
-                    </div>
+                    <!--                <div class="mb-3">-->
+                    <!--                    <div class="class-3">-->
+                    <!--                        <select name="" id=""></select>-->
+                    <!--                    </div>-->
+                    <!--                </div>-->
 
                     <button type="button" onclick="memberAmChart();">등록현황보기</button>
 
@@ -221,8 +237,8 @@
             </div>
         </div>
     </div>
-
-    <script>
+</div>
+<script>
         $("ul.tabs li").click(function() {
             var tabId = $(this).attr("data-tab");
 
@@ -232,9 +248,12 @@
             $(this).addClass("current");
             $("#" + tabId).addClass("current");
         });
-    </script>
 
-    <script th:src="@{/js/member/member_calculate.js}"></script>
+
+
+</script>
+
+<script th:src="@{/js/member/member_calculate.js}"></script>
 
 
 </body>

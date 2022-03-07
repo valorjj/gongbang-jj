@@ -246,7 +246,6 @@ public class MemberService implements UserDetailsService {
         }
     }
 
-
     // [개인 정산 페이지에 출력될 데이터를 호출하는 영역]
     public Page<MemberEntity> getMemberList(@PageableDefault Pageable pageable, int memberNo, String keyword) {
 

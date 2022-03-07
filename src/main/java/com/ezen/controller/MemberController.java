@@ -608,15 +608,12 @@ public class MemberController {
 
         // 2. 내가 개설한 클래스에 등록한 회원 내역을 불러옵니다.
         Page<MemberEntity> myCustomerList = memberService.getMemberList(pageable, memberNo, keyword);
-
-        System.out.println(myCustomerList);
-
         model.addAttribute("myCustomers", myCustomerList);
-
+        int size = myCustomerList.getNumberOfElements();
+        model.addAttribute("howmany", size);
         // 3. 내가 개설한 클래스 목록을 출력합니다.
         List<RoomEntity> myRoomList = roomService.getmyroomlist();
         model.addAttribute("myRooms", myRoomList);
-
 
         return "member/calculate_page";
     }
