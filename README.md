@@ -1,5 +1,5 @@
 ### Notion : [노션링크](https://cedar-echinacea-afc.notion.site/GONGBANG-6af052ece8454a40b679e37e59586796)
-### Youtube 시연 영상 : https://www.youtube.com/watch?v=99xE80Gi0mU
+### Youtube 시연 영상 : https://youtu.be/WyYObFmRypk
 
 
 # 프로젝트이름 : GONGBANG
