@@ -1,6 +1,7 @@
 ### Notion : [노션링크](https://cedar-echinacea-afc.notion.site/GONGBANG-6af052ece8454a40b679e37e59586796)
 ### Youtube 시연 영상 : https://www.youtube.com/watch?v=99xE80Gi0mU
 
+
 # 프로젝트이름 : GONGBANG
 
 ## 주제 : 나만의 원데이 클래스를 개설해서 수강생들을 모집한다. 
